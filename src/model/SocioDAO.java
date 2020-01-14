@@ -61,7 +61,31 @@ public class SocioDAO {
         }catch(SQLException ex){
         
         }
-    }    
+    }
+
+    public Socio getSocio(String codigo){
+        Socio socio = null;
+        try{
+            conexion.conectar();
+            String query = "SELECT * FROM socios WHERE codigo = ?";
+            PreparedStatement obtenerSocio = conexion.conectar().prepareStatement(query);
+            obtenerSocio.setString(1, codigo);
+            ResultSet r = obtenerSocio.executeQuery();
+            if(r.next()){
+                socio = new Socio(r.getInt("id_socio"), r.getString("codigo"), r.getString("nombres"), r.getString("apellidos"), r.getString("dpi"));
+                socio.setDireccion(r.getString("direccion"));
+                socio.setFecha_inicio_pago(r.getDate("fecha_inicio_pago"));
+                socio.setExonerado(r.getBoolean("exonerado"));
+                socio.setSocios_id_socio(r.getInt("socios_id_socio"));
+            }
+            
+            conexion.desconectar();
+        }catch(SQLException ex){
+        
+        }
+    
+        return socio;
+    }
     
     
 }
