@@ -87,5 +87,26 @@ public class SocioDAO {
         return socio;
     }
     
+    public void updateSocio(Socio socio){
+        try{
+            conexion.conectar();
+            String query = "UPDATE socios SET codigo = ?, nombres = ?, apellidos = ?, dpi = ?, direccion = ?, fecha_inicio_pago = ?, exonerado = ?, socios_id_socio = ? WHERE id_socio = ?";
+            PreparedStatement update_socio = conexion.conectar().prepareStatement(query);
+            update_socio.setString(1, socio.getCodigo());
+            update_socio.setString(2, socio.getCodigo());
+            update_socio.setString(3, socio.getApellidos());
+            update_socio.setString(4, socio.getDpi());
+            update_socio.setString(5, socio.getDireccion());
+            update_socio.setDate(6, socio.getFecha_inicio_pago());
+            update_socio.setBoolean(7, socio.isExonerado());
+            update_socio.setInt(8, socio.getSocios_id_socio());
+            update_socio.setInt(9, socio.getId_socio());
+            update_socio.executeUpdate();
+            conexion.desconectar();
+        }catch(SQLException ex){
+        
+        }
+    }
+    
     
 }

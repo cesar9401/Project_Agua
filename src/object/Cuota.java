@@ -9,13 +9,13 @@ package object;
  *
  * @author cesar31
  */
-public class Cuotas {
+public class Cuota {
     
     private int id_cuotas;
     private String nombre_cuota;
     private double valor_cuota;
 
-    public Cuotas(int id_cuotas, String nombre_cuota, double valor_cuota) {
+    public Cuota(int id_cuotas, String nombre_cuota, double valor_cuota) {
         this.id_cuotas = id_cuotas;
         this.nombre_cuota = nombre_cuota;
         this.valor_cuota = valor_cuota;
