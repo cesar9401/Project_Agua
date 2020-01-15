@@ -194,14 +194,6 @@ public class SociosJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain PagosSocios " + pagosSociosCollectionOldPagosSocios + " since its sociosIdSocio field is not nullable.");
                 }
             }
-            for (Socios sociosCollectionOldSocios : sociosCollectionOld) {
-                if (!sociosCollectionNew.contains(sociosCollectionOldSocios)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Socios " + sociosCollectionOldSocios + " since its sociosIdSocio field is not nullable.");
-                }
-            }
             for (SociosEventos sociosEventosCollectionOldSociosEventos : sociosEventosCollectionOld) {
                 if (!sociosEventosCollectionNew.contains(sociosEventosCollectionOldSociosEventos)) {
                     if (illegalOrphanMessages == null) {
@@ -294,6 +286,12 @@ public class SociosJpaController implements Serializable {
                     }
                 }
             }
+            for (Socios sociosCollectionOldSocios : sociosCollectionOld) {
+                if (!sociosCollectionNew.contains(sociosCollectionOldSocios)) {
+                    sociosCollectionOldSocios.setSociosIdSocio(null);
+                    sociosCollectionOldSocios = em.merge(sociosCollectionOldSocios);
+                }
+            }
             for (Socios sociosCollectionNewSocios : sociosCollectionNew) {
                 if (!sociosCollectionOld.contains(sociosCollectionNewSocios)) {
                     Socios oldSociosIdSocioOfSociosCollectionNewSocios = sociosCollectionNewSocios.getSociosIdSocio();
@@ -367,13 +365,6 @@ public class SociosJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the PagosSocios " + pagosSociosCollectionOrphanCheckPagosSocios + " in its pagosSociosCollection field has a non-nullable sociosIdSocio field.");
             }
-            Collection<Socios> sociosCollectionOrphanCheck = socios.getSociosCollection();
-            for (Socios sociosCollectionOrphanCheckSocios : sociosCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Socios " + sociosCollectionOrphanCheckSocios + " in its sociosCollection field has a non-nullable sociosIdSocio field.");
-            }
             Collection<SociosEventos> sociosEventosCollectionOrphanCheck = socios.getSociosEventosCollection();
             for (SociosEventos sociosEventosCollectionOrphanCheckSociosEventos : sociosEventosCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -388,6 +379,11 @@ public class SociosJpaController implements Serializable {
             if (sociosIdSocio != null) {
                 sociosIdSocio.getSociosCollection().remove(socios);
                 sociosIdSocio = em.merge(sociosIdSocio);
+            }
+            Collection<Socios> sociosCollection = socios.getSociosCollection();
+            for (Socios sociosCollectionSocios : sociosCollection) {
+                sociosCollectionSocios.setSociosIdSocio(null);
+                sociosCollectionSocios = em.merge(sociosCollectionSocios);
             }
             em.remove(socios);
             em.getTransaction().commit();

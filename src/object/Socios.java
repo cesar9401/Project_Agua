@@ -40,7 +40,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Socios.findByDpi", query = "SELECT s FROM Socios s WHERE s.dpi = :dpi"),
     @NamedQuery(name = "Socios.findByDireccion", query = "SELECT s FROM Socios s WHERE s.direccion = :direccion"),
     @NamedQuery(name = "Socios.findByFechaInicioPago", query = "SELECT s FROM Socios s WHERE s.fechaInicioPago = :fechaInicioPago"),
-    @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado")})
+    @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado"),
+//Nuestras consultas
+    @NamedQuery(name = "Socios.paraElLogin", query = "SELECT s FROM administradores  INNER JOIN socios ON administradores.socios_id_socio = socios.id_socio WHERE socios.codigo = :codigo AND administradores.password = :password")
+    })
 public class Socios implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -78,10 +81,10 @@ public class Socios implements Serializable {
     private Collection<PagosMorosos> pagosMorososCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sociosIdSocio")
     private Collection<PagosSocios> pagosSociosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sociosIdSocio")
+    @OneToMany(mappedBy = "sociosIdSocio")
     private Collection<Socios> sociosCollection;
     @JoinColumn(name = "socios_id_socio", referencedColumnName = "id_socio")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Socios sociosIdSocio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sociosIdSocio")
     private Collection<SociosEventos> sociosEventosCollection;
