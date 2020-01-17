@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearSocioController">
+    <stylesheets>
+        <URL value="@/css/crearsocio.css" />
+    </stylesheets>
+   <children>
+      <JFXButton fx:id="Crear" buttonType="RAISED" layoutX="233.0" layoutY="260.0" onAction="#crearSocio" prefHeight="58.0" prefWidth="196.0" style="-fx-background-color: red;" text="Crear" />
+   </children>
+</AnchorPane>
