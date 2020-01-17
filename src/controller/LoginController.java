@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import object.Administradores;
 import object.Socios;
 
 /**
@@ -63,7 +65,6 @@ public class LoginController implements Initializable {
             
 //        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
 //        EntityManager em = emf.createEntityManager();
-//        
 //        Query consultaLogin = em.createNamedQuery("Socios.findAll");
 //        List<Socios> socios = (List<Socios>) consultaLogin.getResultList();
 //        for(Socios s: socios){
