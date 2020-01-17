@@ -7,9 +7,8 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +22,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import object.Socios;
 
 
 /**
@@ -66,19 +69,19 @@ public class LoginController implements Initializable {
         String user = text_socio.getText();
         String pass = pass_socio.getText();
             
-//        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-//        EntityManager em = emf.createEntityManager();
-//        Query consultaLogin = em.createNamedQuery("Socios.findAll");
-//        List<Socios> socios = (List<Socios>) consultaLogin.getResultList();
-//        for(Socios s: socios){
-//            s.getCodigo();
-//        }
-
-        try {
-            getMainView();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        Query consultaLogin = em.createNamedQuery("Socios.findAll");
+        List<Socios> socios = (List<Socios>) consultaLogin.getResultList();
+        for(Socios s: socios){
+            System.out.println(s.getCodigo());
         }
+        
+//        try {
+//            getMainView();
+//        } catch (IOException ex) {
+//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     /**
      * Initializes the controller class.
