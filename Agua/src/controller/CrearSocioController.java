@@ -108,9 +108,6 @@ public class CrearSocioController implements Initializable {
             }else
                 Alerta.Alerta.AlertInformation("Imagen", "Archivo Invalido", "Debe seleccionar una Imagen");
             
-           
-            
-            
         }
     }
     
@@ -152,6 +149,10 @@ public class CrearSocioController implements Initializable {
                     Logger.getLogger(CrearSocioController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            SociosJpaController saveSocio = new SociosJpaController(emf);
+            saveSocio.create(nuevo);
             
             Alerta.Alerta.AlertInformation("Informacion", "Nuevo Socio", "Almacenado Correctamente");
         }else{
