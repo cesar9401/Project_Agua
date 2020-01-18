@@ -31,7 +31,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Administradores.findAll", query = "SELECT a FROM Administradores a")
     , @NamedQuery(name = "Administradores.findByIdAdministrador", query = "SELECT a FROM Administradores a WHERE a.idAdministrador = :idAdministrador")
-    , @NamedQuery(name = "Administradores.findByPassword", query = "SELECT a FROM Administradores a WHERE a.password = :password")})
+    , @NamedQuery(name = "Administradores.findByPassword", query = "SELECT a FROM Administradores a WHERE a.password = :password")
+        
+    //Nuestras consultas
+        
+    , @NamedQuery(name = "Administradores.findBySociosIdSocio", query = "SELECT a FROM Administradores a WHERE a.sociosIdSocio = :sociosIdSocio")})
+
 public class Administradores implements Serializable {
 
     private static final long serialVersionUID = 1L;
