@@ -1,0 +1,15 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-background-color: #f8f4e8;
+}
+
+.pane_nuevaCuota{
+    -fx-background-color: #f1eee2;
+}
+
+.label_titulo{
+    -fx-font-size: 18px;
+}

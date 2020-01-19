@@ -20,7 +20,8 @@
               </items>
             </MenuButton>
             <Label fx:id="label_socios" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_socios" text="Socios" textFill="WHITE" />
-            <Label fx:id="label_pagos" layoutX="130.0" layoutY="15.0" prefHeight="35.0" prefWidth="90.0" styleClass="label_pagos" text="Pagos" textFill="WHITE" />
+            <Label fx:id="label_pagos" layoutX="130.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_pagos" text="Pagos" textFill="WHITE" />
+            <Label fx:id="label_cuotas" layoutX="240.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_cuotas" text="Cuotas" textFill="WHITE" />
          </children></AnchorPane>
       <AnchorPane fx:id="adminBar" layoutX="14.0" layoutY="91.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <children>

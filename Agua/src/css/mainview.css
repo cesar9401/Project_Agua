@@ -15,7 +15,7 @@
 }
 
 .adminBar{
-    -fx-background-color: #1755b9;
+    -fx-background-color: #1c6ae7;
 }
 
 .adminBar:hover{
@@ -27,7 +27,7 @@
     -fx-border-color: #0561a8;
 }
 
-.label_socios, .label_pagos{
+.label_socios, .label_pagos, .label_cuotas{
     -fx-background-color: #4f4f4f;
     -fx-alignment: center;
     -fx-font-size: 16px;
@@ -36,7 +36,7 @@
     -fx-color: #fff;
 }
 
-.label_socios:hover, .label_pagos:hover{
+.label_socios:hover, .label_pagos:hover, .label_cuotas:hover{
     -fx-cursor: hand;
     -fx-font-size: 18px;
     -fx-translate-x: -5px;

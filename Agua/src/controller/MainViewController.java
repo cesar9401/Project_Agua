@@ -58,6 +58,8 @@ public class MainViewController implements Initializable {
     private Label label_apellidos;
     @FXML
     private Label apellidosAdmin;
+    @FXML
+    private Label label_cuotas;
 
     @FXML
     void cerrarSesion(ActionEvent event) {
@@ -67,10 +69,18 @@ public class MainViewController implements Initializable {
     
     @FXML
     private void handleButtonAction(MouseEvent event) throws IOException {
-        if(base_pane.getChildren().isEmpty()){
-            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml")));
-        }else{
+        
+        Object obj = event.getSource();
+        
+        if(obj.equals(label_socios)){
             base_pane.getChildren().clear();
+            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml")));
+        }else if(obj.equals(label_pagos)){
+            base_pane.getChildren().clear();
+            
+        }else if(obj.equals(label_cuotas)){
+            base_pane.getChildren().clear();
+            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearCuotas.fxml")));
         }
     }
     

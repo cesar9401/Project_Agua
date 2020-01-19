@@ -203,13 +203,15 @@ public class CrearSocioController implements Initializable {
      * @param keyEvent 
      */
     public void validationOfNumber(KeyEvent keyEvent){
-        
         try{
             char key = keyEvent.getCharacter().charAt(0);
 
             if (!Character.isDigit(key))
                 keyEvent.consume();
-
+            
+            if(keyEvent.getSource().equals(txtCui) && txtCui.getText().length()==13){
+                keyEvent.consume();
+            }
         } catch (Exception ex){ }
     }
     
