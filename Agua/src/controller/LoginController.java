@@ -30,13 +30,15 @@ import javax.persistence.Query;
 import object.Administradores;
 import object.Socios;
 
-
 /**
  * FXML Controller class
  *
  * @author cesar31
  */
 public class LoginController implements Initializable {
+    
+    private Socios socio;
+    private Administradores admin;
     
     @FXML
     private Label label_socio;
@@ -64,11 +66,11 @@ public class LoginController implements Initializable {
         
     }
     
-     public void obtener(){
+    public void obtener(){
         
         //Evento Iniciar Sesion
-        Socios socio = getSocio();
-        Administradores admin = getAdmin(socio);
+        socio = getSocioBD();
+        admin = getAdmin(socio);
         
         if(admin != null){
             logIn();
@@ -76,6 +78,7 @@ public class LoginController implements Initializable {
             System.out.println("Usuario y/o contraseña incorrecta");
         }
     }
+    
     /**
      * Initializes the controller class.
      */
@@ -104,7 +107,7 @@ public class LoginController implements Initializable {
         }
     }
     
-    public Socios getSocio(){
+    public Socios getSocioBD(){
         Socios socio = null;
         
         String user = text_socio.getText();
@@ -145,5 +148,22 @@ public class LoginController implements Initializable {
         }
         
         return admin;
+    }
+
+    //Getter and Setter Socios y Administradores
+    public Socios getSocio() {
+        return socio;
+    }
+
+    public void setSocio(Socios socio) {
+        this.socio = socio;
+    }
+
+    public Administradores getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Administradores admin) {
+        this.admin = admin;
     }
 }

@@ -49,3 +49,7 @@
     -fx-cursor: hand;
     -fx-border-color: #0561a8;
 }
+
+.base_pane{
+    -fx-background-color: #fdf7e3;
+}

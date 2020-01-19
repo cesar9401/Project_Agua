@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -28,29 +29,49 @@ import javafx.stage.Stage;
  * @author cesar31
  */
 public class MainViewController implements Initializable {
-    
+        
     @FXML
     private AnchorPane navBar;
-
     @FXML
     private MenuButton admin_button;
-
     @FXML
     private MenuItem item_cerrarSesion;
-
     @FXML
     private Label label_socios;
-
     @FXML
     private Label label_pagos;
-
     @FXML
     private AnchorPane adminBar;
+    @FXML
+    private AnchorPane base_pane;
+    @FXML
+    private Label label_datos;
+    @FXML
+    private Label label_codigo;
+    @FXML
+    private Label codigoAdmin;
+    @FXML
+    private Label label_nombres;
+    @FXML
+    private Label nombreAdmin;
+    @FXML
+    private Label label_apellidos;
+    @FXML
+    private Label apellidosAdmin;
 
     @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
         getLogIn();
+    }
+    
+    @FXML
+    private void handleButtonAction(MouseEvent event) throws IOException {
+        if(base_pane.getChildren().isEmpty()){
+            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml")));
+        }else{
+            base_pane.getChildren().clear();
+        }
     }
     
     /**
@@ -79,5 +100,4 @@ public class MainViewController implements Initializable {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }
