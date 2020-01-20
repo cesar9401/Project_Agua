@@ -26,17 +26,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 //import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import model.SociosJpaController;
+import model.exceptions.NonexistentEntityException;
 import object.Socios;
 import object.auxiliary.ViewSocio;
 
@@ -100,14 +110,17 @@ public class ModifySocioController implements Initializable {
         colCode.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("codigo"));
         colName.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("nombre"));
         
+        Image imgUsr = new Image("/img/usr+.png");
+        imgSocio.setImage(imgUsr);
+        
         Query forGetSocios = getEntityManager().createNamedQuery("Socios.findAll");
         
         getAndShowAllSocios(forGetSocios.getResultList());
         eventTable();
         
-        txtSearch.setOnAction(e -> {
+        txtSearch.setOnKeyTyped(e -> {
             Query consulta;
-            String buscar ;// = (txtSearch.getText().contains("*"))?txtSearch.getText().substring(1):txtSearch.getText();
+            String buscar ;
             System.out.println(e.getEventType());
             if (txtSearch.getText().contains("*")) {
                buscar = txtSearch.getText().substring(1);
@@ -116,10 +129,36 @@ public class ModifySocioController implements Initializable {
                 consulta = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", txtSearch.getText());
             
             getAndShowAllSocios(consulta.getResultList());
-//            
-//            if (e.getEventType().getName()) {
-//                
-//            }
+            
+            if (txtSearch.getText().equals("") || txtSearch.getText() == null) {
+                getAndShowAllSocios(forGetSocios.getResultList());
+            }
+        });
+        
+        txtCui.setOnKeyTyped(event -> validationOfNumber(event));
+        txtCode.setOnKeyTyped(e -> validationOfNumber(e));
+        chkBox.setOnMouseClicked(event ->{
+                if (chkBox.isSelected()) {
+                    
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.showAndWait()
+      .filter(response -> response == ButtonType.OK)
+      .ifPresent(response -> System.out.println("opcionIfPresent"));
+                    
+                    
+                    Parent root;
+                    try {
+                        root = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Login");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
         });
     }    
 
@@ -136,6 +175,7 @@ public class ModifySocioController implements Initializable {
 
     @FXML
     private void btnSaveChangeOnAction(ActionEvent event) {
+        modifySocio();
         
     }
     @FXML
@@ -150,10 +190,6 @@ public class ModifySocioController implements Initializable {
     
     private void getAndShowAllSocios(List forGetSocios ){
          
-       
-        
-        
-        
         ObservableList<ViewSocio> showDataSocio = FXCollections.observableArrayList();
         
         for (Iterator<Socios> iterator = forGetSocios.iterator(); iterator.hasNext();) {
@@ -170,7 +206,7 @@ public class ModifySocioController implements Initializable {
         tableSocio.setOnMouseClicked(e->{
             if (e.getClickCount()==2) {
                 System.out.println("copiar item a los textField");
-               // questionMom();
+               
                     
                     idSocio = tableSocio.getSelectionModel().getSelectedItem().getIdSocio();
                     
@@ -230,12 +266,50 @@ public class ModifySocioController implements Initializable {
                 Alerta.Alerta.AlertInformation("Informacion", "Codigo", "El Codigo ingresado ya existe");
             }else{
                 aMdoficar.setCodigo(codigoModificado);
-            }
+                }
         }
         
-       
-    }
+         
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        SociosJpaController socioJpa = new SociosJpaController(emf);
+        try {
+            socioJpa.edit(aMdoficar);
+        } catch (NonexistentEntityException ex) {
+            Alerta.Alerta.AlertInformation("Error", "Modificar Socio", ex.getMessage());
+            Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Alerta.Alerta.AlertInformation("Error", "Modificar Socio", ex.getMessage());
+            Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        
+    }
+    public void cleanFields(){
+         
+        txtName.setText("");
+        txtLastName.setText("");
+        txtCui.setText("");
+        txtCode.setText("");
+        //.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        txtDate.setValue(null);
+        mancomunado.setSelected(false);
+        isExonerated.setSelected(false);
+        
+      
+       Image imgUsr = new Image("/img/usr+.png");
+        imgSocio.setImage(imgUsr);
+    }
+    
+     public void validationOfNumber(KeyEvent keyEvent){
+        
+        try{
+            char key = keyEvent.getCharacter().charAt(0);
+
+            if (!Character.isDigit(key))
+                keyEvent.consume();
+
+        } catch (Exception ex){ }
+    }
     
     
 }
