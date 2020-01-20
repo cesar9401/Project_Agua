@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="680.0" prefWidth="1024.0" scaleShape="false" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifySocioController">
+    <stylesheets>
+        <URL value="@/css/modifysocio.css" />
+    </stylesheets>
+   <children>
+      <Separator layoutX="490.0" layoutY="54.0" orientation="VERTICAL" prefHeight="587.0" prefWidth="0.0" />
+      <TableView fx:id="tableSocio" layoutX="23.0" layoutY="184.0" prefHeight="304.0" prefWidth="442.0">
+        <columns>
+          <TableColumn fx:id="colCode" prefWidth="121.0" text="Codigo" />
+          <TableColumn fx:id="colName" prefWidth="336.0" text="Nombre" />
+        </columns>
+      </TableView>
+      <JFXTextField fx:id="txtSearch" labelFloat="true" layoutX="23.0" layoutY="125.0" prefHeight="26.0" prefWidth="442.0" promptText="Buscar Usuario (Codigo o *Nombre)" />
+      <JFXButton fx:id="btnSelect" buttonType="RAISED" layoutX="123.0" layoutY="556.0" onAction="#btnSelectOnAction" prefHeight="48.0" prefWidth="191.0" style="-fx-background-color: #BDBDBD;" text="Seleccionar">
+         <font>
+            <Font size="22.0" />
+         </font></JFXButton>
+      <ImageView fx:id="imgSocio" fitHeight="150.0" fitWidth="200.0" layoutX="624.0" layoutY="14.0" onMouseClicked="#changeImg" pickOnBounds="true" preserveRatio="true" />
+      <JFXTextField fx:id="txtName" labelFloat="true" layoutX="517.0" layoutY="171.0" prefHeight="26.0" prefWidth="420.0" promptText="Nombre" />
+      <JFXTextField fx:id="txtLastName" labelFloat="true" layoutX="517.0" layoutY="213.0" prefHeight="26.0" prefWidth="420.0" promptText="Apellido" />
+      <JFXTextField fx:id="txtCui" labelFloat="true" layoutX="517.0" layoutY="270.0" prefHeight="26.0" prefWidth="420.0" promptText="CUI (No DPI)" />
+      <JFXTextField fx:id="txtDireccion" labelFloat="true" layoutX="527.0" layoutY="322.0" prefHeight="26.0" prefWidth="420.0" promptText="Direccion" />
+      <JFXTextField fx:id="txtCode" labelFloat="true" layoutX="517.0" layoutY="378.0" prefHeight="26.0" prefWidth="151.0" promptText="Codigo" />
+      <JFXToggleButton fx:id="mancomunado" layoutX="719.0" layoutY="361.0" text="Mancomunado" />
+      <JFXDatePicker fx:id="txtDate" layoutX="512.0" layoutY="499.0" promptText="Fecha de Inicio" />
+      <JFXToggleButton fx:id="isExonerated" layoutX="732.0" layoutY="484.0" text="Exonerar" />
+      <JFXButton fx:id="btnSaveChange" buttonType="RAISED" layoutX="645.0" layoutY="611.0" onAction="#btnSaveChangeOnAction" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: #F78181;" text="Guardar Cambios" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font></JFXButton>
+      <JFXCheckBox fx:id="chkBox" layoutX="645.0" layoutY="580.0" text="Eliminar a este Socio" />
+      <JFXCheckBox fx:id="chkMancomunados" layoutX="131.0" layoutY="505.0" text="Ver Mancomunados" />
+      <JFXCheckBox fx:id="chkPropietarios" layoutX="310.0" layoutY="505.0" text="Ver Propietarios" />
+      <JFXCheckBox fx:id="chkTodo" layoutX="23.0" layoutY="505.0" text="Todos" />
+      <Label layoutX="23.0" layoutY="159.0" prefHeight="16.0" prefWidth="442.0" text="Para buscar por Nombre coloque primero un *" textFill="#bcbaba" />
+      <JFXTextField fx:id="txtIdSuperSocio" layoutX="515.0" layoutY="432.0" prefHeight="26.0" prefWidth="420.0" promptText="Codigo Socio Referencia" />
+   </children>
+</AnchorPane>
