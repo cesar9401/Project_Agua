@@ -13,3 +13,9 @@
 .label_titulo{
     -fx-font-size: 18px;
 }
+
+.button_nueva, .btn_agregar,
+.btn_cancelar, .btn_editar, 
+.btn_eliminar{
+    -fx-cursor: hand;
+}

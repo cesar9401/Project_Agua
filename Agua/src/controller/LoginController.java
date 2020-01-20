@@ -85,8 +85,8 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        URL nuevo = getClass().getResource("/img/icono200x200.png");
-        Image image = new Image(nuevo.toString(), 200, 200, false, true);
+        
+        Image image = new Image("/img/icono200x200.png");
         image_view.setImage(image);
     }
     

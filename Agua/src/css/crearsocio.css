@@ -5,3 +5,11 @@
 .mainFxmlClass {
 
 }
+
+.button_crear{
+    -fx-cursor: hand;
+}
+
+.img{
+    -fx-cursor: hand;
+}

@@ -28,13 +28,13 @@
       
     
     
-      <ImageView fx:id="img" fitHeight="217.0" fitWidth="300.0" layoutX="124.0" layoutY="24.0" onMouseClicked="#loadImg" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="img" fitHeight="217.0" fitWidth="300.0" layoutX="124.0" layoutY="24.0" onMouseClicked="#loadImg" pickOnBounds="true" preserveRatio="true" styleClass="img" />
       
       <JFXTextField fx:id="txtCode" labelFloat="true" layoutX="538.0" layoutY="252" prefHeight="26.0" prefWidth="300.0" promptText="Codigo" />
       <JFXToggleButton fx:id="isExonerated" layoutX="536.0" layoutY="324.0" prefHeight="60.0" prefWidth="171.0" text="Exonerar" unToggleColor="#030000" />
       <JFXToggleButton fx:id="mancomunado" layoutX="538.0" layoutY="386" prefHeight="60.0" prefWidth="171.0" text="Mancomunado" unToggleColor="#030000" />
       <DatePicker fx:id="datePicker" layoutX="538.0" layoutY="448.0" promptText="Fecha Inicio" />
       
-      <JFXButton fx:id="Crear" buttonType="RAISED" layoutX="449.0" layoutY="560.0" onAction="#crearSocio" prefHeight="58.0" prefWidth="196.0" style="-fx-background-color: red;" text="Crear" />
+      <JFXButton fx:id="Crear" buttonType="RAISED" layoutX="449.0" layoutY="560.0" onAction="#crearSocio" prefHeight="58.0" prefWidth="196.0" style="-fx-background-color: red;" styleClass="button_crear" text="Crear" />
    </children>
 </AnchorPane>
