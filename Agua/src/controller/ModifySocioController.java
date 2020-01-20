@@ -236,6 +236,6 @@ public class ModifySocioController implements Initializable {
        
     }
 
-    
-    
+
+
 }

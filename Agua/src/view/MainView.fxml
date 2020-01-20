@@ -16,7 +16,6 @@
             <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
               <items>
                 <MenuItem fx:id="item_cerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" styleClass="item_cerrarSesion" text="Cerrar Sesion" />
-                <MenuItem mnemonicParsing="false" text="Mi Cuenta" />
               </items>
             </MenuButton>
             <Label fx:id="label_socios" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_socios" text="Socios" textFill="WHITE" />
