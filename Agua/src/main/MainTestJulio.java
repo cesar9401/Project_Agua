@@ -24,7 +24,7 @@ public class MainTestJulio extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/ModifySocio.fxml"));
         stage.setTitle("Login");
         stage.setScene(new Scene(root));
         stage.show();
