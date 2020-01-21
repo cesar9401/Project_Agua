@@ -16,9 +16,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.util.Date;
-
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,6 +115,8 @@ public class CrearSocioController implements Initializable {
     private MenuItem item_VerCuotas;
     @FXML
     private Label label_inicio;
+    @FXML
+    private MenuItem item_eventos;    
     //---------------------- Aqui termina NavBar y adminBar
 
     /**
@@ -327,6 +326,11 @@ public class CrearSocioController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
             root = loader.load();
             CrearCuotasController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
+        }else if(obj == item_eventos){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
+            root = loader.load();
+            CrearEventosController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }
         

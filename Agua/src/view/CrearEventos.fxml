@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXToggleButton?>
+
 <?import java.net.URL?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearSocioController">
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controller.CrearEventosController">
     <stylesheets>
-        <URL value="@/css/crearsocio.css" />
+        <URL value="@/css/creareventos.css" />
         <!--Maquetacion de navBar y adminBar en mainview.css-->
         <URL value="@/css/mainview.css" />
     </stylesheets>
-   <children>
-       <!--Aqui empieza navBar-->
+    
+    <!--Aqui empieza navBar-->
       <AnchorPane fx:id="navBar" prefHeight="70.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
@@ -45,10 +40,10 @@
             </MenuButton>
             <Label fx:id="label_inicio" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleItemActionMouse" prefHeight="35.0" prefWidth="100.0" styleClass="label_inicio" text="Inicio" textFill="WHITE" />
          </children>
-      </AnchorPane>        
-        <!--Aqui termina navBar-->
-        
-        <!--Aqui empieza adminBar-->
+      </AnchorPane>
+    <!--Aqui termina navBar-->
+
+    <!--Aqui empieza adminBar-->
       <AnchorPane fx:id="adminBar" layoutY="70.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <children>
             <Label fx:id="label_datos" layoutX="25.0" layoutY="5.0" text="Datos Administrador" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0" />
@@ -60,29 +55,6 @@
             <Label fx:id="apellidosAdmin" layoutX="630.0" layoutY="16.0" prefHeight="20.0" prefWidth="150.0" text="Apellidos Ejemplo" />
          </children>
       </AnchorPane>
-      <!--Aqui termina adminBar-->        
-        
-      
-      <JFXTextField fx:id="txtName" labelFloat="true" layoutX="133.0" layoutY="372.0" prefHeight="28.0" prefWidth="300.0" promptText="Nombre">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </JFXTextField>
-      <JFXTextField fx:id="txtLastName" labelFloat="true" layoutX="133.0" layoutY="444.0" prefHeight="26.0" prefWidth="300.0" promptText="Apellido" />
-      <JFXTextField fx:id="txtCui" labelFloat="true" layoutX="133.0" layoutY="506.0" prefHeight="26.0" prefWidth="300.0" promptText="CUI (No DPI)" />
-      <JFXTextField fx:id="txtDireccion" labelFloat="true" layoutX="133.0" layoutY="562.0" prefHeight="26.0" prefWidth="300.0" promptText="Direccion" />
-      
-      
-      
+    <!--Aqui termina adminBar-->       
     
-    
-      <ImageView fx:id="img" fitHeight="217.0" fitWidth="300.0" layoutX="124.0" layoutY="144.0" onMouseClicked="#loadImg" pickOnBounds="true" preserveRatio="true" styleClass="img" />
-      
-      <JFXTextField fx:id="txtCode" labelFloat="true" layoutX="538.0" layoutY="372.0" prefHeight="26.0" prefWidth="300.0" promptText="Codigo" />
-      <JFXToggleButton fx:id="isExonerated" layoutX="536.0" layoutY="444.0" prefHeight="60.0" prefWidth="171.0" text="Exonerar" unToggleColor="#030000" />
-      <JFXToggleButton fx:id="mancomunado" layoutX="538.0" layoutY="506.0" prefHeight="60.0" prefWidth="171.0" text="Mancomunado" unToggleColor="#030000" />
-      <DatePicker fx:id="datePicker" layoutX="538.0" layoutY="562.0" promptText="Fecha Inicio" />
-      
-      <JFXButton fx:id="Crear" buttonType="RAISED" layoutX="449.0" layoutY="680.0" onAction="#crearSocio" prefHeight="58.0" prefWidth="196.0" style="-fx-background-color: red;" styleClass="button_crear" text="Crear" />
-   </children>
 </AnchorPane>

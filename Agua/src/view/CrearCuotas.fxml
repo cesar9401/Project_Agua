@@ -36,8 +36,7 @@
             </MenuButton>
             <MenuButton fx:id="menu_btnPagos" layoutX="265.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnPagos" text="Pagos" textAlignment="CENTER" textFill="WHITE">
               <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
+                <MenuItem fx:id="item_eventos" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_eventos" text="Eventos" />
               </items>
             </MenuButton>
             <MenuButton fx:id="menu_btnCuotas" layoutX="390.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnCuotas" text="Cuotas" textAlignment="CENTER" textFill="WHITE">

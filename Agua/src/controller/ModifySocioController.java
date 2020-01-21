@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.sql.Date;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -149,6 +147,8 @@ public class ModifySocioController implements Initializable {
     private MenuItem item_VerCuotas;
     @FXML
     private Label label_inicio;
+    @FXML
+    private MenuItem item_eventos;
     //---------------------- Aqui termina NavBar y adminBar    
     
     /**
@@ -440,6 +440,11 @@ public class ModifySocioController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
             root = loader.load();
             CrearCuotasController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
+        }else if(obj == item_eventos){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
+            root = loader.load();
+            CrearEventosController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }
         

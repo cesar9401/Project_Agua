@@ -126,6 +126,8 @@ public class CrearCuotasController implements Initializable {
     private MenuItem item_VerCuotas;
     @FXML
     private Label label_inicio;
+    @FXML
+    private MenuItem item_eventos;
     //---------------------- Aqui termina NavBar y adminBar    
 
     /**
@@ -330,6 +332,11 @@ public class CrearCuotasController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
             root = loader.load();
             CrearCuotasController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
+        }else if(obj == item_eventos){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
+            root = loader.load();
+            CrearEventosController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }
         

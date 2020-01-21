@@ -30,8 +30,8 @@ import object.Socios;
  *
  * @author cesar31
  */
-public class MainViewController implements Initializable {
-        
+public class CrearEventosController implements Initializable {
+    
     //----------------------> navBar y adminBar
     //Atributos del administrador que inicia sesion
     private Socios socio;
@@ -75,10 +75,7 @@ public class MainViewController implements Initializable {
     private Label label_inicio;
     @FXML
     private MenuItem item_eventos;
-    //---------------------- Aqui termina NavBar y adminBar
-    
-    @FXML
-    private AnchorPane base_pane;
+    //---------------------- Aqui termina NavBar y adminBar    
 
     /**
      * Initializes the controller class.
@@ -88,7 +85,6 @@ public class MainViewController implements Initializable {
         // TODO
     }
 
-    //-----------Aqui empiezan metodos del navBar y adminBar
     @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
@@ -178,5 +174,6 @@ public class MainViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    //-----------Aqui termina metodos del navBar y adminBar
+    //-----------Aqui termina metodos del navBar y adminBar    
+    
 }
