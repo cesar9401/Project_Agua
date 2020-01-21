@@ -11,18 +11,33 @@
         <URL value="@/css/mainview.css" />
     </stylesheets>
    <children>
-      <AnchorPane fx:id="navBar" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="navBar" prefHeight="70.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
               <items>
                 <MenuItem fx:id="item_cerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" styleClass="item_cerrarSesion" text="Cerrar Sesion" />
               </items>
             </MenuButton>
-            <Label fx:id="label_socios" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_socios" text="Socios" textFill="WHITE" />
-            <Label fx:id="label_pagos" layoutX="130.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_pagos" text="Pagos" textFill="WHITE" />
-            <Label fx:id="label_cuotas" layoutX="240.0" layoutY="15.0" onMouseClicked="#handleButtonAction" prefHeight="35.0" prefWidth="90.0" styleClass="label_cuotas" text="Cuotas" textFill="WHITE" />
+            <MenuButton fx:id="menu_btnSocios" layoutX="140.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnSocios" stylesheets="@../css/mainview.css" text="Socios" textAlignment="CENTER" textFill="WHITE">
+              <items>
+                <MenuItem fx:id="item_nuevoSocio" mnemonicParsing="false" onAction="#handleItemAction" text="Nuevo Socio" />
+                <MenuItem fx:id="item_VerSocios" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Socios" />
+              </items>
+            </MenuButton>
+            <MenuButton fx:id="menu_btnPagos" layoutX="265.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnPagos" text="Pagos" textAlignment="CENTER" textFill="WHITE">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+            <MenuButton fx:id="menu_btnCuotas" layoutX="390.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnCuotas" text="Cuotas" textAlignment="CENTER" textFill="WHITE">
+              <items>
+                <MenuItem fx:id="item_VerCuotas" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Cuotas" />
+              </items>
+            </MenuButton>
+            <Label fx:id="label_inicio" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleItemActionMouse" prefHeight="35.0" prefWidth="100.0" styleClass="label_inicio" text="Inicio" textFill="WHITE" />
          </children></AnchorPane>
-      <AnchorPane fx:id="adminBar" layoutX="14.0" layoutY="91.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
+      <AnchorPane fx:id="adminBar" layoutY="70.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <children>
             <Label fx:id="label_datos" layoutX="25.0" layoutY="5.0" text="Datos Administrador" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0" />
             <Label fx:id="label_codigo" layoutX="155.0" layoutY="15.0" prefHeight="20.0" prefWidth="55.0" text="Codigo: " />

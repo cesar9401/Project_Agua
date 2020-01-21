@@ -22,6 +22,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import object.Administradores;
+import object.Socios;
 
 /**
  * FXML Controller class
@@ -30,6 +32,11 @@ import javafx.stage.Stage;
  */
 public class MainViewController implements Initializable {
         
+    //Atributos del administrador que inicia sesion
+    private Socios socio;
+    private Administradores admin;
+    
+    //----------------------> navBar y adminBar
     @FXML
     private AnchorPane navBar;
     @FXML
@@ -37,13 +44,7 @@ public class MainViewController implements Initializable {
     @FXML
     private MenuItem item_cerrarSesion;
     @FXML
-    private Label label_socios;
-    @FXML
-    private Label label_pagos;
-    @FXML
     private AnchorPane adminBar;
-    @FXML
-    private AnchorPane base_pane;
     @FXML
     private Label label_datos;
     @FXML
@@ -59,31 +60,30 @@ public class MainViewController implements Initializable {
     @FXML
     private Label apellidosAdmin;
     @FXML
-    private Label label_cuotas;
+    private MenuButton menu_btnSocios;
+    @FXML
+    private MenuButton menu_btnPagos;
+    @FXML
+    private MenuButton menu_btnCuotas;
+    @FXML
+    private MenuItem item_nuevoSocio;
+    @FXML
+    private MenuItem item_VerSocios;
+    @FXML
+    private MenuItem item_VerCuotas;
+    @FXML
+    private Label label_inicio;
+    //---------------------- Aqui termina NavBar y adminBar
+    
+    @FXML
+    private AnchorPane base_pane;
 
     @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
         getLogIn();
     }
-    
-    @FXML
-    private void handleButtonAction(MouseEvent event) throws IOException {
         
-        Object obj = event.getSource();
-        
-        if(obj.equals(label_socios)){
-            base_pane.getChildren().clear();
-            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml")));
-        }else if(obj.equals(label_pagos)){
-            base_pane.getChildren().clear();
-            
-        }else if(obj.equals(label_cuotas)){
-            base_pane.getChildren().clear();
-            base_pane.getChildren().add(FXMLLoader.load(getClass().getResource("../view/CrearCuotas.fxml")));
-        }
-    }
-    
     /**
      * Initializes the controller class.
      */
@@ -91,7 +91,19 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
+    
+    public void initializeAttributes(Socios socio, Administradores admin){
+        this.socio = socio;
+        this.admin = admin;
+        setAttributesView();
+    }
 
+    public void setAttributesView(){
+        codigoAdmin.setText(socio.getCodigo());
+        nombreAdmin.setText(socio.getNombres());
+        apellidosAdmin.setText(socio.getApellidos());
+    }
+    
     public void signOff() throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
         Stage stage = new Stage();
@@ -109,5 +121,41 @@ public class MainViewController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void handleItemAction(ActionEvent event) throws IOException {
+        Stage stage = (Stage) navBar.getScene().getWindow();
+        Parent root = null;
+        Object obj = event.getSource();
+  
+        if(obj == item_nuevoSocio){
+            root = FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml"));
+        }else if(obj == item_VerSocios){
+            root = FXMLLoader.load(getClass().getResource("../view/ModifySocio.fxml"));
+        }else if(obj == item_VerCuotas){
+            root = FXMLLoader.load(getClass().getResource("../view/CrearCuotas.fxml"));
+        }
+        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void handleItemActionMouse(MouseEvent event) throws IOException {
+        Stage stage = (Stage) navBar.getScene().getWindow();
+        Parent root = null;
+        Object obj = event.getSource();
+        if(obj == label_inicio){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
+            root = loader.load();
+            MainViewController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
+        }
+        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

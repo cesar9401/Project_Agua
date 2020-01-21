@@ -85,17 +85,35 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
         Image image = new Image("/img/icono200x200.png");
         image_view.setImage(image);
     }
     
     public void getMainView() throws IOException{
+        
+        /*
         Parent root = FXMLLoader.load(getClass().getResource("../view/MainView.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Inicio");
         stage.setScene(new Scene(root));
         stage.show();
+        
+        //Cerrar ventana Login
+        label_socio.getScene().getWindow().hide();
+        */
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
+        Parent root = loader.load();
+        
+        MainViewController controller = loader.getController();
+        controller.initializeAttributes(socio, admin);
+        
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        
+        //Cerrar ventana Login
         label_socio.getScene().getWindow().hide();
     }
     
