@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +47,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import model.SociosJpaController;
+import model.exceptions.IllegalOrphanException;
 import model.exceptions.NonexistentEntityException;
 import object.Socios;
 import object.auxiliary.ViewSocio;
@@ -141,23 +143,25 @@ public class ModifySocioController implements Initializable {
                 if (chkBox.isSelected()) {
                     
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.showAndWait()
-      .filter(response -> response == ButtonType.OK)
-      .ifPresent(response -> System.out.println("opcionIfPresent"));
+                    alert.setContentText("Esta seguro que desea eliminar al Usuario: "+aMdoficar.getNombres()+"\nCon Codigo:"+aMdoficar.getCodigo());
+                    alert.setHeaderText(null);
+                    alert.setTitle("Confirmación");
+                    
+                    Optional<ButtonType> action = alert.showAndWait();
                     
                     
-                    Parent root;
-                    try {
-                        root = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
-
-                    Stage stage = new Stage();
-                    stage.setTitle("Login");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
+                        if (action.get() == ButtonType.OK) {
+                           deleteSocio();
+                            getAndShowAllSocios(forGetSocios.getResultList());
+                            cleanFields();
+                            Alerta.Alerta.AlertInformation("Informacion", "Socio Eliminado", "Correctamente");
+                        } 
+                        chkBox.setSelected(false);
+                    
+//                    alert.showAndWait()
+//                    .filter(response -> response == ButtonType.OK)
+//                    .ifPresent(response -> deleteSocio());
+                    
                 }
         });
     }    
@@ -230,15 +234,19 @@ public class ModifySocioController implements Initializable {
         txtLastName.setText(socio.getApellidos());
         txtCui.setText(socio.getDpi());
         txtCode.setText(codigoSocio[1]);
-        //.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        
         txtDate.setValue(socio.getFechaInicioPago().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         mancomunado.setSelected(codigoSocio[0].contains("B"));
         isExonerated.setSelected(socio.getExonerado());
-        
-      InputStream in = new ByteArrayInputStream(socio.getFotografia());
-        javafx.scene.image.Image image = new javafx.scene.image.Image(in);
-        imgSocio.setImage(image);
-        
+        try {
+            InputStream in = new ByteArrayInputStream(socio.getFotografia());
+            javafx.scene.image.Image image = new javafx.scene.image.Image(in);
+            imgSocio.setImage(image);
+
+            
+        } catch (Exception e) {
+            System.out.println("No tiene fotografia");
+        }
         // imgSocio.setImage(mostrar);
        
         
@@ -309,4 +317,18 @@ public class ModifySocioController implements Initializable {
 
         } catch (Exception ex){ }
     }
+     private void deleteSocio(){
+         Query aEliminar = getEntityManager().createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", aMdoficar.getIdSocio());
+         SociosJpaController eliminarSocio = new SociosJpaController(conexion.ConexionJPA.getInstancia().getEMF());
+         
+        try {
+            eliminarSocio.destroy(aMdoficar.getIdSocio());
+        } catch (IllegalOrphanException ex) {
+            Alerta.Alerta.AlertError("Eliminar", "Eliminiacion", "Finalizo con un error, Socio No eliminado");
+            Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NonexistentEntityException ex) {
+            Alerta.Alerta.AlertError("Eliminar", "Eliminiacion", "Finalizo con un error, Socio No eliminado");
+            Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
 }

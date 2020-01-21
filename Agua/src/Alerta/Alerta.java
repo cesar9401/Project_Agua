@@ -101,6 +101,7 @@ public class Alerta {
                 alert.setHeaderText(HeaderTxt);
                 alert.setContentText(Contenttxt);
                 alert.showAndWait();
+                
    }
 
      public static void AlertError(String Title, String HeaderTxt, String Contenttxt){
