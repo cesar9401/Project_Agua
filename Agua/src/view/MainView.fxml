@@ -8,9 +8,11 @@
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
     <stylesheets>
+        <!--Maquetacion de navBar y adminBar en mainview.css-->
         <URL value="@/css/mainview.css" />
     </stylesheets>
    <children>
+    <!--Aqui empieza navBar-->
       <AnchorPane fx:id="navBar" prefHeight="70.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
@@ -36,7 +38,11 @@
               </items>
             </MenuButton>
             <Label fx:id="label_inicio" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleItemActionMouse" prefHeight="35.0" prefWidth="100.0" styleClass="label_inicio" text="Inicio" textFill="WHITE" />
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
+    <!--Aqui termina navBar-->
+
+    <!--Aqui empieza adminBar-->
       <AnchorPane fx:id="adminBar" layoutY="70.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <children>
             <Label fx:id="label_datos" layoutX="25.0" layoutY="5.0" text="Datos Administrador" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0" />
@@ -46,7 +52,10 @@
             <Label fx:id="nombreAdmin" layoutX="385.0" layoutY="15.0" prefHeight="20.0" prefWidth="150.0" text="Nombres Ejemplo" />
             <Label fx:id="label_apellidos" layoutX="560.0" layoutY="15.0" prefHeight="20.0" prefWidth="60.0" text="Apellidos" />
             <Label fx:id="apellidosAdmin" layoutX="630.0" layoutY="16.0" prefHeight="20.0" prefWidth="150.0" text="Apellidos Ejemplo" />
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
+    <!--Aqui termina adminBar-->        
+
       <AnchorPane fx:id="base_pane" layoutX="7.0" layoutY="110.0" prefHeight="200.0" prefWidth="1024.0" styleClass="base_pane" stylesheets="@../css/mainview.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0" />
    </children>
 </AnchorPane>

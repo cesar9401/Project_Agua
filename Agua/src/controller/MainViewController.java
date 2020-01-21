@@ -32,11 +32,11 @@ import object.Socios;
  */
 public class MainViewController implements Initializable {
         
+    //----------------------> navBar y adminBar
     //Atributos del administrador que inicia sesion
     private Socios socio;
     private Administradores admin;
     
-    //----------------------> navBar y adminBar
     @FXML
     private AnchorPane navBar;
     @FXML
@@ -77,13 +77,7 @@ public class MainViewController implements Initializable {
     
     @FXML
     private AnchorPane base_pane;
-
-    @FXML
-    void cerrarSesion(ActionEvent event) {
-        //Cerrar Sesion
-        getLogIn();
-    }
-        
+    
     /**
      * Initializes the controller class.
      */
@@ -91,7 +85,15 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-    
+
+    //-----------Aqui empiezan metodos del navBar y adminBar
+    @FXML
+    void cerrarSesion(ActionEvent event) {
+        //Cerrar Sesion
+        getLogIn();
+    }
+
+    //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
     public void initializeAttributes(Socios socio, Administradores admin){
         this.socio = socio;
         this.admin = admin;
@@ -123,6 +125,7 @@ public class MainViewController implements Initializable {
         }
     }
 
+    //Metodo para cargar las vistas fxml
     @FXML
     private void handleItemAction(ActionEvent event) throws IOException {
         Stage stage = (Stage) navBar.getScene().getWindow();
@@ -130,11 +133,20 @@ public class MainViewController implements Initializable {
         Object obj = event.getSource();
   
         if(obj == item_nuevoSocio){
-            root = FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearSocio.fxml"));
+            root = loader.load();
+            CrearSocioController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
         }else if(obj == item_VerSocios){
-            root = FXMLLoader.load(getClass().getResource("../view/ModifySocio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
+            root = loader.load();
+            ModifySocioController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
         }else if(obj == item_VerCuotas){
-            root = FXMLLoader.load(getClass().getResource("../view/CrearCuotas.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
+            root = loader.load();
+            CrearCuotasController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
         }
         
         Scene scene = new Scene(root);
@@ -142,6 +154,7 @@ public class MainViewController implements Initializable {
         stage.show();
     }
 
+    //Metodo para obtener MainView.fxml
     @FXML
     private void handleItemActionMouse(MouseEvent event) throws IOException {
         Stage stage = (Stage) navBar.getScene().getWindow();
@@ -158,4 +171,5 @@ public class MainViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+    //-----------Aqui termina metodos del navBar y adminBar
 }
