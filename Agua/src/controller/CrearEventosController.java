@@ -9,10 +9,8 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -48,6 +46,7 @@ import model.exceptions.NonexistentEntityException;
 import object.Administradores;
 import object.Eventos;
 import object.Socios;
+import object.auxiliary.ViewEventos;
 
 /**
  * FXML Controller class
@@ -57,7 +56,7 @@ import object.Socios;
 public class CrearEventosController implements Initializable {
     
     private double precio = 0;
-    private ObservableList<Eventos> eventos;
+    private ObservableList<ViewEventos> eventos;
     
     @FXML
     private Button button_nueva;
@@ -78,7 +77,7 @@ public class CrearEventosController implements Initializable {
     @FXML
     private Label label_titulo;
     @FXML
-    private TableView<Eventos> table_eventos;
+    private TableView<ViewEventos> table_eventos;
     @FXML
     private TableColumn colNombre;
     @FXML
@@ -99,7 +98,7 @@ public class CrearEventosController implements Initializable {
     private AnchorPane navBar;
     @FXML
     private MenuButton admin_button;
-    @FXML
+    @FXML 
     private MenuItem item_cerrarSesion;
     @FXML
     private AnchorPane adminBar;
@@ -204,24 +203,24 @@ public class CrearEventosController implements Initializable {
         }
     }
     
-    public List<Eventos> getEventos(){
+    public List<ViewEventos> getEventos(){
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         EntityManager em = emf.createEntityManager();
         Query getEventos = em.createNamedQuery("Eventos.findAll");
         List<Eventos> evt = null;
+        List<ViewEventos> viewEvt = new ArrayList<>();
         try{
             evt = getEventos.getResultList();
         }catch(Exception ex){
         
         }
-        //SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         for(Eventos e: evt){
-            //String fecha = format.format(e.getFecha());
-            java.sql.Date date = new java.sql.Date(e.getFecha().getTime());
-            e.setFecha(date);
+            String fecha = format.format(e.getFecha());
+            viewEvt.add(new ViewEventos(e.getIdEventos(), e.getNombre(), fecha, e.getCuota()));
         }
         
-        return evt;
+        return viewEvt;
     }
     
     public void createTable(){
@@ -233,7 +232,7 @@ public class CrearEventosController implements Initializable {
     
     public void setTableEventos(){
         eventos.clear();
-        List<Eventos> evt = getEventos();
+        List<ViewEventos> evt = getEventos();
         if(!this.eventos.containsAll(evt)){
             this.eventos.addAll(evt);
             
@@ -244,7 +243,7 @@ public class CrearEventosController implements Initializable {
     
     @FXML
     private void seleccionarAction(MouseEvent event) {
-        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
         if(tmp != null){
             button_editar.setDisable(false);
             button_eliminar.setDisable(false);
@@ -253,7 +252,7 @@ public class CrearEventosController implements Initializable {
 
     @FXML
     private void editAction(ActionEvent event) {
-        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
         if(tmp != null){
         
         }else{
@@ -263,23 +262,35 @@ public class CrearEventosController implements Initializable {
 
     @FXML
     private void eliminarAction(ActionEvent event) {
-        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
-        java.util.Date date = new java.util.Date(tmp.getFecha().getTime());
-        tmp.setFecha(date);
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        System.out.println("id: " + tmp.getId_eventos());
         
         if(tmp != null){
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-            EventosJpaController deleteEvento = new EventosJpaController(emf);
-            try {
-                deleteEvento.destroy(tmp.getIdEventos());
-                Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
-                setTableEventos();
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
-            }            
+            EntityManager em = emf.createEntityManager();
+            Query getEvento = em.createNamedQuery("Eventos.findByIdEventos").setParameter("idEventos", tmp.getId_eventos());
+            Eventos forDelete = null;
+            try{
+                forDelete = (Eventos) getEvento.getResultList().get(0);
+            }catch(Exception ex){
             
+            }
+            if(forDelete != null){
+                EventosJpaController eventoJpa = new EventosJpaController(emf);
+                try {
+                    eventoJpa.destroy(forDelete.getIdEventos());
+                    setTableEventos();
+                    Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
+
+                } catch (IllegalOrphanException ex) {
+                    Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+                }            
+            }else{
+                Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Ya se ha eliminado el evento satisfactoriamente");
+            }
+
         }else{
             Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder eliminar");
         }
