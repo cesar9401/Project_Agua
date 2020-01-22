@@ -5,24 +5,48 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import model.EventosJpaController;
+import model.exceptions.IllegalOrphanException;
+import model.exceptions.NonexistentEntityException;
 import object.Administradores;
+import object.Eventos;
 import object.Socios;
 
 /**
@@ -31,6 +55,40 @@ import object.Socios;
  * @author cesar31
  */
 public class CrearEventosController implements Initializable {
+    
+    private double precio = 0;
+    private ObservableList<Eventos> eventos;
+    
+    @FXML
+    private Button button_nueva;
+    @FXML
+    private AnchorPane pane_nuevoEvento;
+    @FXML
+    private Button btn_agregar;
+    @FXML
+    private JFXTextField txt_ValorEvento;
+    @FXML
+    private JFXTextField txt_nombreEvento;
+    @FXML
+    private Button btn_cancelar;
+    @FXML
+    private ImageView image_evento;
+    @FXML
+    private DatePicker fecha;
+    @FXML
+    private Label label_titulo;
+    @FXML
+    private TableView<Eventos> table_eventos;
+    @FXML
+    private TableColumn colNombre;
+    @FXML
+    private TableColumn colFecha;
+    @FXML
+    private TableColumn colValor;
+    @FXML
+    private Button button_editar;
+    @FXML
+    private Button button_eliminar;
     
     //----------------------> navBar y adminBar
     //Atributos del administrador que inicia sesion
@@ -76,15 +134,159 @@ public class CrearEventosController implements Initializable {
     @FXML
     private MenuItem item_eventos;
     //---------------------- Aqui termina NavBar y adminBar    
-
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        pane_nuevoEvento.setVisible(false);
+        Image calendario = new Image("/img/calendario.png");
+        image_evento.setImage(calendario);
+        createTable();
+        setTableEventos();
+        button_editar.setDisable(true);
+        button_eliminar.setDisable(true);
     }
 
+    //Boton nuevos eventos, para mostrar AnchorPane con formulario para nuevoss eventos
+    @FXML
+    private void nuevoEventoAction(ActionEvent event) {
+        if(!pane_nuevoEvento.isVisible()){
+            pane_nuevoEvento.setVisible(true);
+        }else{
+            pane_nuevoEvento.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void agregarEventoAction(ActionEvent event) {
+        setEvento();
+    }
+
+    @FXML
+    private void validar(KeyEvent event) {
+        try{
+            precio = Double.parseDouble(txt_ValorEvento.getText());
+        }catch(NumberFormatException ex){
+            txt_ValorEvento.setText("");
+        }
+    }
+
+    @FXML
+    private void cancelarAction(ActionEvent event) {
+        if(pane_nuevoEvento.isVisible()){
+            pane_nuevoEvento.setVisible(false);
+        }
+    }
+
+    public void setEvento(){
+        Eventos nuevo = new Eventos();
+        if(!txt_nombreEvento.getText().isEmpty() && fecha.getValue() != null && !txt_ValorEvento.getText().isEmpty()){
+            nuevo.setNombre(txt_nombreEvento.getText());
+            nuevo.setFecha(java.sql.Date.valueOf(fecha.getValue()));
+            nuevo.setCuota(BigDecimal.valueOf(precio));
+            
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            EventosJpaController saveEvento = new EventosJpaController(emf);
+            saveEvento.create(nuevo);
+            
+            Alerta.Alerta.AlertInformation("Informacion", "Nuevo Evento", "Almacenado Correctamente");
+            txt_nombreEvento.setText("");
+            txt_ValorEvento.setText("");
+            fecha.setValue(null);
+            
+            //Agregar a la tabla
+            setTableEventos();
+        }else{
+            Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
+        }
+    }
+    
+    public List<Eventos> getEventos(){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        Query getEventos = em.createNamedQuery("Eventos.findAll");
+        List<Eventos> evt = null;
+        try{
+            evt = getEventos.getResultList();
+        }catch(Exception ex){
+        
+        }
+        //SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        for(Eventos e: evt){
+            //String fecha = format.format(e.getFecha());
+            java.sql.Date date = new java.sql.Date(e.getFecha().getTime());
+            e.setFecha(date);
+        }
+        
+        return evt;
+    }
+    
+    public void createTable(){
+        eventos = FXCollections.observableArrayList();
+        this.colNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.colFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        this.colValor.setCellValueFactory(new PropertyValueFactory("cuota"));
+    }
+    
+    public void setTableEventos(){
+        eventos.clear();
+        List<Eventos> evt = getEventos();
+        if(!this.eventos.containsAll(evt)){
+            this.eventos.addAll(evt);
+            
+            //Para poder agregar a la tabla
+            this.table_eventos.setItems(eventos);
+        }
+    }
+    
+    @FXML
+    private void seleccionarAction(MouseEvent event) {
+        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            button_editar.setDisable(false);
+            button_eliminar.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void editAction(ActionEvent event) {
+        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+        
+        }else{
+            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder editar");
+        }
+    }
+
+    @FXML
+    private void eliminarAction(ActionEvent event) {
+        Eventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        java.util.Date date = new java.util.Date(tmp.getFecha().getTime());
+        tmp.setFecha(date);
+        
+        if(tmp != null){
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            EventosJpaController deleteEvento = new EventosJpaController(emf);
+            try {
+                deleteEvento.destroy(tmp.getIdEventos());
+                Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
+                setTableEventos();
+            } catch (IllegalOrphanException ex) {
+                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            
+        }else{
+            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder eliminar");
+        }
+        
+    }
+        
+    //-----------Aqui empiezan metodos del navBar y adminBar
     @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
@@ -175,5 +377,4 @@ public class CrearEventosController implements Initializable {
         stage.show();
     }
     //-----------Aqui termina metodos del navBar y adminBar    
-    
 }

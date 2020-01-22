@@ -59,7 +59,7 @@ public class Eventos implements Serializable {
     private BigDecimal cuota;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventosIdEventos")
     private Collection<SociosEventos> sociosEventosCollection;
-
+    
     public Eventos() {
     }
 
@@ -139,5 +139,5 @@ public class Eventos implements Serializable {
     public String toString() {
         return "object.Eventos[ idEventos=" + idEventos + " ]";
     }
-    
+
 }

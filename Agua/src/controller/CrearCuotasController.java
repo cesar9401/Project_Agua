@@ -235,6 +235,7 @@ public class CrearCuotasController implements Initializable {
             txt_nombreCuota.setText("");
             txt_ValorCuota.setText("");
             
+            //Agregar a la tabla
             setTableCuotas();
         }else{
             Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
