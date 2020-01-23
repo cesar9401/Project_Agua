@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -37,53 +40,54 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import model.CuotasJpaController;
+import model.EventosJpaController;
 import model.exceptions.IllegalOrphanException;
 import model.exceptions.NonexistentEntityException;
 import object.Administradores;
-import object.Cuotas;
+import object.Eventos;
 import object.Socios;
+import object.auxiliary.ViewEventos;
 
 /**
  * FXML Controller class
  *
  * @author cesar31
  */
-public class CrearCuotasController implements Initializable {
+public class CrearEventosController implements Initializable {
     
     private double precio = 0;
-    private ObservableList<Cuotas> cuotas;
+    private ObservableList<ViewEventos> eventos;
     
-    @FXML
-    private AnchorPane pane_cuotas;
     @FXML
     private Button button_nueva;
     @FXML
-    private AnchorPane pane_nuevaCuota;
-    @FXML
-    private JFXTextField txt_nombreCuota;
-    @FXML
-    private JFXTextField txt_ValorCuota;
+    private AnchorPane pane_nuevoEvento;
     @FXML
     private Button btn_agregar;
     @FXML
+    private JFXTextField txt_ValorEvento;
+    @FXML
+    private JFXTextField txt_nombreEvento;
+    @FXML
     private Button btn_cancelar;
+    @FXML
+    private ImageView image_evento;
+    @FXML
+    private DatePicker fecha;
     @FXML
     private Label label_titulo;
     @FXML
-    private TableView<Cuotas> table_cuotas;
+    private TableView<ViewEventos> table_eventos;
     @FXML
-    private Button btn_editar;
+    private TableColumn colNombre;
     @FXML
-    private Button btn_eliminar;
-    @FXML
-    private TableColumn colNo;
-    @FXML
-    private TableColumn colDescripcion;
+    private TableColumn colFecha;
     @FXML
     private TableColumn colValor;
     @FXML
-    private ImageView image_moneda;
+    private Button button_editar;
+    @FXML
+    private Button button_eliminar;
     
     //----------------------> navBar y adminBar
     //Atributos del administrador que inicia sesion
@@ -94,7 +98,7 @@ public class CrearCuotasController implements Initializable {
     private AnchorPane navBar;
     @FXML
     private MenuButton admin_button;
-    @FXML
+    @FXML 
     private MenuItem item_cerrarSesion;
     @FXML
     private AnchorPane adminBar;
@@ -129,150 +133,197 @@ public class CrearCuotasController implements Initializable {
     @FXML
     private MenuItem item_eventos;
     //---------------------- Aqui termina NavBar y adminBar    
-
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        pane_nuevaCuota.setVisible(false);
-        Image coin = new Image("/img/moneda.png");
-        image_moneda.setImage(coin);
+        pane_nuevoEvento.setVisible(false);
+        Image calendario = new Image("/img/calendario.png");
+        image_evento.setImage(calendario);
         createTable();
-        setTableCuotas();
-        btn_editar.setDisable(true);
-        btn_eliminar.setDisable(true);
-    }    
+        setTableEventos();
+        button_editar.setDisable(true);
+        button_eliminar.setDisable(true);
+    }
 
-    //Boton Nueva Cuota, para mostrar AnchorPane con formulario para nuevas cuotas
+    //Boton nuevos eventos, para mostrar AnchorPane con formulario para nuevoss eventos
     @FXML
-    private void nuevaCuotaAction(ActionEvent event) {
-        if(!pane_nuevaCuota.isVisible()){
-            pane_nuevaCuota.setVisible(true);
+    private void nuevoEventoAction(ActionEvent event) {
+        if(!pane_nuevoEvento.isVisible()){
+            pane_nuevoEvento.setVisible(true);
         }else{
-            pane_nuevaCuota.setVisible(false);
+            pane_nuevoEvento.setVisible(false);
         }
     }
 
-    //Boton Agregar
     @FXML
-    private void agregarCuotaAction(ActionEvent event) {
-        setCuota();
-    }
-    
-    //Boton cancelar
-    @FXML
-    private void cancelarAction(ActionEvent event) {
-        if(pane_nuevaCuota.isVisible()){
-            pane_nuevaCuota.setVisible(false);
-        }
+    private void agregarEventoAction(ActionEvent event) {
+        setEvento();
     }
 
-    //Validar que ingrese datos para cobros
     @FXML
     private void validar(KeyEvent event) {
         try{
-            precio = Double.parseDouble(txt_ValorCuota.getText());
-        }catch(NumberFormatException e){
-            txt_ValorCuota.setText("");
-        }    
-     }
-
-    @FXML
-    private void editAction(ActionEvent event) {
-        Cuotas tmp = table_cuotas.getSelectionModel().getSelectedItem();
-        if(tmp != null){
-            
-        }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar una cuota para poder editarla");
+            precio = Double.parseDouble(txt_ValorEvento.getText());
+        }catch(NumberFormatException ex){
+            txt_ValorEvento.setText("");
         }
     }
 
     @FXML
-    private void eliminarAction(ActionEvent event) {
-        Cuotas tmp = table_cuotas.getSelectionModel().getSelectedItem();
-        if(tmp != null){
-            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-            CuotasJpaController deleteCuota = new CuotasJpaController(emf);
-            try {
-                deleteCuota.destroy(tmp.getIdCuotas());
-                Alerta.Alerta.AlertInformation("Informacion", "Cuota Eliminada", "Se ha eliminado la cuota satisfactoriamente");
-                setTableCuotas();
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar una cuota para poder eliminarla");
+    private void cancelarAction(ActionEvent event) {
+        if(pane_nuevoEvento.isVisible()){
+            pane_nuevoEvento.setVisible(false);
         }
+    }
 
-    }
-    
-    @FXML
-    private void seleccionarAction(MouseEvent event) {  
-        Cuotas tmp = table_cuotas.getSelectionModel().getSelectedItem();
-        if(tmp != null){
-            btn_editar.setDisable(false);
-            btn_eliminar.setDisable(false);
-        }
-    }
-    
-    public void setCuota(){
-        Cuotas nueva = new Cuotas();
-        
-        if(!txt_nombreCuota.getText().isEmpty() && !txt_ValorCuota.getText().isEmpty()){
-            nueva.setNombreCuota(txt_nombreCuota.getText());
-            BigDecimal valor = BigDecimal.valueOf(precio);
-            nueva.setValorCuota(valor);
+    public void setEvento(){
+        Eventos nuevo = new Eventos();
+        if(!txt_nombreEvento.getText().isEmpty() && fecha.getValue() != null && !txt_ValorEvento.getText().isEmpty()){
+            nuevo.setNombre(txt_nombreEvento.getText());
+            nuevo.setFecha(java.sql.Date.valueOf(fecha.getValue()));
+            nuevo.setCuota(BigDecimal.valueOf(precio));
             
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-            CuotasJpaController saveCuota = new CuotasJpaController(emf);
-            saveCuota.create(nueva);
+            EventosJpaController saveEvento = new EventosJpaController(emf);
+            saveEvento.create(nuevo);
             
-            Alerta.Alerta.AlertInformation("Informacion", "Nueva Cuota", "Almacenado Correctamente");
-            txt_nombreCuota.setText("");
-            txt_ValorCuota.setText("");
+            Alerta.Alerta.AlertInformation("Informacion", "Nuevo Evento", "Almacenado Correctamente");
+            txt_nombreEvento.setText("");
+            txt_ValorEvento.setText("");
+            fecha.setValue(null);
             
             //Agregar a la tabla
-            setTableCuotas();
+            setTableEventos();
         }else{
             Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
         }
     }
     
-    public List<Cuotas> getCuotas(){
+    public List<ViewEventos> getEventos(){
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         EntityManager em = emf.createEntityManager();
-        Query getCuotas = em.createNamedQuery("Cuotas.findAll");
-        List<Cuotas> cts = null;
+        Query getEventos = em.createNamedQuery("Eventos.findAll");
+        List<Eventos> evt = null;
+        List<ViewEventos> viewEvt = new ArrayList<>();
         try{
-            cts = (List<Cuotas>) getCuotas.getResultList();
-        }catch(Exception e){
+            evt = getEventos.getResultList();
+        }catch(Exception ex){
         
-        }    
+        }
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        for(Eventos e: evt){
+            String fecha = format.format(e.getFecha());
+            viewEvt.add(new ViewEventos(e.getIdEventos(), e.getNombre(), fecha, e.getCuota()));
+        }
         
-        return cts;
+        return viewEvt;
     }
     
     public void createTable(){
-        cuotas = FXCollections.observableArrayList();
-        this.colNo.setCellValueFactory(new PropertyValueFactory("idCuotas"));
-        this.colDescripcion.setCellValueFactory(new PropertyValueFactory("nombreCuota"));
-        this.colValor.setCellValueFactory(new PropertyValueFactory("valorCuota"));
+        eventos = FXCollections.observableArrayList();
+        this.colNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
+        this.colFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        this.colValor.setCellValueFactory(new PropertyValueFactory("cuota"));
     }
     
-    public void setTableCuotas(){
-        cuotas.clear();
-        List<Cuotas> cuotas_tmp = getCuotas();
-        if(!this.cuotas.containsAll(cuotas_tmp)){
-            this.cuotas.addAll(cuotas_tmp);
-            this.table_cuotas.setItems(cuotas);
+    public void setTableEventos(){
+        eventos.clear();
+        List<ViewEventos> evt = getEventos();
+        if(!this.eventos.containsAll(evt)){
+            this.eventos.addAll(evt);
+            
+            //Para poder agregar a la tabla
+            this.table_eventos.setItems(eventos);
         }
     }
     
+    @FXML
+    private void seleccionarAction(MouseEvent event) {
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            button_editar.setDisable(false);
+            button_eliminar.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void editAction(ActionEvent event) {
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            Eventos forEdit = getEventoById(tmp);
+            if(forEdit != null){
+            
+            }
+        }else{
+            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder editar");
+        }
+    }
+
+    @FXML
+    private void eliminarAction(ActionEvent event) {
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        
+        if(tmp != null){
+            Eventos forDelete = getEventoById(tmp);
+            if(forDelete != null){
+                //Metodo para eliminar evento
+                setDestroyEventos(forDelete);
+            }else{
+                Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Ya se ha eliminado el evento satisfactoriamente");
+            }
+        }else{
+            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder eliminar");
+        }
+    }
     
+    public void setDestroyEventos(Eventos forDelete){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EventosJpaController eventoJpa = new EventosJpaController(emf);
+        try {
+            eventoJpa.destroy(forDelete.getIdEventos());
+            setTableEventos();
+            Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
+
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+    }
+    
+    public void setEditEventos(Eventos forEdit){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EventosJpaController eventoJpa = new EventosJpaController(emf);
+        try {
+            eventoJpa.edit(forEdit);
+            setTableEventos();
+            Alerta.Alerta.AlertInformation("Informacion", "Evento Actualizado", "Se ha actualizado el evento satisfactoriamente");
+
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Eventos getEventoById(ViewEventos tmp){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        Query getEvento = em.createNamedQuery("Eventos.findByIdEventos").setParameter("idEventos", tmp.getId_eventos());
+        Eventos evt = null;
+        try{
+            evt = (Eventos) getEvento.getResultList().get(0);
+        }catch(Exception ex){
+            
+        }
+        
+        return evt;
+    }
+        
     //-----------Aqui empiezan metodos del navBar y adminBar
     @FXML
     void cerrarSesion(ActionEvent event) {
@@ -363,5 +414,5 @@ public class CrearCuotasController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    //-----------Aqui termina metodos del navBar y adminBar
+    //-----------Aqui termina metodos del navBar y adminBar    
 }

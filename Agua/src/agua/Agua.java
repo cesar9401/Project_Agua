@@ -33,8 +33,6 @@ public class Agua extends Application{
         stage.setTitle("Login");
         stage.setScene(new Scene(root));
         stage.show();
-        
-        
     }
     
 }
