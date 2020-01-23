@@ -80,7 +80,8 @@
       
       <JFXTextField fx:id="txtCode" labelFloat="true" layoutX="538.0" layoutY="372.0" prefHeight="26.0" prefWidth="300.0" promptText="Codigo" />
       <JFXToggleButton fx:id="isExonerated" layoutX="536.0" layoutY="444.0" prefHeight="60.0" prefWidth="171.0" text="Exonerar" unToggleColor="#030000" />
-      <JFXToggleButton fx:id="mancomunado" layoutX="538.0" layoutY="506.0" prefHeight="60.0" prefWidth="171.0" text="Mancomunado" unToggleColor="#030000" />
+      <JFXToggleButton fx:id="mancomunado" layoutX="670.0" layoutY="444.0" prefHeight="60.0" prefWidth="171.0" text="Mancomunado" unToggleColor="#030000" />
+       <JFXTextField fx:id="txtCodePropietario" labelFloat="true" layoutX="548.0" layoutY="506.0" prefHeight="26.0" prefWidth="250.0" promptText="Codigo" />
       <DatePicker fx:id="datePicker" layoutX="538.0" layoutY="562.0" promptText="Fecha Inicio" />
       
       <JFXButton fx:id="Crear" buttonType="RAISED" layoutX="449.0" layoutY="680.0" onAction="#crearSocio" prefHeight="58.0" prefWidth="196.0" style="-fx-background-color: red;" styleClass="button_crear" text="Crear" />

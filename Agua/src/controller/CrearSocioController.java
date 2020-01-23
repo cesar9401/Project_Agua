@@ -70,6 +70,8 @@ public class CrearSocioController implements Initializable {
     private DatePicker datePicker;
     @FXML
     private JFXTextField txtDireccion;
+    @FXML
+    private JFXTextField txtCodePropietario;
     
     private boolean changeImg;
     private String pathImg;
@@ -129,9 +131,18 @@ public class CrearSocioController implements Initializable {
         Image imgUsr = new Image("/img/usr+.png");
         img.setImage(imgUsr);
         changeImg = false;
+        txtCodePropietario.setVisible(false);
         
         txtCui.setOnKeyTyped(event -> validationOfNumber(event));
         txtCode.setOnKeyTyped(event -> validationOfNumber(event));
+        
+        mancomunado.setOnAction(e -> {
+            if (mancomunado.isSelected()) {
+                txtCodePropietario.setVisible(mancomunado.isSelected());
+                System.out.println("agregarPopOver");
+            }
+        });
+        
     }    
 
     @FXML
@@ -357,4 +368,8 @@ public class CrearSocioController implements Initializable {
         stage.show();
     }
     //-----------Aqui termina metodos del navBar y adminBar
+    
+    public void popOverMancomunado(){
+        
+    }
 }
