@@ -254,7 +254,10 @@ public class CrearEventosController implements Initializable {
     private void editAction(ActionEvent event) {
         ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
         if(tmp != null){
-        
+            Eventos forEdit = getEventoById(tmp);
+            if(forEdit != null){
+            
+            }
         }else{
             Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder editar");
         }
@@ -263,38 +266,62 @@ public class CrearEventosController implements Initializable {
     @FXML
     private void eliminarAction(ActionEvent event) {
         ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
-        System.out.println("id: " + tmp.getId_eventos());
         
         if(tmp != null){
-            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-            EntityManager em = emf.createEntityManager();
-            Query getEvento = em.createNamedQuery("Eventos.findByIdEventos").setParameter("idEventos", tmp.getId_eventos());
-            Eventos forDelete = null;
-            try{
-                forDelete = (Eventos) getEvento.getResultList().get(0);
-            }catch(Exception ex){
-            
-            }
+            Eventos forDelete = getEventoById(tmp);
             if(forDelete != null){
-                EventosJpaController eventoJpa = new EventosJpaController(emf);
-                try {
-                    eventoJpa.destroy(forDelete.getIdEventos());
-                    setTableEventos();
-                    Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
-
-                } catch (IllegalOrphanException ex) {
-                    Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NonexistentEntityException ex) {
-                    Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
-                }            
+                //Metodo para eliminar evento
+                setDestroyEventos(forDelete);
             }else{
                 Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Ya se ha eliminado el evento satisfactoriamente");
             }
-
         }else{
             Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder eliminar");
         }
+    }
+    
+    public void setDestroyEventos(Eventos forDelete){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EventosJpaController eventoJpa = new EventosJpaController(emf);
+        try {
+            eventoJpa.destroy(forDelete.getIdEventos());
+            setTableEventos();
+            Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
+
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+    }
+    
+    public void setEditEventos(Eventos forEdit){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EventosJpaController eventoJpa = new EventosJpaController(emf);
+        try {
+            eventoJpa.edit(forEdit);
+            setTableEventos();
+            Alerta.Alerta.AlertInformation("Informacion", "Evento Actualizado", "Se ha actualizado el evento satisfactoriamente");
+
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Eventos getEventoById(ViewEventos tmp){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        Query getEvento = em.createNamedQuery("Eventos.findByIdEventos").setParameter("idEventos", tmp.getId_eventos());
+        Eventos evt = null;
+        try{
+            evt = (Eventos) getEvento.getResultList().get(0);
+        }catch(Exception ex){
+            
+        }
         
+        return evt;
     }
         
     //-----------Aqui empiezan metodos del navBar y adminBar
