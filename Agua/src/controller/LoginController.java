@@ -5,6 +5,7 @@
  */
 package controller;
 
+import com.sun.javafx.cursor.CursorFrame;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -15,8 +16,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -75,6 +78,9 @@ public class LoginController implements Initializable {
         if(admin != null){
             logIn();
         }else{
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Informacion");
+            alerta.setContentText("Usuario y/o contraseña incorrecta");
             System.out.println("Usuario y/o contraseña incorrecta");
         }
     }
@@ -87,6 +93,14 @@ public class LoginController implements Initializable {
         // TODO
         Image image = new Image("/img/icono200x200.png");
         image_view.setImage(image);
+        
+        text_socio.setOnAction((ActionEvent e)->{
+            
+          pass_socio.requestFocus();
+        });
+        pass_socio.setOnAction(e ->{
+            obtener();
+        });
     }
     
     public void getMainView() throws IOException{
