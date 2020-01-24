@@ -17,9 +17,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +34,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.Blend;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -150,34 +155,20 @@ public class CrearSocioController implements Initializable {
             }
         });
         
+        Query forGetSocios = getEntityManager().createNamedQuery("Socios.findAll");
         
-        popOverMancomunado();
+         ObservableList<ViewSocio> showDataSocio = FXCollections.observableArrayList();
         
-        
+        for (Iterator<Socios> iterator = forGetSocios.getResultList().iterator(); iterator.hasNext();) {
+            Socios next = iterator.next();
+            showDataSocio.add(new ViewSocio(next.getIdSocio(), next.getCodigo(), next.getNombres()));
+          //  System.out.println(next.getNombre());
          
-        JFXTextField searchSocio = new JFXTextField();
-        searchSocio.setPrefSize(200, 150);
-        searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
-        searchSocio.setLabelFloat(true);
-        
-        searchSocio.setLayoutX(20);
-        searchSocio.setLayoutY(10);
+            
+        }
+        popOverMancomunado(showDataSocio);
         
         
-        TableView<ViewSocio> tableView = new TableView<>();
-        tableView.setLayoutX(0);
-        tableView.setLayoutY(30);
-        
-        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
-        
-        PopOver popOver = new PopOver(anchorPane);
-        txtCodePropietario.setEffect(new Blend());
-        
-        
-        txtCodePropietario.setOnKeyPressed(e->{
-            System.out.println("Pop oVert visible");
-            popOver.show(txtCodePropietario);
-        });
         
         
     }    
@@ -438,8 +429,54 @@ public class CrearSocioController implements Initializable {
     }
     //-----------Aqui termina metodos del navBar y adminBar
     
-    public void popOverMancomunado(){
+    public void popOverMancomunado(ObservableList<ViewSocio> items){
        
         
+         
+        JFXTextField searchSocio = new JFXTextField();
+        searchSocio.setPrefSize(200, 150);
+        searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
+        searchSocio.setLabelFloat(true);
+        
+        searchSocio.setLayoutX(2);
+        searchSocio.setLayoutY(5);
+        searchSocio.setVisible(true);
+        
+        
+        TableColumn<ViewSocio,String> forCodigo = new TableColumn<ViewSocio, String>("Codigo");
+        TableColumn<ViewSocio,String> forSocio = new TableColumn<ViewSocio, String>("Nombre");
+        
+          forCodigo.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("codigo"));
+        forSocio.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("nombre"));
+        
+        
+        forCodigo.setPrefWidth(250);
+        forSocio.setPrefWidth(250);
+        
+        TableView<ViewSocio> tableView = new TableView<>(items);
+        
+        tableView.setLayoutX(0);
+        tableView.setLayoutY(30);
+        tableView.getColumns().addAll(forCodigo,forSocio);
+        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
+        
+//        anchorPane.setClip(searchSocio);
+//        anchorPane.setClip(tableView);
+        
+        PopOver popOver = new PopOver(anchorPane);
+        txtCodePropietario.setEffect(new Blend());
+        
+        
+        txtCodePropietario.setOnKeyPressed(e->{
+            System.out.println("Pop oVert visible");
+            popOver.show(txtCodePropietario);
+        });
+        
+        
+    }
+    private EntityManager getEntityManager(){
+         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        
+        return emf.createEntityManager();
     }
 }
