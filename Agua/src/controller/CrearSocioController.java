@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTextField;
 //import com.jfoenix.controls.JFXTextField;
 import javafx.scene.control.TextField;
 import com.jfoenix.controls.JFXToggleButton;
+import com.sun.org.apache.bcel.internal.generic.PopInstruction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,11 +30,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
+import javafx.scene.effect.Blend;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
@@ -42,6 +46,8 @@ import javax.persistence.Query;
 import model.SociosJpaController;
 import object.Administradores;
 import object.Socios;
+import object.auxiliary.ViewSocio;
+import org.controlsfx.control.PopOver;
 
 /**
  * FXML Controller class
@@ -142,6 +148,36 @@ public class CrearSocioController implements Initializable {
                 System.out.println("agregarPopOver");
             }
         });
+        
+        
+        popOverMancomunado();
+        
+        
+         
+        JFXTextField searchSocio = new JFXTextField();
+        searchSocio.setPrefSize(200, 150);
+        searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
+        searchSocio.setLabelFloat(true);
+        
+        searchSocio.setLayoutX(20);
+        searchSocio.setLayoutY(10);
+        
+        
+        TableView<ViewSocio> tableView = new TableView<>();
+        tableView.setLayoutX(0);
+        tableView.setLayoutY(30);
+        
+        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
+        
+        PopOver popOver = new PopOver(anchorPane);
+        txtCodePropietario.setEffect(new Blend());
+        
+        
+        txtCodePropietario.setOnKeyPressed(e->{
+            System.out.println("Pop oVert visible");
+            popOver.show(txtCodePropietario);
+        });
+        
         
     }    
 
@@ -370,6 +406,7 @@ public class CrearSocioController implements Initializable {
     //-----------Aqui termina metodos del navBar y adminBar
     
     public void popOverMancomunado(){
+       
         
     }
 }
