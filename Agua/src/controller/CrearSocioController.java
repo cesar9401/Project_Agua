@@ -26,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -202,9 +203,14 @@ public class CrearSocioController implements Initializable {
                 changeImg = true;
                 pathImg = selectFile.getAbsolutePath();
                 
-            }else
-                Alerta.Alerta.AlertInformation("Imagen", "Archivo Invalido", "Debe seleccionar una Imagen");
-            
+            }else{
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText("Archivo Invalido");
+                info.setContentText("Debe seleccionar una cuota para poder eliminarla");
+                info.show(); 
+                
+            }
         }
     }
     
@@ -242,7 +248,14 @@ public class CrearSocioController implements Initializable {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(CrearSocioController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
-                    Alerta.Alerta.AlertError("Error", "Imagen", "Ocurrio un error al intentar guardar la imagen");
+                    Alert info = new Alert(Alert.AlertType.ERROR);
+                    info.setTitle("Error");
+                    info.setHeaderText("Imagen");
+                    info.setContentText("Ocurrio un error al intentar guardar la imagen");
+                    info.show(); 
+
+                    
+                    
                     Logger.getLogger(CrearSocioController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -251,9 +264,22 @@ public class CrearSocioController implements Initializable {
             SociosJpaController saveSocio = new SociosJpaController(emf);
             saveSocio.create(nuevo);
             
-            Alerta.Alerta.AlertInformation("Informacion", "Nuevo Socio", "Almacenado Correctamente");
+            
+            
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText("Nuevo Socio");
+                info.setContentText("Almacenado Correctamente");
+                info.show(); 
+                
         }else{
-            Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText("Informacion ");
+                info.setContentText("Debe llenar los campos obligatorios");
+                info.show(); 
+                
+            
         }
         
         
@@ -284,7 +310,14 @@ public class CrearSocioController implements Initializable {
             }
         if (consultaCodigo.getResultList().size()>0) {
 
-            Alerta.Alerta.AlertInformation("Informacion", "Codigo", "El Codigo que Ingreso ya Existe");
+            
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText("Codigo ");
+                info.setContentText("El Codigo que Ingreso ya existe");
+                info.show(); 
+                
+            
             
             txtCode.setText("");
             return null;

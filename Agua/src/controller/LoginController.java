@@ -79,8 +79,10 @@ public class LoginController implements Initializable {
             logIn();
         }else{
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-            alerta.setTitle("Informacion");
+            alerta.setTitle("Error");
+            alerta.setHeaderText("Error");
             alerta.setContentText("Usuario y/o contraseña incorrecta");
+            alerta.show();
             System.out.println("Usuario y/o contraseña incorrecta");
         }
     }

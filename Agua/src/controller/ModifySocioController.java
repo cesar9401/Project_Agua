@@ -202,7 +202,12 @@ public class ModifySocioController implements Initializable {
                            deleteSocio();
                             getAndShowAllSocios(forGetSocios.getResultList());
                             cleanFields();
-                            Alerta.Alerta.AlertInformation("Informacion", "Socio Eliminado", "Correctamente");
+                             Alert info = new Alert(Alert.AlertType.INFORMATION);
+                                info.setTitle("Informacion");
+                                info.setHeaderText(" Socio Eliminado ");
+                                info.setContentText("Correctamente");
+                                info.show(); 
+                            
                         } 
                         chkBox.setSelected(false);
                     
@@ -319,7 +324,14 @@ public class ModifySocioController implements Initializable {
         }else{
             Query checkCodigo = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigoModificado);
             if (checkCodigo.getResultList().size()>0) {
-                Alerta.Alerta.AlertInformation("Informacion", "Codigo", "El Codigo ingresado ya existe");
+                
+                 Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText(" Codigo");
+                info.setContentText("El Codigo ingresado ya existe");
+                info.show(); 
+                
+                
             }else{
                 aMdoficar.setCodigo(codigoModificado);
                 }
@@ -331,10 +343,22 @@ public class ModifySocioController implements Initializable {
         try {
             socioJpa.edit(aMdoficar);
         } catch (NonexistentEntityException ex) {
-            Alerta.Alerta.AlertInformation("Error", "Modificar Socio", ex.getMessage());
+            
+             Alert info = new Alert(Alert.AlertType.ERROR);
+            info.setTitle("Error");
+            info.setHeaderText(" Modificar socio");
+            info.setContentText(ex.getMessage());
+            info.show(); 
+            
+            
             Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Alerta.Alerta.AlertInformation("Error", "Modificar Socio", ex.getMessage());
+             Alert info = new Alert(Alert.AlertType.ERROR);
+            info.setTitle("Error Type 2");
+            info.setHeaderText(" Modificar socio");
+            info.setContentText(ex.getMessage());
+            info.show(); 
+            
             Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -372,10 +396,21 @@ public class ModifySocioController implements Initializable {
         try {
             eliminarSocio.destroy(aMdoficar.getIdSocio());
         } catch (IllegalOrphanException ex) {
-            Alerta.Alerta.AlertError("Eliminar", "Eliminiacion", "Finalizo con un error, Socio No eliminado");
+             Alert info = new Alert(Alert.AlertType.ERROR);
+            info.setTitle("Error");
+            info.setHeaderText("socio No Eliminado");
+            info.setContentText(ex.getMessage());
+            info.show(); 
+            
             Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
-            Alerta.Alerta.AlertError("Eliminar", "Eliminiacion", "Finalizo con un error, Socio No eliminado");
+             Alert info = new Alert(Alert.AlertType.ERROR);
+            info.setTitle("Error Type 2");
+            info.setHeaderText("socio No Eliminado");
+            info.setContentText(ex.getMessage());
+            info.show(); 
+            
+            
             Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
         }
      }

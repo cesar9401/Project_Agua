@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -185,7 +186,11 @@ public class CrearCuotasController implements Initializable {
         if(tmp != null){
             
         }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar una cuota para poder editarla");
+            Alert alertaError = new Alert(Alert.AlertType.ERROR);
+            alertaError.setTitle("Error");
+            alertaError.setContentText("Debe seleccionar una cuota para poder editarla");
+            alertaError.show();
+            
         }
     }
 
@@ -197,7 +202,12 @@ public class CrearCuotasController implements Initializable {
             CuotasJpaController deleteCuota = new CuotasJpaController(emf);
             try {
                 deleteCuota.destroy(tmp.getIdCuotas());
-                Alerta.Alerta.AlertInformation("Informacion", "Cuota Eliminada", "Se ha eliminado la cuota satisfactoriamente");
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setContentText( "Se ha eliminado la cuota satisfactoriamente");
+                info.show();
+                
+                
                 setTableCuotas();
             } catch (IllegalOrphanException ex) {
                 Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,7 +215,10 @@ public class CrearCuotasController implements Initializable {
                 Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar una cuota para poder eliminarla");
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setContentText("Debe seleccionar una cuota para poder eliminarla");
+                info.show();                
         }
 
     }
@@ -230,15 +243,22 @@ public class CrearCuotasController implements Initializable {
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
             CuotasJpaController saveCuota = new CuotasJpaController(emf);
             saveCuota.create(nueva);
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setContentText("Couta Almacenada Correctamente");
+            info.show(); 
             
-            Alerta.Alerta.AlertInformation("Informacion", "Nueva Cuota", "Almacenado Correctamente");
             txt_nombreCuota.setText("");
             txt_ValorCuota.setText("");
             
             //Agregar a la tabla
             setTableCuotas();
         }else{
-            Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setContentText("Debe llenar los campos obligatorios");
+                info.show(); 
+            
         }
     }
     

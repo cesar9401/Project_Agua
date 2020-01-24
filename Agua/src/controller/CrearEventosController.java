@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -190,8 +191,13 @@ public class CrearEventosController implements Initializable {
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
             EventosJpaController saveEvento = new EventosJpaController(emf);
             saveEvento.create(nuevo);
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText(" Nuevo Evento");
+                info.setContentText("Almacenado Correctamente");
+                info.show(); 
+                
             
-            Alerta.Alerta.AlertInformation("Informacion", "Nuevo Evento", "Almacenado Correctamente");
             txt_nombreEvento.setText("");
             txt_ValorEvento.setText("");
             fecha.setValue(null);
@@ -199,7 +205,14 @@ public class CrearEventosController implements Initializable {
             //Agregar a la tabla
             setTableEventos();
         }else{
-            Alerta.Alerta.AlertInformation("Faltan Datos", "Informacion", "Debe llenar los Campos obligatorios");
+            
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setHeaderText(" Informacion");
+            info.setContentText("Debe llenar los Campos obligatorios");
+            info.show(); 
+                
+            
         }
     }
     
@@ -259,7 +272,13 @@ public class CrearEventosController implements Initializable {
             
             }
         }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder editar");
+            
+             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un evento para pode editar");
+            errorInfo.show(); 
+            
         }
     }
 
@@ -273,10 +292,21 @@ public class CrearEventosController implements Initializable {
                 //Metodo para eliminar evento
                 setDestroyEventos(forDelete);
             }else{
-                Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Ya se ha eliminado el evento satisfactoriamente");
+                
+                 Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setHeaderText(" Evento eliminado");
+                info.setContentText("Evento eliminado Satisfactoriamente");
+                info.show(); 
+                
             }
         }else{
-            Alerta.Alerta.AlertError("Error", "Accion no valida", "Debe seleccionar un evento para poder eliminar");
+             Alert info = new Alert(Alert.AlertType.ERROR);
+            info.setTitle("Error");
+            info.setHeaderText(" Accion No Valida");
+            info.setContentText("Debe Seleccionar un evento para poder eliminarlo");
+            info.show(); 
+            
         }
     }
     
@@ -286,7 +316,13 @@ public class CrearEventosController implements Initializable {
         try {
             eventoJpa.destroy(forDelete.getIdEventos());
             setTableEventos();
-            Alerta.Alerta.AlertInformation("Informacion", "Evento Eliminado", "Se ha eliminado el evento satisfactoriamente");
+            
+             Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setHeaderText(" Evento Eliminado");
+            info.setContentText("Se ha eliminado el evento satisfactoriamente");
+            info.show(); 
+            
 
         } catch (IllegalOrphanException ex) {
             Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,7 +337,14 @@ public class CrearEventosController implements Initializable {
         try {
             eventoJpa.edit(forEdit);
             setTableEventos();
-            Alerta.Alerta.AlertInformation("Informacion", "Evento Actualizado", "Se ha actualizado el evento satisfactoriamente");
+            
+             Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setHeaderText(" Evento Actualizado ");
+            info.setContentText("Se ha Actualizado el evento satisfactoriamente");
+            info.show(); 
+            
+            
 
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
