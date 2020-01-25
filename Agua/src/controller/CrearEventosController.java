@@ -273,7 +273,7 @@ public class CrearEventosController implements Initializable {
             }
         }else{
             
-             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
             errorInfo.setTitle("Error");
             errorInfo.setHeaderText(" Accion no Valida");
             errorInfo.setContentText("Debe seleccionar un evento para pode editar");
@@ -293,7 +293,7 @@ public class CrearEventosController implements Initializable {
                 setDestroyEventos(forDelete);
             }else{
                 
-                 Alert info = new Alert(Alert.AlertType.INFORMATION);
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
                 info.setTitle("Informacion");
                 info.setHeaderText(" Evento eliminado");
                 info.setContentText("Evento eliminado Satisfactoriamente");
@@ -317,7 +317,7 @@ public class CrearEventosController implements Initializable {
             eventoJpa.destroy(forDelete.getIdEventos());
             setTableEventos();
             
-             Alert info = new Alert(Alert.AlertType.INFORMATION);
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Informacion");
             info.setHeaderText(" Evento Eliminado");
             info.setContentText("Se ha eliminado el evento satisfactoriamente");
@@ -338,7 +338,7 @@ public class CrearEventosController implements Initializable {
             eventoJpa.edit(forEdit);
             setTableEventos();
             
-             Alert info = new Alert(Alert.AlertType.INFORMATION);
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Informacion");
             info.setHeaderText(" Evento Actualizado ");
             info.setContentText("Se ha Actualizado el evento satisfactoriamente");
