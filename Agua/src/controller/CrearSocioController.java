@@ -131,6 +131,8 @@ public class CrearSocioController implements Initializable {
     private Label label_inicio;
     @FXML
     private MenuItem item_eventos;    
+    private int idSocio;
+    private String codigosocio;
     //---------------------- Aqui termina NavBar y adminBar
 
     /**
@@ -433,9 +435,10 @@ public class CrearSocioController implements Initializable {
        
         
          
-        TextField searchSocio = new TextField();
+        JFXTextField searchSocio = new JFXTextField();
         searchSocio.setPrefSize(200, 150);
         searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
+        searchSocio.setEditable(true);
         //searchSocio.setLabelFloat(true);
 //        
 //        searchSocio.setLayoutX(2);
@@ -461,7 +464,10 @@ public class CrearSocioController implements Initializable {
         
         tableView.setOnMouseClicked(e ->{
             if (e.getClickCount() == 2) {
-                int idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
+                this.idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
+                txtCodePropietario.setText("");
+                txtCodePropietario.setText(tableView.getSelectionModel().getSelectedItem().getCodigo());
+                
                 System.out.println("Id"+idSocio);
             }
         });

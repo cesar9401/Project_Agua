@@ -289,14 +289,33 @@ public class ModifySocioController implements Initializable {
         txtDate.setValue(socio.getFechaInicioPago().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         mancomunado.setSelected(codigoSocio[0].contains("B"));
         isExonerated.setSelected(socio.getExonerado());
+        
+        
+        if (codigoSocio[0].contains("B")) {
+
+
+           // txtIdSuperSocio.setText(socio.getSociosIdSocio().getCodigo());
+            
+            //txtIdSuperSocio.setText();
+        }
+        
         try {
-            InputStream in = new ByteArrayInputStream(socio.getFotografia());
-            javafx.scene.image.Image image = new javafx.scene.image.Image(in);
-            imgSocio.setImage(image);
+            if (socio.getFotografia().toString() == null) {
+                System.out.println("Null");
+                Image imgUsr = new Image("/img/usr+.png");
+            }else{
+                
+                InputStream in = new ByteArrayInputStream(socio.getFotografia());
+                javafx.scene.image.Image image = new javafx.scene.image.Image(in);
+                imgSocio.setImage(image);
+            }
 
             
         } catch (Exception e) {
+            Image imgUsr = new Image("/img/usr+.png");
             System.out.println("No tiene fotografia");
+            imgSocio.setImage(imgUsr);
+            
         }
         // imgSocio.setImage(mostrar);
        
