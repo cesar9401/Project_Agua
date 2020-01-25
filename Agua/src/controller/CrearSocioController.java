@@ -433,13 +433,13 @@ public class CrearSocioController implements Initializable {
        
         
          
-        JFXTextField searchSocio = new JFXTextField();
+        TextField searchSocio = new TextField();
         searchSocio.setPrefSize(200, 150);
         searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
-        searchSocio.setLabelFloat(true);
-        
-        searchSocio.setLayoutX(2);
-        searchSocio.setLayoutY(5);
+        //searchSocio.setLabelFloat(true);
+//        
+//        searchSocio.setLayoutX(2);
+//        searchSocio.setLayoutY(5);
         searchSocio.setVisible(true);
         
         
@@ -456,8 +456,16 @@ public class CrearSocioController implements Initializable {
         TableView<ViewSocio> tableView = new TableView<>(items);
         
         tableView.setLayoutX(0);
-        tableView.setLayoutY(30);
+        tableView.setLayoutY(40);
         tableView.getColumns().addAll(forCodigo,forSocio);
+        
+        tableView.setOnMouseClicked(e ->{
+            if (e.getClickCount() == 2) {
+                int idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
+                System.out.println("Id"+idSocio);
+            }
+        });
+        
         AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
         
 //        anchorPane.setClip(searchSocio);

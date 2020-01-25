@@ -262,9 +262,7 @@ public class ModifySocioController implements Initializable {
     public void eventTable(){
         tableSocio.setOnMouseClicked(e->{
             if (e.getClickCount()==2) {
-                System.out.println("copiar item a los textField");
                
-                    
                     idSocio = tableSocio.getSelectionModel().getSelectedItem().getIdSocio();
                     
                     Query getSocio = getEntityManager().createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", idSocio);
