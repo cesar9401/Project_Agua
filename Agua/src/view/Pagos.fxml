@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PagosController">
+    <stylesheets>
+        <URL value="@/css/pagos.css" />
+    </stylesheets>
+   <children>
+      <JFXTextField fx:id="txtCodigoSocio" layoutX="148.0" layoutY="171.0" prefHeight="26.0" prefWidth="226.0" promptText="Codigo Socio" />
+      <JFXButton fx:id="btnBuscar" buttonType="RAISED" layoutX="674.0" layoutY="151.0" prefHeight="46.0" prefWidth="149.0" style="-fx-background-color: #2E64FE;" text="Buscar" />
+      <Separator layoutX="84.0" layoutY="250.0" prefHeight="0.0" prefWidth="864.0" />
+      <JFXTextField fx:id="txtNombreSocio" layoutX="148.0" layoutY="272.0" promptText="Nombre De Socio" />
+      <JFXTextField fx:id="txtCui" layoutX="401.0" layoutY="272.0" prefHeight="26.0" prefWidth="239.0" promptText="CUI De Propietario" />
+      <JFXDatePicker fx:id="dateUltimo" layoutX="142.0" layoutY="363.0" promptText="Ultimo Mes Pagado" />
+      <JFXDatePicker fx:id="dateActual" layoutX="401.0" layoutY="363.0" promptText="Fecha Actual" />
+      <JFXDatePicker fx:id="datePagarHasta" layoutX="683.0" layoutY="363.0" promptText="Pagar Hasta:" />
+      <JFXTextField fx:id="txtSancion" layoutX="148.0" layoutY="428.0" promptText="Sancion De Sesion" />
+      <JFXTextField fx:id="txtSancionDeTrabajo" layoutX="148.0" layoutY="476.0" promptText="Sancion De Trabajo" />
+      <JFXTextField fx:id="txtTotalDeConstruccion" layoutX="401.0" layoutY="426.0" promptText="Total De Construccion" />
+      <JFXTextField fx:id="txtTotalDeMora" layoutX="401.0" layoutY="476.0" promptText="Total De Mora" />
+      <Label layoutX="683.0" layoutY="400.0" prefHeight="16.0" prefWidth="180.0" textFill="#e81313" />
+      <TableView fx:id="tblDetalle" layoutX="103.0" layoutY="576.0" prefHeight="200.0" prefWidth="703.0">
+        <columns>
+          <TableColumn fx:id="columnCodigo" prefWidth="162.0" text="Codigo" />
+            <TableColumn fx:id="columnDescripcion" prefWidth="287.0" text="Descripcion" />
+          <TableColumn fx:id="columnPrecio" prefWidth="253.0" text="Precio" />
+        </columns>
+      </TableView>
+      <JFXButton fx:id="btnVisualizarPago" buttonType="RAISED" layoutX="664.0" layoutY="455.0" prefHeight="40.0" prefWidth="193.0" style="-fx-background-color: #FA8258;" text="Visualizar Pago" />
+      <Separator layoutX="84.0" layoutY="517.0" prefHeight="3.0" prefWidth="864.0" />
+      <JFXButton fx:id="btnRegistrar" layoutX="699.0" layoutY="541.0" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #FE642E;" text="Registrar" />
+      <JFXTextField fx:id="txtNoRecibo" layoutX="143.0" layoutY="537.0" promptText="Recibo No." />
+      <JFXTextField fx:id="txtTotalPago" layoutX="401.0" layoutY="537.0" promptText="Total Q." />
+      <JFXButton fx:id="btnEliminarFIla" buttonType="RAISED" layoutX="832.0" layoutY="736.0" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: #BDBDBD;" text="Eliminar FIla" />
+      <JFXToggleButton fx:id="togglePropietario" layoutX="399.0" layoutY="154.0" prefWidth="193.0" text="Propietario" />
+   </children>
+</AnchorPane>

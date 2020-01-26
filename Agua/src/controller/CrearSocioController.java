@@ -273,15 +273,7 @@ public class CrearSocioController implements Initializable {
                 info.show(); 
                 
             
-        }
-        
-        
-        
-        
-        
-        
-        
-        
+        }        
     }
     public String checkCode(){
         
