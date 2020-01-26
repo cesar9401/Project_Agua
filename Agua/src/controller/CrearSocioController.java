@@ -151,10 +151,9 @@ public class CrearSocioController implements Initializable {
         txtCode.setOnKeyTyped(event -> validationOfNumber(event));
         
         mancomunado.setOnAction(e -> {
-            if (mancomunado.isSelected()) {
-                txtCodePropietario.setVisible(mancomunado.isSelected());
-                System.out.println("agregarPopOver");
-            }
+            
+            txtCodePropietario.setVisible(mancomunado.isSelected());
+            
         });
         
         Query forGetSocios = getEntityManager().createNamedQuery("Socios.findAll");
@@ -178,6 +177,7 @@ public class CrearSocioController implements Initializable {
     @FXML
     private void crearSocio(ActionEvent event) {
         captureData();
+        clearData();
     }
     
     @FXML
@@ -492,5 +492,24 @@ public class CrearSocioController implements Initializable {
          EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         
         return emf.createEntityManager();
+    }
+    public void clearData(){
+            
+        txtCode.setText("");
+        txtCodePropietario.setText("");
+        txtCodePropietario.setVisible(false);
+        txtCui.setText("");
+        txtDireccion.setText("");
+        txtLastName.setText("");
+        txtName.setText("");
+        
+       mancomunado.setSelected(false);
+       isExonerated.setSelected(false);
+       changeImg = false;
+       
+       
+        Image imgUsr = new Image("/img/usr+.png");
+        img.setImage(imgUsr);
+        datePicker.setValue(null);
     }
 }
