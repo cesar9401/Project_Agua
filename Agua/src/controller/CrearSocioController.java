@@ -131,6 +131,8 @@ public class CrearSocioController implements Initializable {
     private Label label_inicio;
     @FXML
     private MenuItem item_eventos;    
+    private int idSocio;
+    private String codigosocio;
     //---------------------- Aqui termina NavBar y adminBar
 
     /**
@@ -149,10 +151,9 @@ public class CrearSocioController implements Initializable {
         txtCode.setOnKeyTyped(event -> validationOfNumber(event));
         
         mancomunado.setOnAction(e -> {
-            if (mancomunado.isSelected()) {
-                txtCodePropietario.setVisible(mancomunado.isSelected());
-                System.out.println("agregarPopOver");
-            }
+            
+            txtCodePropietario.setVisible(mancomunado.isSelected());
+            
         });
         
         Query forGetSocios = getEntityManager().createNamedQuery("Socios.findAll");
@@ -176,6 +177,7 @@ public class CrearSocioController implements Initializable {
     @FXML
     private void crearSocio(ActionEvent event) {
         captureData();
+        clearData();
     }
     
     @FXML
@@ -271,15 +273,7 @@ public class CrearSocioController implements Initializable {
                 info.show(); 
                 
             
-        }
-        
-        
-        
-        
-        
-        
-        
-        
+        }        
     }
     public String checkCode(){
         
@@ -436,10 +430,11 @@ public class CrearSocioController implements Initializable {
         JFXTextField searchSocio = new JFXTextField();
         searchSocio.setPrefSize(200, 150);
         searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
-        searchSocio.setLabelFloat(true);
-        
-        searchSocio.setLayoutX(2);
-        searchSocio.setLayoutY(5);
+        searchSocio.setEditable(true);
+        //searchSocio.setLabelFloat(true);
+//        
+//        searchSocio.setLayoutX(2);
+//        searchSocio.setLayoutY(5);
         searchSocio.setVisible(true);
         
         
@@ -456,8 +451,19 @@ public class CrearSocioController implements Initializable {
         TableView<ViewSocio> tableView = new TableView<>(items);
         
         tableView.setLayoutX(0);
-        tableView.setLayoutY(30);
+        tableView.setLayoutY(40);
         tableView.getColumns().addAll(forCodigo,forSocio);
+        
+        tableView.setOnMouseClicked(e ->{
+            if (e.getClickCount() == 2) {
+                this.idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
+                txtCodePropietario.setText("");
+                txtCodePropietario.setText(tableView.getSelectionModel().getSelectedItem().getCodigo());
+                
+                System.out.println("Id"+idSocio);
+            }
+        });
+        
         AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
         
 //        anchorPane.setClip(searchSocio);
@@ -478,5 +484,24 @@ public class CrearSocioController implements Initializable {
          EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         
         return emf.createEntityManager();
+    }
+    public void clearData(){
+            
+        txtCode.setText("");
+        txtCodePropietario.setText("");
+        txtCodePropietario.setVisible(false);
+        txtCui.setText("");
+        txtDireccion.setText("");
+        txtLastName.setText("");
+        txtName.setText("");
+        
+       mancomunado.setSelected(false);
+       isExonerated.setSelected(false);
+       changeImg = false;
+       
+       
+        Image imgUsr = new Image("/img/usr+.png");
+        img.setImage(imgUsr);
+        datePicker.setValue(null);
     }
 }

@@ -79,6 +79,8 @@ public class MainViewController implements Initializable {
     
     @FXML
     private AnchorPane base_pane;
+    @FXML
+    private MenuItem pagos;
 
     /**
      * Initializes the controller class.
