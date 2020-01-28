@@ -11,10 +11,16 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import object.Socios;
 
 /**
@@ -66,17 +72,51 @@ public class PagosController implements Initializable {
     private JFXButton btnEliminarFIla;
     @FXML
     private JFXToggleButton togglePropietario;
+    @FXML
+    private Label lblPagarHasta;
 
     private Socios socio;
     /**
      * Initializes the controller class.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }   
-    public void searchSocio(){
+    @FXML
+    private void btnBusccar(ActionEvent event) {
+        socio = null;        
+        
+        String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
+            
+        Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
+        if (buscar.getResultList().size() > 0) {
+            this.socio =(Socios) buscar.getResultList().get(0);
+        }else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(" Informacion ");
+            alert.setHeaderText("Codgio de Socio");
+            alert.setContentText("El codigo de socio no se encuentra en la base de datos");
+            alert.show();
+        }
         
     }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        
+        // TODO
+        
+        togglePropietario.setOnAction(e->{
+          
+        });
+    }   
+    public Socios searchSocio(String codigo){
+        
+        Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
+        return null;
+        
+    }
+    private EntityManager getEntityManager(){
+         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        
+        return emf.createEntityManager();
+    }
+
     
 }

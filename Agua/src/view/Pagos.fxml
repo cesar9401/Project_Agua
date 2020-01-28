@@ -17,7 +17,7 @@
     </stylesheets>
    <children>
       <JFXTextField fx:id="txtCodigoSocio" layoutX="148.0" layoutY="171.0" prefHeight="26.0" prefWidth="226.0" promptText="Codigo Socio" />
-      <JFXButton fx:id="btnBuscar" buttonType="RAISED" layoutX="674.0" layoutY="151.0" prefHeight="46.0" prefWidth="149.0" style="-fx-background-color: #2E64FE;" text="Buscar" />
+      <JFXButton fx:id="btnBuscar" buttonType="RAISED" layoutX="674.0" layoutY="151.0" onAction="#btnBusccar" prefHeight="46.0" prefWidth="149.0" style="-fx-background-color: #2E64FE;" text="Buscar" />
       <Separator layoutX="84.0" layoutY="250.0" prefHeight="0.0" prefWidth="864.0" />
       <JFXTextField fx:id="txtNombreSocio" layoutX="148.0" layoutY="272.0" promptText="Nombre De Socio" />
       <JFXTextField fx:id="txtCui" layoutX="401.0" layoutY="272.0" prefHeight="26.0" prefWidth="239.0" promptText="CUI De Propietario" />
@@ -28,7 +28,7 @@
       <JFXTextField fx:id="txtSancionDeTrabajo" layoutX="148.0" layoutY="476.0" promptText="Sancion De Trabajo" />
       <JFXTextField fx:id="txtTotalDeConstruccion" layoutX="401.0" layoutY="426.0" promptText="Total De Construccion" />
       <JFXTextField fx:id="txtTotalDeMora" layoutX="401.0" layoutY="476.0" promptText="Total De Mora" />
-      <Label layoutX="683.0" layoutY="400.0" prefHeight="16.0" prefWidth="180.0" textFill="#e81313" />
+      <Label fx:id="lblPagarHasta" layoutX="683.0" layoutY="400.0" prefHeight="16.0" prefWidth="180.0" textFill="#e81313" />
       <TableView fx:id="tblDetalle" layoutX="103.0" layoutY="576.0" prefHeight="200.0" prefWidth="703.0">
         <columns>
           <TableColumn fx:id="columnCodigo" prefWidth="162.0" text="Codigo" />

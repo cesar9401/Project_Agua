@@ -3,8 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package view;
 
+import controller.CrearCuotasController;
+import controller.CrearEventosController;
+import controller.CrearSocioController;
+import controller.ModifySocioController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,6 +26,8 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import object.Administradores;
 import object.Socios;
@@ -28,15 +35,10 @@ import object.Socios;
 /**
  * FXML Controller class
  *
- * @author cesar31
+ * @author julio
  */
-public class MainViewController implements Initializable {
-        
-    //----------------------> navBar y adminBar
-    //Atributos del administrador que inicia sesion
-    private Socios socio;
-    private Administradores admin;
-    
+public class Main_TestController implements Initializable {
+
     @FXML
     private AnchorPane navBar;
     @FXML
@@ -44,54 +46,42 @@ public class MainViewController implements Initializable {
     @FXML
     private MenuItem item_cerrarSesion;
     @FXML
-    private AnchorPane adminBar;
-    @FXML
-    private Label label_datos;
-    @FXML
-    private Label label_codigo;
-    @FXML
-    private Label codigoAdmin;
-    @FXML
-    private Label label_nombres;
-    @FXML
-    private Label nombreAdmin;
-    @FXML
-    private Label label_apellidos;
-    @FXML
-    private Label apellidosAdmin;
-    @FXML
     private MenuButton menu_btnSocios;
-    @FXML
-    private MenuButton menu_btnPagos;
-    @FXML
-    private MenuButton menu_btnCuotas;
     @FXML
     private MenuItem item_nuevoSocio;
     @FXML
     private MenuItem item_VerSocios;
     @FXML
+    private MenuButton menu_btnPagos;
+    @FXML
+    private MenuItem item_eventos;
+    @FXML
+    private MenuButton menu_btnCuotas;
+    @FXML
     private MenuItem item_VerCuotas;
     @FXML
     private Label label_inicio;
-    @FXML
-    private MenuItem item_eventos;
-    //---------------------- Aqui termina NavBar y adminBar
     
+    private Socios socio;
+    private Administradores admin;
     @FXML
-    private AnchorPane base_pane;
+    private BorderPane border;
     @FXML
-    private MenuItem pagos;
+    private StackPane stackPane;
 
+    static BorderPane borderStatic;
+    @FXML
+    private MenuItem item_pagos;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }
+        borderStatic=border;
+    }    
 
-    //-----------Aqui empiezan metodos del navBar y adminBar
-    @FXML
+  @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
         getLogIn();
@@ -105,9 +95,9 @@ public class MainViewController implements Initializable {
     }
 
     public void setAttributesView(){
-        codigoAdmin.setText(socio.getCodigo());
-        nombreAdmin.setText(socio.getNombres());
-        apellidosAdmin.setText(socio.getApellidos());
+       // codigoAdmin.setText(socio.getCodigo());
+        //nombreAdmin.setText(socio.getNombres());
+        //apellidosAdmin.setText(socio.getApellidos());
     }
     
     public void signOff() throws IOException{
@@ -125,7 +115,7 @@ public class MainViewController implements Initializable {
         try {
             signOff();
         } catch (IOException ex) {
-            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main_TestController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -137,30 +127,34 @@ public class MainViewController implements Initializable {
         Object obj = event.getSource();
   
         if(obj == item_nuevoSocio){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearSocio.fxml"));
-            root = loader.load();
-            CrearSocioController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
+
+             loadView("crearSocio");
+           
         }else if(obj == item_VerSocios){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
-            root = loader.load();
-            ModifySocioController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
+            loadView("ModifySocio");
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
+//            root = loader.load();
+//            ModifySocioController controller = loader.getController();
+//            controller.initializeAttributes(socio, admin);
         }else if(obj == item_VerCuotas){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
-            root = loader.load();
-            CrearCuotasController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
+            loadView("CrearCuotas");
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
+//            root = loader.load();
+//            CrearCuotasController controller = loader.getController();
+//            controller.initializeAttributes(socio, admin);
         }else if(obj == item_eventos){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
-            root = loader.load();
-            CrearEventosController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
+            loadView("CrearEventos");
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
+//            root = loader.load();
+//            CrearEventosController controller = loader.getController();
+//            controller.initializeAttributes(socio, admin);
+        }else if (obj == item_pagos) {
+            loadView("pagos");
         }
         
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     //Metodo para obtener MainView.fxml
@@ -172,7 +166,7 @@ public class MainViewController implements Initializable {
         if(obj == label_inicio){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
             root = loader.load();
-            MainViewController controller = loader.getController();
+            Main_TestController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }
         
@@ -181,4 +175,19 @@ public class MainViewController implements Initializable {
         stage.show();
     }
     //-----------Aqui termina metodos del navBar y adminBar
+    
+    public void loadView(String vista){
+        
+          //border.getChildren().clear();
+            try {
+                
+                System.out.println("Vista Load "+ vista);
+            border.setCenter(FXMLLoader.load(getClass().getResource("/view/"+vista+".fxml")));
+           // stackPane.getChildren().add(border);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
 }
+  
+
