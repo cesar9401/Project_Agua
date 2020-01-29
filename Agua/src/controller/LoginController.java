@@ -183,21 +183,4 @@ public class LoginController implements Initializable {
         
         return admin;
     }
-
-    //Getter and Setter Socios y Administradores
-    public Socios getSocio() {
-        return socio;
-    }
-
-    public void setSocio(Socios socio) {
-        this.socio = socio;
-    }
-
-    public Administradores getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Administradores admin) {
-        this.admin = admin;
-    }
 }

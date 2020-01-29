@@ -44,22 +44,6 @@ public class MainViewController implements Initializable {
     @FXML
     private MenuItem item_cerrarSesion;
     @FXML
-    private AnchorPane adminBar;
-    @FXML
-    private Label label_datos;
-    @FXML
-    private Label label_codigo;
-    @FXML
-    private Label codigoAdmin;
-    @FXML
-    private Label label_nombres;
-    @FXML
-    private Label nombreAdmin;
-    @FXML
-    private Label label_apellidos;
-    @FXML
-    private Label apellidosAdmin;
-    @FXML
     private MenuButton menu_btnSocios;
     @FXML
     private MenuButton menu_btnPagos;
@@ -101,15 +85,8 @@ public class MainViewController implements Initializable {
     public void initializeAttributes(Socios socio, Administradores admin){
         this.socio = socio;
         this.admin = admin;
-        setAttributesView();
     }
 
-    public void setAttributesView(){
-        codigoAdmin.setText(socio.getCodigo());
-        nombreAdmin.setText(socio.getNombres());
-        apellidosAdmin.setText(socio.getApellidos());
-    }
-    
     public void signOff() throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
         Stage stage = new Stage();
