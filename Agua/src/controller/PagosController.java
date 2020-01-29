@@ -10,7 +10,10 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,10 +21,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.Blend;
+import javafx.scene.layout.AnchorPane;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import object.Socios;
+import object.auxiliary.ViewSocio;
+import org.controlsfx.control.PopOver;
 
 /**
  * FXML Controller class
@@ -76,18 +84,21 @@ public class PagosController implements Initializable {
     private Label lblPagarHasta;
 
     private Socios socio;
+    private int idSocio;
     /**
      * Initializes the controller class.
      */
     @FXML
     private void btnBusccar(ActionEvent event) {
         socio = null;        
-        
-        String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
+       // togglePropietario.setVisible(false);
+       // String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
             
-        Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
+        Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", txtCodigoSocio.getText());
         if (buscar.getResultList().size() > 0) {
             this.socio =(Socios) buscar.getResultList().get(0);
+            colocarDatosSocio();
+            
         }else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(" Informacion ");
@@ -101,14 +112,28 @@ public class PagosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         // TODO
+        txtCodigoSocio.setOnAction(e->{
+            Query query =getEntityManager().createNamedQuery("Socios.findAll");
+            ObservableList<ViewSocio> showDataSocio = FXCollections.observableArrayList();
         
-        togglePropietario.setOnAction(e->{
-          
+        for (Iterator<Socios> iterator = query.getResultList().iterator(); iterator.hasNext();) {
+            Socios next = iterator.next();
+            showDataSocio.add(new ViewSocio(next.getIdSocio(), next.getCodigo(), next.getNombres()));
+          //  System.out.println(next.getNombre());
+         
+            
+        }
+            popOverMancomunado(showDataSocio);
         });
+        
+        
     }   
     public Socios searchSocio(String codigo){
         
         Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
+        if (buscar.getResultList().size() > 0) {
+         colocarDatosSocio();
+        }
         return null;
         
     }
@@ -118,5 +143,67 @@ public class PagosController implements Initializable {
         return emf.createEntityManager();
     }
 
-    
+    public void colocarDatosSocio(){
+         txtNombreSocio.setText(socio.getNombres());
+         txtCui.setText(socio.getDpi());
+        
+         //Query buscarUltimoPago = getEntityManager().createNamedQuery("PagosSocios.findByMesCancelado")
+    }
+     public void popOverMancomunado(ObservableList<ViewSocio> items){
+       
+        
+         
+        JFXTextField searchSocio = new JFXTextField();
+        searchSocio.setPrefSize(200, 150);
+        searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
+        searchSocio.setEditable(true);
+        //searchSocio.setLabelFloat(true);
+//        
+//        searchSocio.setLayoutX(2);
+//        searchSocio.setLayoutY(5);
+        searchSocio.setVisible(true);
+        
+        
+        TableColumn<ViewSocio,String> forCodigo = new TableColumn<ViewSocio, String>("Codigo");
+        TableColumn<ViewSocio,String> forSocio = new TableColumn<ViewSocio, String>("Nombre");
+        
+          forCodigo.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("codigo"));
+        forSocio.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("nombre"));
+        
+        
+        forCodigo.setPrefWidth(250);
+        forSocio.setPrefWidth(250);
+        
+        TableView<ViewSocio> tableView = new TableView<>(items);
+        
+        tableView.setLayoutX(0);
+        tableView.setLayoutY(40);
+        tableView.getColumns().addAll(forCodigo,forSocio);
+        
+        tableView.setOnMouseClicked(e ->{
+            if (e.getClickCount() == 2) {
+                this.idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
+                txtCodigoSocio.setText("");
+                txtCodigoSocio.setText(tableView.getSelectionModel().getSelectedItem().getCodigo());
+                
+                System.out.println("Id"+idSocio);
+            }
+        });
+        
+        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
+        
+//        anchorPane.setClip(searchSocio);
+//        anchorPane.setClip(tableView);
+        
+        PopOver popOver = new PopOver(anchorPane);
+        txtCodigoSocio.setEffect(new Blend());
+        
+        
+        txtCodigoSocio.setOnKeyPressed(e->{
+            System.out.println("Pop oVert visible");
+            popOver.show(txtCodigoSocio);
+        });
+        
+        
+    }
 }
