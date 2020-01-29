@@ -132,35 +132,46 @@ public class MainViewController implements Initializable {
     //Metodo para cargar las vistas fxml
     @FXML
     private void handleItemAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) navBar.getScene().getWindow();
+        //Stage stage = (Stage) navBar.getScene().getWindow();
+        FXMLLoader loader = null;
         Parent root = null;
         Object obj = event.getSource();
   
         if(obj == item_nuevoSocio){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearSocio.fxml"));
+            loader = new FXMLLoader(getClass().getResource("../view/CrearSocio.fxml"));
             root = loader.load();
             CrearSocioController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }else if(obj == item_VerSocios){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
+            loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
             root = loader.load();
             ModifySocioController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }else if(obj == item_VerCuotas){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
+            loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
             root = loader.load();
             CrearCuotasController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
         }else if(obj == item_eventos){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
+            loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
             root = loader.load();
             CrearEventosController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
-        }
+        }else if(obj == pagos){
+            loader = new FXMLLoader(getClass().getResource("../view/Pagos.fxml"));
+            root = loader.load();
+            PagosController controller = loader.getController();
+            controller.initializeAttributes(socio, admin);
+        } 
         
+        base_pane.getChildren().clear();
+        base_pane.getChildren().setAll(root);
+        
+        /*
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        */
     }
 
     //Metodo para obtener MainView.fxml

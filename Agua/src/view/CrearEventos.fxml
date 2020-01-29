@@ -15,53 +15,7 @@
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearEventosController">
     <stylesheets>
         <URL value="@/css/creareventos.css" />
-        <!--Maquetacion de navBar y adminBar en mainview.css-->
-        <URL value="@/css/mainview.css" />
     </stylesheets>
-    
-    <!--Aqui empieza navBar-->
-      <AnchorPane fx:id="navBar" prefHeight="70.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
-              <items>
-                <MenuItem fx:id="item_cerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" styleClass="item_cerrarSesion" text="Cerrar Sesion" />
-              </items>
-            </MenuButton>
-            <MenuButton fx:id="menu_btnSocios" layoutX="140.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnSocios" stylesheets="@../css/mainview.css" text="Socios" textAlignment="CENTER" textFill="WHITE">
-              <items>
-                <MenuItem fx:id="item_nuevoSocio" mnemonicParsing="false" onAction="#handleItemAction" text="Nuevo Socio" />
-                <MenuItem fx:id="item_VerSocios" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Socios" />
-              </items>
-            </MenuButton>
-            <MenuButton fx:id="menu_btnPagos" layoutX="265.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnPagos" text="Pagos" textAlignment="CENTER" textFill="WHITE">
-              <items>
-                <MenuItem fx:id="item_eventos" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_eventos" text="Eventos" />
-              </items>
-            </MenuButton>
-            <MenuButton fx:id="menu_btnCuotas" layoutX="390.0" layoutY="15.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnCuotas" text="Cuotas" textAlignment="CENTER" textFill="WHITE">
-              <items>
-                <MenuItem fx:id="item_VerCuotas" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Cuotas" />
-              </items>
-            </MenuButton>
-            <Label fx:id="label_inicio" layoutX="15.0" layoutY="15.0" onMouseClicked="#handleItemActionMouse" prefHeight="35.0" prefWidth="100.0" styleClass="label_inicio" text="Inicio" textFill="WHITE" />
-         </children>
-      </AnchorPane>
-    <!--Aqui termina navBar-->
-
-    <!--Aqui empieza adminBar-->
-      <AnchorPane fx:id="adminBar" layoutY="70.0" prefHeight="50.0" prefWidth="200.0" styleClass="adminBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
-         <children>
-            <Label fx:id="label_datos" layoutX="25.0" layoutY="5.0" text="Datos Administrador" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0" />
-            <Label fx:id="label_codigo" layoutX="155.0" layoutY="15.0" prefHeight="20.0" prefWidth="55.0" text="Codigo: " />
-            <Label fx:id="codigoAdmin" layoutX="220.0" layoutY="15.0" prefHeight="20.0" prefWidth="70.0" text="A-000000" />
-            <Label fx:id="label_nombres" layoutX="315.0" layoutY="15.0" prefHeight="20.0" prefWidth="65.0" text="Nombres: " />
-            <Label fx:id="nombreAdmin" layoutX="385.0" layoutY="15.0" prefHeight="20.0" prefWidth="150.0" text="Nombres Ejemplo" />
-            <Label fx:id="label_apellidos" layoutX="560.0" layoutY="15.0" prefHeight="20.0" prefWidth="60.0" text="Apellidos" />
-            <Label fx:id="apellidosAdmin" layoutX="630.0" layoutY="16.0" prefHeight="20.0" prefWidth="150.0" text="Apellidos Ejemplo" />
-         </children>
-      </AnchorPane>
-    <!--Aqui termina adminBar-->       
-    
       <Button fx:id="button_nueva" layoutX="30.0" layoutY="150.0" mnemonicParsing="false" onAction="#nuevoEventoAction" prefHeight="30.0" prefWidth="130.0" styleClass="button_nueva" text="Nuevo Evento..." />
       <AnchorPane fx:id="pane_nuevoEvento" layoutX="30.0" layoutY="210.0" prefHeight="180.0" prefWidth="1024.0" styleClass="pane_nuevaCuota" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
          <children>

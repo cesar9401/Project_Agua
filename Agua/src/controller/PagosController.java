@@ -21,6 +21,7 @@ import javafx.scene.control.TableView;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import object.Administradores;
 import object.Socios;
 
 /**
@@ -30,6 +31,10 @@ import object.Socios;
  */
 public class PagosController implements Initializable {
 
+    //Atributos del administrador que inicia sesion
+    private Socios socio;
+    private Administradores admin;
+    
     @FXML
     private JFXTextField txtCodigoSocio;
     @FXML
@@ -75,19 +80,19 @@ public class PagosController implements Initializable {
     @FXML
     private Label lblPagarHasta;
 
-    private Socios socio;
+    private Socios tmp;
     /**
      * Initializes the controller class.
      */
     @FXML
     private void btnBusccar(ActionEvent event) {
-        socio = null;        
+        tmp = null;        
         
         String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
             
         Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
         if (buscar.getResultList().size() > 0) {
-            this.socio =(Socios) buscar.getResultList().get(0);
+            this.tmp =(Socios) buscar.getResultList().get(0);
         }else{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(" Informacion ");
@@ -97,6 +102,7 @@ public class PagosController implements Initializable {
         }
         
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -105,13 +111,20 @@ public class PagosController implements Initializable {
         togglePropietario.setOnAction(e->{
           
         });
-    }   
+    }
+    
+    public void initializeAttributes(Socios socio, Administradores admin){
+        this.socio = socio;
+        this.admin = admin;
+    }
+    
     public Socios searchSocio(String codigo){
         
         Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
         return null;
         
     }
+    
     private EntityManager getEntityManager(){
          EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         
