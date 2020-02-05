@@ -27,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import object.Administradores;
 import object.Socios;
 import object.auxiliary.ViewSocio;
 import org.controlsfx.control.PopOver;
@@ -38,6 +39,10 @@ import org.controlsfx.control.PopOver;
  */
 public class PagosController implements Initializable {
 
+    //Atributos del administrador que inicia sesion
+    private Socios socio;
+    private Administradores admin;
+    
     @FXML
     private JFXTextField txtCodigoSocio;
     @FXML
@@ -83,51 +88,54 @@ public class PagosController implements Initializable {
     @FXML
     private Label lblPagarHasta;
 
-    private Socios socio;
+
+   // private Socios socio;
     private int idSocio;
+
+    private Socios tmp;
+
     /**
      * Initializes the controller class.
      */
     @FXML
     private void btnBusccar(ActionEvent event) {
+
         socio = null;        
        // togglePropietario.setVisible(false);
        // String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
+
+        tmp = null;        
+        
+        String codigo = (togglePropietario.isSelected())?"A-"+txtCodigoSocio.getText():"B-"+txtCodigoSocio.getText();            
+
             
-        Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", txtCodigoSocio.getText());
-        if (buscar.getResultList().size() > 0) {
-            this.socio =(Socios) buscar.getResultList().get(0);
-            colocarDatosSocio();
-            
-        }else{
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(" Informacion ");
-            alert.setHeaderText("Codgio de Socio");
-            alert.setContentText("El codigo de socio no se encuentra en la base de datos");
-            alert.show();
-        }
         
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
         // TODO
         txtCodigoSocio.setOnAction(e->{
-            Query query =getEntityManager().createNamedQuery("Socios.findAll");
+            
             ObservableList<ViewSocio> showDataSocio = FXCollections.observableArrayList();
         
-        for (Iterator<Socios> iterator = query.getResultList().iterator(); iterator.hasNext();) {
-            Socios next = iterator.next();
-            showDataSocio.add(new ViewSocio(next.getIdSocio(), next.getCodigo(), next.getNombres()));
-          //  System.out.println(next.getNombre());
-         
-            
-        }
-            popOverMancomunado(showDataSocio);
+        
+ 
         });
+
         
         
     }   
+
+    
+    
+    public void initializeAttributes(Socios socio, Administradores admin){
+        this.socio = socio;
+        this.admin = admin;
+    }
+    
+
     public Socios searchSocio(String codigo){
         
         Query buscar = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", codigo);
@@ -137,6 +145,7 @@ public class PagosController implements Initializable {
         return null;
         
     }
+    
     private EntityManager getEntityManager(){
          EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         

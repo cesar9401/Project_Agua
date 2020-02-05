@@ -23,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import object.Administradores;
+import object.Socios;
 
 /**
  * FXML Controller class
@@ -30,6 +32,10 @@ import javafx.scene.layout.AnchorPane;
  * @author julio
  */
 public class PagoController implements Initializable {
+
+    //Atributos del administrador que inicia sesion
+    private Socios socio;
+    private Administradores admin;    
 
     @FXML
     private AnchorPane navBar;
@@ -116,7 +122,8 @@ public class PagoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
+
 
     @FXML
     private void cerrarSesion(ActionEvent event) {

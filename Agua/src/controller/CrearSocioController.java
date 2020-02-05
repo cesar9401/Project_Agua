@@ -61,7 +61,14 @@ import org.controlsfx.control.PopOver;
  * @author julio
  */
 public class CrearSocioController implements Initializable {
-
+    
+//Atributos del administrador que inicia sesion
+    private Socios socio;
+    private Administradores admin;
+    
+    private int idSocio;
+    private String codigosocio;
+    
     @FXML
     private JFXButton Crear;
     @FXML
@@ -88,53 +95,6 @@ public class CrearSocioController implements Initializable {
     private boolean changeImg;
     private String pathImg;
     
-    //----------------------> navBar y adminBar
-    //Atributos del administrador que inicia sesion
-    private Socios socio;
-    private Administradores admin;
-    
-    @FXML
-    private AnchorPane navBar;
-    @FXML
-    private MenuButton admin_button;
-    @FXML
-    private MenuItem item_cerrarSesion;
-    @FXML
-    private AnchorPane adminBar;
-    @FXML
-    private Label label_datos;
-    @FXML
-    private Label label_codigo;
-    @FXML
-    private Label codigoAdmin;
-    @FXML
-    private Label label_nombres;
-    @FXML
-    private Label nombreAdmin;
-    @FXML
-    private Label label_apellidos;
-    @FXML
-    private Label apellidosAdmin;
-    @FXML
-    private MenuButton menu_btnSocios;
-    @FXML
-    private MenuButton menu_btnPagos;
-    @FXML
-    private MenuButton menu_btnCuotas;
-    @FXML
-    private MenuItem item_nuevoSocio;
-    @FXML
-    private MenuItem item_VerSocios;
-    @FXML
-    private MenuItem item_VerCuotas;
-    @FXML
-    private Label label_inicio;
-    @FXML
-    private MenuItem item_eventos;    
-    private int idSocio;
-    private String codigosocio;
-    //---------------------- Aqui termina NavBar y adminBar
-
     /**
      * Initializes the controller class.
      */
@@ -169,9 +129,12 @@ public class CrearSocioController implements Initializable {
         }
         popOverMancomunado(showDataSocio);
         
-        
-        
-        
+    }   
+   
+    //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
+    public void initializeAttributes(Socios socio, Administradores admin){
+        this.socio = socio;
+        this.admin = admin;
     }    
 
     @FXML
@@ -329,99 +292,6 @@ public class CrearSocioController implements Initializable {
             }
         } catch (Exception ex){ }
     }
-    
-    //-----------Aqui empiezan metodos del navBar y adminBar
-    @FXML
-    public void cerrarSesion(ActionEvent event) {
-        //Cerrar Sesion
-        getLogIn();
-    }
-
-    //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
-    public void initializeAttributes(Socios socio, Administradores admin){
-        this.socio = socio;
-        this.admin = admin;
-        setAttributesView();
-    }
-
-    public void setAttributesView(){
-        codigoAdmin.setText(socio.getCodigo());
-        nombreAdmin.setText(socio.getNombres());
-        apellidosAdmin.setText(socio.getApellidos());
-    }
-    
-    public void signOff() throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("Login");
-        stage.setScene(new Scene(root));
-        stage.show();
-        
-        //Cerra ventana
-        admin_button.getScene().getWindow().hide();
-    }
-    
-    public void getLogIn(){
-        try {
-            signOff();
-        } catch (IOException ex) {
-            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    //Metodo para cargar las vistas fxml
-    @FXML
-    private void handleItemAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) navBar.getScene().getWindow();
-        Parent root = null;
-        Object obj = event.getSource();
-  
-        if(obj == item_nuevoSocio){
-            //root = FXMLLoader.load(getClass().getResource("../view/CrearSocio.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearSocio.fxml"));
-            root = loader.load();
-            CrearSocioController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
-        }else if(obj == item_VerSocios){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/ModifySocio.fxml"));
-            root = loader.load();
-            ModifySocioController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
-        }else if(obj == item_VerCuotas){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearCuotas.fxml"));
-            root = loader.load();
-            CrearCuotasController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
-        }else if(obj == item_eventos){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/CrearEventos.fxml"));
-            root = loader.load();
-            CrearEventosController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
-        }
-        
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    //Metodo para obtener MainView.fxml
-    @FXML
-    private void handleItemActionMouse(MouseEvent event) throws IOException {
-        Stage stage = (Stage) navBar.getScene().getWindow();
-        Parent root = null;
-        Object obj = event.getSource();
-        if(obj == label_inicio){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
-            root = loader.load();
-            MainViewController controller = loader.getController();
-            controller.initializeAttributes(socio, admin);
-        }
-        
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    //-----------Aqui termina metodos del navBar y adminBar
     
     public void popOverMancomunado(ObservableList<ViewSocio> items){
        
