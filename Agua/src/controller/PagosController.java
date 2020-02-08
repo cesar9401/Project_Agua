@@ -153,8 +153,8 @@ public class PagosController implements Initializable {
     }
 
     public void colocarDatosSocio(){
-         txtNombreSocio.setText(socio.getNombres());
-         txtCui.setText(socio.getDpi());
+         txtNombreSocio.setText(tmp.getNombres());
+         txtCui.setText(tmp.getDpi());
         
          //Query buscarUltimoPago = getEntityManager().createNamedQuery("PagosSocios.findByMesCancelado")
     }
@@ -199,7 +199,7 @@ public class PagosController implements Initializable {
             }
         });
         
-        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
+            AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
         
 //        anchorPane.setClip(searchSocio);
 //        anchorPane.setClip(tableView);

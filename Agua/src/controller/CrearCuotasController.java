@@ -24,8 +24,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -149,14 +147,48 @@ public class CrearCuotasController implements Initializable {
     private void editAction(ActionEvent event) {
         Cuotas tmp = table_cuotas.getSelectionModel().getSelectedItem();
         if(tmp != null){
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            EntityManager em = emf.createEntityManager();
+            Query getCuota = em.createNamedQuery("Cuotas.findByIdCuotas").setParameter("idCuotas", tmp.getIdCuotas());
+            Cuotas cta = null;
+            try{
+                cta = (Cuotas) getCuota.getResultList().get(0);
+            }catch(Exception ex){
             
+            }
+            
+            if(cta != null){
+                try {
+                    editCuota(cta);
+                } catch (IOException ex) {
+                    Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                Alert alertaError = new Alert(Alert.AlertType.ERROR);
+                alertaError.setTitle("Error");
+                alertaError.setContentText("Cuota no disponible, intente más tarde");
+                alertaError.show();
+            }
         }else{
             Alert alertaError = new Alert(Alert.AlertType.ERROR);
             alertaError.setTitle("Error");
             alertaError.setContentText("Debe seleccionar una cuota para poder editarla");
             alertaError.show();
-            
         }
+    }
+    
+    public void editCuota(Cuotas cta) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/EditCuotas.fxml"));
+        Parent root = loader.load();
+        EditCuotasController controller = loader.getController();
+        controller.initializeAttributes(cta);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        
+        //Actualizar tabla
+        setTableCuotas();
     }
 
     @FXML
@@ -172,8 +204,9 @@ public class CrearCuotasController implements Initializable {
                 info.setContentText( "Se ha eliminado la cuota satisfactoriamente");
                 info.show();
                 
-                
+                //Actualizar tabla
                 setTableCuotas();
+                
             } catch (IllegalOrphanException ex) {
                 Logger.getLogger(CrearCuotasController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NonexistentEntityException ex) {
