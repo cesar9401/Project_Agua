@@ -182,9 +182,11 @@ public class CrearCuotasController implements Initializable {
         Parent root = loader.load();
         EditCuotasController controller = loader.getController();
         controller.initializeAttributes(cta);
+        
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Editar Cuota");
         stage.showAndWait();
         
         //Actualizar tabla

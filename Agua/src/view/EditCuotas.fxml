@@ -14,7 +14,7 @@
       <ImageView fx:id="image_moneda" fitHeight="100.0" fitWidth="100.0" layoutX="55.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" styleClass="image_moneda" />
       <JFXTextField fx:id="txt_ValorCuota" labelFloat="true" layoutX="510.0" layoutY="105.0" onKeyReleased="#validar" prefHeight="30.0" prefWidth="150.0" promptText="Valor Q." styleClass="txt_valorCuota" />
       <JFXTextField fx:id="txt_nombreCuota" labelFloat="true" layoutX="210.0" layoutY="105.0" prefHeight="30.0" prefWidth="250.0" promptText="Nombre Cuota" styleClass="txt_nombreCuota" />
-      <Button fx:id="btn_agregar" layoutX="708.0" layoutY="105.0" mnemonicParsing="false" onAction="#agregarCuotaAction" prefHeight="30.0" prefWidth="72.0" styleClass="btn_agregar" text="Editar" />
+      <Button fx:id="btn_editar" layoutX="708.0" layoutY="105.0" mnemonicParsing="false" onAction="#editarCuotaAction" prefHeight="30.0" prefWidth="72.0" styleClass="btn_editar" text="Editar" />
       <Button fx:id="btn_cancelar" layoutX="810.0" layoutY="105.0" mnemonicParsing="false" onAction="#cancelarAction" prefHeight="30.0" prefWidth="72.0" styleClass="btn_cancelar" text="Cancelar" />
    </children>
 </AnchorPane>
