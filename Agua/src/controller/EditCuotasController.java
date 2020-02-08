@@ -6,8 +6,11 @@
 package controller;
 
 import com.jfoenix.controls.JFXTextField;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +19,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javax.persistence.EntityManagerFactory;
+import model.CuotasJpaController;
+import model.exceptions.NonexistentEntityException;
 import object.Cuotas;
 
 /**
@@ -27,6 +33,7 @@ public class EditCuotasController implements Initializable {
     
     private Cuotas cta;
     private double precio = 0;
+    
     @FXML
     private ImageView image_moneda;
     @FXML
@@ -51,6 +58,7 @@ public class EditCuotasController implements Initializable {
     public void initializeAttributes(Cuotas cta){
         this.cta = cta;
         showAttributes();
+        precio = cta.getValorCuota().doubleValue();
     }
     
     public void showAttributes(){
@@ -80,17 +88,41 @@ public class EditCuotasController implements Initializable {
     
     public void editCuota(){
         if(!txt_nombreCuota.getText().isEmpty() && !txt_ValorCuota.getText().isEmpty()){
+            
+            BigDecimal valor = BigDecimal.valueOf(precio);
             //Acciones para editar cuota
             
+            cta.setNombreCuota(txt_nombreCuota.getText());
+            cta.setValorCuota(valor);
             
+            setEditCuota();
             
             //Cerrar ventana
             this.image_moneda.getScene().getWindow().hide();
+            
         }else{
             Alert alertaError = new Alert(Alert.AlertType.ERROR);
             alertaError.setTitle("Error");
             alertaError.setContentText("Debe llenar los campos obligatorios");
             alertaError.show();
         }
+    }
+    
+    public void setEditCuota(){
+        try {
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            CuotasJpaController editCta = new CuotasJpaController(emf);
+            editCta.edit(cta);
+
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setContentText("Couta Editada Correctamente");
+            info.show(); 
+            
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(EditCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(EditCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+        }    
     }
 }
