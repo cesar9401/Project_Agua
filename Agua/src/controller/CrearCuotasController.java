@@ -216,9 +216,9 @@ public class CrearCuotasController implements Initializable {
             }
         }else{
             Alert info = new Alert(Alert.AlertType.INFORMATION);
-                info.setTitle("Informacion");
-                info.setContentText("Debe seleccionar una cuota para poder eliminarla");
-                info.show();                
+            info.setTitle("Informacion");
+            info.setContentText("Debe seleccionar una cuota para poder eliminarla");
+            info.show();                
         }
 
     }
@@ -255,9 +255,9 @@ public class CrearCuotasController implements Initializable {
             setTableCuotas();
         }else{
             Alert info = new Alert(Alert.AlertType.INFORMATION);
-                info.setTitle("Informacion");
-                info.setContentText("Debe llenar los campos obligatorios");
-                info.show(); 
+            info.setTitle("Informacion");
+            info.setContentText("Debe llenar los campos obligatorios");
+            info.show(); 
             
         }
     }

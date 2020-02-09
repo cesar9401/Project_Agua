@@ -156,12 +156,12 @@ public class CrearEventosController implements Initializable {
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
             EventosJpaController saveEvento = new EventosJpaController(emf);
             saveEvento.create(nuevo);
-                Alert info = new Alert(Alert.AlertType.INFORMATION);
-                info.setTitle("Informacion");
-                info.setHeaderText(" Nuevo Evento");
-                info.setContentText("Almacenado Correctamente");
-                info.show(); 
-                
+            
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setHeaderText(" Nuevo Evento");
+            info.setContentText("Almacenado Correctamente");
+            info.show(); 
             
             txt_nombreEvento.setText("");
             txt_ValorEvento.setText("");
@@ -170,14 +170,11 @@ public class CrearEventosController implements Initializable {
             //Agregar a la tabla
             setTableEventos();
         }else{
-            
             Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Informacion");
             info.setHeaderText(" Informacion");
             info.setContentText("Debe llenar los Campos obligatorios");
             info.show(); 
-                
-            
         }
     }
     
@@ -234,17 +231,35 @@ public class CrearEventosController implements Initializable {
         if(tmp != null){
             Eventos forEdit = getEventoById(tmp);
             if(forEdit != null){
-            
+                try {
+                    setEditEvento(forEdit);
+                } catch (IOException ex) {
+                    Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }else{
-            
             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
             errorInfo.setTitle("Error");
             errorInfo.setHeaderText(" Accion no Valida");
             errorInfo.setContentText("Debe seleccionar un evento para pode editar");
             errorInfo.show(); 
-            
         }
+    }
+    
+    public void setEditEvento(Eventos forEdit) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/EditEventos.fxml"));
+        Parent root = loader.load();
+        EditEventosController controller = loader.getController();
+        controller.initializeAttributes(forEdit);
+        
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Editar Evento");
+        stage.showAndWait();
+        
+        //Actualizar tabla
+        setTableEventos();
     }
 
     @FXML
@@ -266,7 +281,7 @@ public class CrearEventosController implements Initializable {
                 
             }
         }else{
-             Alert info = new Alert(Alert.AlertType.ERROR);
+            Alert info = new Alert(Alert.AlertType.ERROR);
             info.setTitle("Error");
             info.setHeaderText(" Accion No Valida");
             info.setContentText("Debe Seleccionar un evento para poder eliminarlo");
@@ -287,35 +302,12 @@ public class CrearEventosController implements Initializable {
             info.setHeaderText(" Evento Eliminado");
             info.setContentText("Se ha eliminado el evento satisfactoriamente");
             info.show(); 
-            
 
         } catch (IllegalOrphanException ex) {
             Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
         }      
-    }
-    
-    public void setEditEventos(Eventos forEdit){
-        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-        EventosJpaController eventoJpa = new EventosJpaController(emf);
-        try {
-            eventoJpa.edit(forEdit);
-            setTableEventos();
-            
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
-            info.setTitle("Informacion");
-            info.setHeaderText(" Evento Actualizado ");
-            info.setContentText("Se ha Actualizado el evento satisfactoriamente");
-            info.show(); 
-            
-            
-
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(CrearEventosController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public Eventos getEventoById(ViewEventos tmp){

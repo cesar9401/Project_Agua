@@ -8,6 +8,7 @@ package controller;
 import com.jfoenix.controls.JFXTextField;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,22 +17,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javax.persistence.EntityManagerFactory;
-import model.CuotasJpaController;
+import model.EventosJpaController;
 import model.exceptions.NonexistentEntityException;
-import object.Cuotas;
+import object.Eventos;
 
 /**
  * FXML Controller class
  *
  * @author cesar31
  */
-public class EditCuotasController implements Initializable {
-    
-    private Cuotas cta;
+public class EditEventosController implements Initializable {
+
+    private Eventos evt;
     private double precio = 0;
     
     @FXML
@@ -39,11 +41,13 @@ public class EditCuotasController implements Initializable {
     @FXML
     private JFXTextField txt_ValorCuota;
     @FXML
-    private JFXTextField txt_nombreCuota;
+    private JFXTextField txt_nombreEvento;
+    @FXML
+    private Button btn_editar;
     @FXML
     private Button btn_cancelar;
     @FXML
-    private Button btn_editar;
+    private DatePicker fecha;
 
     /**
      * Initializes the controller class.
@@ -51,51 +55,53 @@ public class EditCuotasController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        Image coin = new Image("/img/moneda.png");
+        Image coin = new Image("/img/calendario.png");
         image_moneda.setImage(coin);
     }
 
-    public void initializeAttributes(Cuotas cta){
-        this.cta = cta;
+    public void initializeAttributes(Eventos evt){
+        this.evt = evt;
         showAttributes();
-        precio = cta.getValorCuota().doubleValue();
+        precio = evt.getCuota().doubleValue();
     }
     
     public void showAttributes(){
-        txt_nombreCuota.setText(cta.getNombreCuota());
-        txt_ValorCuota.setText(cta.getValorCuota() + "");
+        java.sql.Date date = new java.sql.Date(evt.getFecha().getTime());
+        txt_nombreEvento.setText(evt.getNombre());
+        txt_ValorCuota.setText(evt.getCuota() + "");
+        fecha.setValue(date.toLocalDate());
     }
-    
+
     @FXML
     private void validar(KeyEvent event) {
         try{
             precio = Double.parseDouble(txt_ValorCuota.getText());
         }catch(NumberFormatException e){
             txt_ValorCuota.setText("");
-        }   
+        } 
+    }
+
+    @FXML
+    private void editarCuotaAction(ActionEvent event) {
+        //Acciones para editar evento
+        editEvento();
     }
 
     @FXML
     private void cancelarAction(ActionEvent event) {
         this.image_moneda.getScene().getWindow().hide();
     }
-
-    @FXML
-    private void editarCuotaAction(ActionEvent event) {
-        //Acciones para editar cuota
-        editCuota();
-    }
     
-    public void editCuota(){
-        if(!txt_nombreCuota.getText().isEmpty() && !txt_ValorCuota.getText().isEmpty()){
+    public void editEvento(){
+        if(!txt_nombreEvento.getText().isEmpty() && !txt_ValorCuota.getText().isEmpty() && fecha.getValue() != null){
             
             BigDecimal valor = BigDecimal.valueOf(precio);
-            //Acciones para editar cuota
             
-            cta.setNombreCuota(txt_nombreCuota.getText());
-            cta.setValorCuota(valor);
+            evt.setNombre(txt_nombreEvento.getText());
+            evt.setCuota(valor);
+            evt.setFecha(java.sql.Date.valueOf(fecha.getValue()));
             
-            setEditCuota();
+            setEditEvento();
             
             //Cerrar ventana
             this.image_moneda.getScene().getWindow().hide();
@@ -108,21 +114,21 @@ public class EditCuotasController implements Initializable {
         }
     }
     
-    public void setEditCuota(){
+    public void setEditEvento(){
         try {
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
-            CuotasJpaController editCta = new CuotasJpaController(emf);
-            editCta.edit(cta);
-
+            EventosJpaController editEvt = new EventosJpaController(emf);
+            editEvt.edit(evt);
+            
             Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Informacion");
-            info.setContentText("Cuota Editada Correctamente");
+            info.setContentText("Evento Editado Correctamente");
             info.show(); 
             
         } catch (NonexistentEntityException ex) {
-            Logger.getLogger(EditCuotasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditEventosController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(EditCuotasController.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+            Logger.getLogger(EditEventosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
