@@ -46,6 +46,19 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado")})
 public class Socios implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "telefono")
+    private int telefono;
+    @Lob
+    @Column(name = "fotografia")
+    private byte[] fotografia;
+    @Basic(optional = false)
+    @Column(name = "exonerado_todo")
+    private boolean exoneradoTodo;
+    @Basic(optional = false)
+    @Column(name = "estado")
+    private boolean estado;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,9 +82,6 @@ public class Socios implements Serializable {
     @Column(name = "fecha_inicio_pago")
     @Temporal(TemporalType.DATE)
     private Date fechaInicioPago;
-    @Lob
-    @Column(name = "fotografia")
-    private byte[] fotografia;
     @Basic(optional = false)
     @Column(name = "exonerado")
     private boolean exonerado;
@@ -161,13 +171,6 @@ public class Socios implements Serializable {
         this.fechaInicioPago = fechaInicioPago;
     }
 
-    public byte[] getFotografia() {
-        return fotografia;
-    }
-
-    public void setFotografia(byte[] fotografia) {
-        this.fotografia = fotografia;
-    }
 
     public boolean getExonerado() {
         return exonerado;
@@ -253,6 +256,38 @@ public class Socios implements Serializable {
     @Override
     public String toString() {
         return "object.Socios[ idSocio=" + idSocio + " ]";
+    }
+
+    public int getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(int telefono) {
+        this.telefono = telefono;
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
+    }
+
+    public boolean getExoneradoTodo() {
+        return exoneradoTodo;
+    }
+
+    public void setExoneradoTodo(boolean exoneradoTodo) {
+        this.exoneradoTodo = exoneradoTodo;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
     
 }
