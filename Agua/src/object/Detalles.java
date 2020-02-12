@@ -32,6 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Detalles.findByDescripcion", query = "SELECT d FROM Detalles d WHERE d.descripcion = :descripcion")})
 public class Detalles implements Serializable {
 
+    @Column(name = "disponible")
+    private Boolean disponible;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,6 +112,14 @@ public class Detalles implements Serializable {
     @Override
     public String toString() {
         return "object.Detalles[ idDetalles=" + idDetalles + " ]";
+    }
+
+    public Boolean getDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(Boolean disponible) {
+        this.disponible = disponible;
     }
     
 }

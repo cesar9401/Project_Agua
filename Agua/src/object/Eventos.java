@@ -40,6 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Eventos.findByCuota", query = "SELECT e FROM Eventos e WHERE e.cuota = :cuota")})
 public class Eventos implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "estado_evento")
+    private boolean estadoEvento;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -138,6 +142,14 @@ public class Eventos implements Serializable {
     @Override
     public String toString() {
         return "object.Eventos[ idEventos=" + idEventos + " ]";
+    }
+
+    public boolean getEstadoEvento() {
+        return estadoEvento;
+    }
+
+    public void setEstadoEvento(boolean estadoEvento) {
+        this.estadoEvento = estadoEvento;
     }
 
 }
