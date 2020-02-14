@@ -188,6 +188,8 @@ public class CrearSocioController implements Initializable {
             nuevo.setDireccion(txtDireccion.getText());
             nuevo.setFechaInicioPago(java.sql.Date.valueOf(datePicker.getValue()));
             
+            //Estado Activo/Inactivo para los socios
+            nuevo.setEstado(true);
             
             if (checkCode() !=  null) {
                 nuevo.setCodigo(checkCode());
