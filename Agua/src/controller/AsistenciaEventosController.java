@@ -27,7 +27,7 @@ public class AsistenciaEventosController implements Initializable {
         // TODO
     }    
     
-    //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
+    //Metodo para recibir el objeto de tipo Eventos con la informacion del evento correspondiente
     public void initializeAttributes(Eventos evt){
         this.evt = evt;
     } 
