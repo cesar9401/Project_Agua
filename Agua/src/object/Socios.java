@@ -46,9 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado")})
 public class Socios implements Serializable {
 
-    @Basic(optional = false)
     @Column(name = "telefono")
-    private int telefono;
+    private Integer telefono;
     @Lob
     @Column(name = "fotografia")
     private byte[] fotografia;
@@ -258,21 +257,6 @@ public class Socios implements Serializable {
         return "object.Socios[ idSocio=" + idSocio + " ]";
     }
 
-    public int getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(int telefono) {
-        this.telefono = telefono;
-    }
-
-    public byte[] getFotografia() {
-        return fotografia;
-    }
-
-    public void setFotografia(byte[] fotografia) {
-        this.fotografia = fotografia;
-    }
 
     public boolean getExoneradoTodo() {
         return exoneradoTodo;
@@ -288,6 +272,22 @@ public class Socios implements Serializable {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    public Integer getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(Integer telefono) {
+        this.telefono = telefono;
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
     }
     
 }

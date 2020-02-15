@@ -122,6 +122,8 @@ public class PagosController implements Initializable {
 
         togglePropietario.setVisible(false);
         btnBuscar.setVisible(false);
+        txtNombreSocio.setEditable(false);
+        txtCui.setEditable(false);
         // TODO
         txtCodigoSocio.setOnAction(e -> {
 
@@ -204,6 +206,7 @@ public class PagosController implements Initializable {
                 this.idSocio = tableView.getSelectionModel().getSelectedItem().getIdSocio();
                 txtCodigoSocio.setText("");
                 txtCodigoSocio.setText(tableView.getSelectionModel().getSelectedItem().getCodigo());
+                itemSelected();
                 popOver.hide();
                 System.out.println("Id" + idSocio);
                 
@@ -227,5 +230,13 @@ public class PagosController implements Initializable {
             popOver.show(txtCodigoSocio);
         });
 
+    }
+    public void itemSelected(){
+        Query searchSocio = getEntityManager().createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", this.idSocio);
+        this.socio = (Socios)searchSocio.getResultList().get(0);
+        
+        txtNombreSocio.setText(this.socio.getNombres()+this.socio.getApellidos());
+        txtCui.setText(this.socio.getDpi());
+       
     }
 }
