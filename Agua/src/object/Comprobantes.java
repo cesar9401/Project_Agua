@@ -6,6 +6,7 @@
 package object;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -37,6 +38,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Comprobantes.findByNoComprobante", query = "SELECT c FROM Comprobantes c WHERE c.noComprobante = :noComprobante")
     , @NamedQuery(name = "Comprobantes.findByFechaComprobante", query = "SELECT c FROM Comprobantes c WHERE c.fechaComprobante = :fechaComprobante")})
 public class Comprobantes implements Serializable {
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "subTotal")
+    private BigDecimal subTotal;
+    @Basic(optional = false)
+    @Column(name = "estado")
+    private boolean estado;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -115,6 +123,22 @@ public class Comprobantes implements Serializable {
     @Override
     public String toString() {
         return "object.Comprobantes[ idComprobantes=" + idComprobantes + " ]";
+    }
+
+    public BigDecimal getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
     
 }

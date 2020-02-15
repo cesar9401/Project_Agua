@@ -39,6 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class Administradores implements Serializable {
 
+    @OneToMany(mappedBy = "administradoresIdAdministrador")
+    private Collection<SociosEventos> sociosEventosCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -121,6 +124,15 @@ public class Administradores implements Serializable {
     @Override
     public String toString() {
         return "object.Administradores[ idAdministrador=" + idAdministrador + " ]";
+    }
+
+    @XmlTransient
+    public Collection<SociosEventos> getSociosEventosCollection() {
+        return sociosEventosCollection;
+    }
+
+    public void setSociosEventosCollection(Collection<SociosEventos> sociosEventosCollection) {
+        this.sociosEventosCollection = sociosEventosCollection;
     }
     
 }

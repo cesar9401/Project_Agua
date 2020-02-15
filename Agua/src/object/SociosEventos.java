@@ -6,6 +6,7 @@
 package object;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -31,6 +34,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SociosEventos.findByIdSociosEventos", query = "SELECT s FROM SociosEventos s WHERE s.idSociosEventos = :idSociosEventos")
     , @NamedQuery(name = "SociosEventos.findByCancelado", query = "SELECT s FROM SociosEventos s WHERE s.cancelado = :cancelado")})
 public class SociosEventos implements Serializable {
+
+    @Column(name = "fecha_pago")
+    @Temporal(TemporalType.DATE)
+    private Date fechaPago;
+    @JoinColumn(name = "administradores_id_administrador", referencedColumnName = "id_administrador")
+    @ManyToOne
+    private Administradores administradoresIdAdministrador;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -115,6 +125,22 @@ public class SociosEventos implements Serializable {
     @Override
     public String toString() {
         return "object.SociosEventos[ idSociosEventos=" + idSociosEventos + " ]";
+    }
+
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public Administradores getAdministradoresIdAdministrador() {
+        return administradoresIdAdministrador;
+    }
+
+    public void setAdministradoresIdAdministrador(Administradores administradoresIdAdministrador) {
+        this.administradoresIdAdministrador = administradoresIdAdministrador;
     }
     
 }

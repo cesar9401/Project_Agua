@@ -6,6 +6,7 @@
 package object;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Detalles.findByIdDetalles", query = "SELECT d FROM Detalles d WHERE d.idDetalles = :idDetalles")
     , @NamedQuery(name = "Detalles.findByDescripcion", query = "SELECT d FROM Detalles d WHERE d.descripcion = :descripcion")})
 public class Detalles implements Serializable {
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "subTotal")
+    private BigDecimal subTotal;
 
     @Column(name = "disponible")
     private Boolean disponible;
@@ -120,6 +125,14 @@ public class Detalles implements Serializable {
 
     public void setDisponible(Boolean disponible) {
         this.disponible = disponible;
+    }
+
+    public BigDecimal getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
     }
     
 }
