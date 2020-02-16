@@ -259,9 +259,12 @@ public class ModifySocioController implements Initializable {
         mancomunado.setSelected(codigoSocio[0].contains("B"));
         isExonerated.setSelected(socio.getExonerado());
         txtIdSuperSocio.setVisible(codigoSocio[0].contains("B"));
-        
-        txtTelefono.setText(String.valueOf(socio.getTelefono()));
-        txtIdSuperSocio.setText(socio.getSociosIdSocio().getCodigo());
+        try {
+
+            txtTelefono.setText(String.valueOf(socio.getTelefono()));
+            txtIdSuperSocio.setText(socio.getSociosIdSocio().getCodigo());
+        } catch (Exception e) {
+        }
 
         if (codigoSocio[0].contains("B")) {
 
@@ -305,7 +308,7 @@ public class ModifySocioController implements Initializable {
             Query superSocio = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", txtIdSuperSocio.getText());
             temp = (Socios) superSocio.getResultList().get(0);
             aMdoficar.setSociosIdSocio(temp);
-            
+
         }
 
         boolean socioMancomunado = mancomunado.isSelected();
@@ -386,7 +389,7 @@ public class ModifySocioController implements Initializable {
         try {
             Query aEliminar = getEntityManager().createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", aMdoficar.getIdSocio());
             SociosJpaController eliminarSocio = new SociosJpaController(conexion.ConexionJPA.getInstancia().getEMF());
-            
+
             aMdoficar.setEstado(false);
             //eliminarSocio.destroy(aMdoficar.getIdSocio());
             eliminarSocio.edit(aMdoficar);
@@ -398,7 +401,7 @@ public class ModifySocioController implements Initializable {
             info.show();
             Logger.getLogger(ModifySocioController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        
+
             Alert info = new Alert(Alert.AlertType.ERROR);
             info.setTitle("Error Type 2");
             info.setHeaderText("socio No Eliminado");

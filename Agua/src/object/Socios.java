@@ -48,11 +48,12 @@ import javax.xml.bind.annotation.XmlTransient;
     })
 public class Socios implements Serializable {
 
-    @Column(name = "telefono")
-    private Integer telefono;
     @Lob
     @Column(name = "fotografia")
     private byte[] fotografia;
+
+    @Column(name = "telefono")
+    private Integer telefono;
     @Basic(optional = false)
     @Column(name = "exonerado_todo")
     private boolean exoneradoTodo;

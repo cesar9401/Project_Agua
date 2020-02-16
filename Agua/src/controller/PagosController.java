@@ -108,14 +108,8 @@ public class PagosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         inicializarTable();
 
-        
-        
-//        togglePropietario.setVisible(false);
-//        btnBuscar.setVisible(false);
         txtNombreSocio.setEditable(false);
         txtCui.setEditable(false);
-        // TODO
-
         prueba = new PopSocios();
         prueba.setSocio(tmp);
        
@@ -124,7 +118,6 @@ public class PagosController implements Initializable {
         txtCodigoSocio.setOnAction(e -> {
             System.out.println("Nombre evento " + e.getEventType().getName());
             if (e.getEventType().getName().contains("ACTION")) {
-                
                 colocarDatosSocio();
             }
         });
@@ -160,9 +153,22 @@ public class PagosController implements Initializable {
      @FXML
     private void btnBusccar(ActionEvent event) {
 
-         System.out.println(prueba.getSocio());
+        this.socio = prueba.getSocio();
+         
          txtNombreSocio.setText(prueba.getSocio().getNombres()+" "+prueba.getSocio().getApellidos());
          txtCui.setText(prueba.getSocio().getDpi());
+         searchLatestPay();
          
+    }
+    private void searchLatestPay(){
+        Query searchPay = getEntityManager().createNamedQuery("PagosSocios.findLatestPago");//.setParameter("sociosIdSocio", this.socio.getIdSocio());
+        if (searchPay.getResultList().size() < 1) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("EL socio que desea pagar no cuenta con un registro de pagos,\npor favor verificar ");
+            alert.setTitle("Informacion");
+            alert.setHeaderText("Verificar Socio");
+        }else{
+            
+        }
     }
 }
