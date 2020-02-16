@@ -52,6 +52,7 @@ import javax.persistence.Query;
 import model.SociosJpaController;
 import object.Administradores;
 import object.Socios;
+import object.auxiliary.PopSocios;
 import object.auxiliary.ViewSocio;
 import org.controlsfx.control.PopOver;
 
@@ -94,6 +95,10 @@ public class CrearSocioController implements Initializable {
     
     private boolean changeImg;
     private String pathImg;
+    @FXML
+    private JFXTextField txtTelefono;
+    @FXML
+    private JFXToggleButton isExoneratedAll;
     
     /**
      * Initializes the controller class.
@@ -113,22 +118,13 @@ public class CrearSocioController implements Initializable {
         mancomunado.setOnAction(e -> {
             
             txtCodePropietario.setVisible(mancomunado.isSelected());
+            if (mancomunado.isSelected()) {
+                PopSocios pop = new PopSocios();
+                pop.popOverMancomunado(txtCodePropietario);
+            }
             
         });
-        
-        Query forGetSocios = getEntityManager().createNamedQuery("Socios.findAll");
-        
-         ObservableList<ViewSocio> showDataSocio = FXCollections.observableArrayList();
-        
-        for (Iterator<Socios> iterator = forGetSocios.getResultList().iterator(); iterator.hasNext();) {
-            Socios next = iterator.next();
-            showDataSocio.add(new ViewSocio(next.getIdSocio(), next.getCodigo(), next.getNombres()));
-          //  System.out.println(next.getNombre());
-         
-            
-        }
-        popOverMancomunado(showDataSocio);
-        
+          
     }   
    
     //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
@@ -169,13 +165,18 @@ public class CrearSocioController implements Initializable {
             }
         }
     }
-    
+    private Socios socioSuper(){
+        
+        Query forCallSocio = getEntityManager().createNamedQuery("Socios.findByCodigo").setParameter("codigo", txtCodePropietario.getText());
+        Socios socio = (Socios) forCallSocio.getResultList().get(0);
+        return (Socios) forCallSocio.getResultList().get(0);
+    }
     
     /**
      * verifica que rellene los campos obligatorios sin tener duplicados en la base de datos
      * si cumple con lo anterior guarda al nuevo socio
      */
-    public void captureData(){
+    private void captureData(){
         
         Socios nuevo = new Socios();
         
@@ -188,6 +189,9 @@ public class CrearSocioController implements Initializable {
             nuevo.setDireccion(txtDireccion.getText());
             nuevo.setFechaInicioPago(java.sql.Date.valueOf(datePicker.getValue()));
             
+            if (!txtCodePropietario.getText().isEmpty()) {
+                nuevo.setSociosIdSocio(socioSuper());
+            }
             
             if (checkCode() !=  null) {
                 nuevo.setCodigo(checkCode());
@@ -238,7 +242,7 @@ public class CrearSocioController implements Initializable {
             
         }        
     }
-    public String checkCode(){
+    private String checkCode(){
         
         
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
@@ -280,7 +284,7 @@ public class CrearSocioController implements Initializable {
      * 
      * @param keyEvent 
      */
-    public void validationOfNumber(KeyEvent keyEvent){
+    private void validationOfNumber(KeyEvent keyEvent){
         try{
             char key = keyEvent.getCharacter().charAt(0);
 
@@ -293,69 +297,13 @@ public class CrearSocioController implements Initializable {
         } catch (Exception ex){ }
     }
     
-    public void popOverMancomunado(ObservableList<ViewSocio> items){
-       
-        
-         
-        JFXTextField searchSocio = new JFXTextField();
-        searchSocio.setPrefSize(200, 150);
-        searchSocio.setPromptText("Ingrese el codigo del Socio a Buscar");
-        searchSocio.setEditable(true);
-        //searchSocio.setLabelFloat(true);
-//        
-//        searchSocio.setLayoutX(2);
-//        searchSocio.setLayoutY(5);
-        searchSocio.setVisible(true);
-        
-        
-        TableColumn<ViewSocio,String> forCodigo = new TableColumn<ViewSocio, String>("Codigo");
-        TableColumn<ViewSocio,String> forSocio = new TableColumn<ViewSocio, String>("Nombre");
-        
-          forCodigo.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("codigo"));
-        forSocio.setCellValueFactory(new PropertyValueFactory<ViewSocio,String>("nombre"));
-        
-        
-        forCodigo.setPrefWidth(250);
-        forSocio.setPrefWidth(250);
-        
-        TableView<ViewSocio> tableView = new TableView<>(items);
-        
-        tableView.setLayoutX(0);
-        tableView.setLayoutY(40);
-        tableView.getColumns().addAll(forCodigo,forSocio);
-        
-        tableView.setOnMouseClicked(e ->{
-            if (e.getClickCount() == 2) {
-                this.idSocio=tableView.getSelectionModel().getSelectedItem().getIdSocio();
-                txtCodePropietario.setText("");
-                txtCodePropietario.setText(tableView.getSelectionModel().getSelectedItem().getCodigo());
-                
-                System.out.println("Id"+idSocio);
-            }
-        });
-        
-        AnchorPane anchorPane = new AnchorPane(searchSocio,tableView);
-        
-//        anchorPane.setClip(searchSocio);
-//        anchorPane.setClip(tableView);
-        
-        PopOver popOver = new PopOver(anchorPane);
-        txtCodePropietario.setEffect(new Blend());
-        
-        
-        txtCodePropietario.setOnKeyPressed(e->{
-            System.out.println("Pop oVert visible");
-            popOver.show(txtCodePropietario);
-        });
-        
-        
-    }
+
     private EntityManager getEntityManager(){
          EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         
         return emf.createEntityManager();
     }
-    public void clearData(){
+    private void clearData(){
             
         txtCode.setText("");
         txtCodePropietario.setText("");

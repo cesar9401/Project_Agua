@@ -5,11 +5,17 @@
  */
 package main;
 
+import java.util.Iterator;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import object.Socios;
 
 /**
  *
@@ -19,9 +25,30 @@ public class MainTestJulio extends Application{
     
     public static void main(String[] args){
         //Write your code here
+//        Scanner scanner = new Scanner(System.in);
+//        String codigo ;
+//        do {
+//            
+//          //  System.out.println("codigo = " + codigo);
+//          codigo = scanner.nextLine();
+//        Query test = getEntityManager().createNamedQuery("Socios.findByCodeUseLike").setParameter("codigo", "%"+codigo+"%");
+//            System.out.println("Consulta"+test.getResultList().size());
+//            System.out.println(test.toString());
+//            for (Iterator<Socios> iterator = test.getResultList().iterator(); iterator.hasNext();) {
+//                Socios nuevp =  iterator.next();
+//                System.out.println("nuevp = " + nuevp.getNombres()+nuevp.getCodigo());
+//                
+//            }
+//            codigo = scanner.nextLine();
+//        } while (codigo.contains("s"));
+//        
         launch(args);
     }
+private static EntityManager getEntityManager() {
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
 
+        return emf.createEntityManager();
+    }
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../view/Pagos.fxml"));

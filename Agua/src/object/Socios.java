@@ -43,7 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Socios.findByDpi", query = "SELECT s FROM Socios s WHERE s.dpi = :dpi")
     , @NamedQuery(name = "Socios.findByDireccion", query = "SELECT s FROM Socios s WHERE s.direccion = :direccion")
     , @NamedQuery(name = "Socios.findByFechaInicioPago", query = "SELECT s FROM Socios s WHERE s.fechaInicioPago = :fechaInicioPago")
-    , @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado")})
+    , @NamedQuery(name = "Socios.findByExonerado", query = "SELECT s FROM Socios s WHERE s.exonerado = :exonerado")
+    , @NamedQuery(name = "Socios.findByCodeUseLike", query = "SELECT s FROM Socios s WHERE s.codigo Like :codigo")
+    })
 public class Socios implements Serializable {
 
     @Column(name = "telefono")

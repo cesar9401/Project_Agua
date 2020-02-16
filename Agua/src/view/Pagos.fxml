@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -17,7 +16,7 @@
     </stylesheets>
    <children>
       <JFXTextField fx:id="txtCodigoSocio" labelFloat="true" layoutX="148.0" layoutY="21.0" prefHeight="26.0" prefWidth="226.0" promptText="Codigo Socio" />
-      <JFXButton fx:id="btnBuscar" buttonType="RAISED" layoutX="674.0" layoutY="10.0" onAction="#btnBusccar" prefHeight="46.0" prefWidth="149.0" style="-fx-background-color: #bfbbc8;" text="Buscar" />
+      <JFXButton fx:id="btnAdd" buttonType="RAISED" layoutX="404.0" layoutY="14.0" onAction="#btnBusccar" prefHeight="46.0" prefWidth="149.0" style="-fx-background-color: #bfbbc8;" text="Agregar Datos" />
       <Separator layoutX="84.0" layoutY="100.0" prefHeight="0.0" prefWidth="864.0" />
       <JFXTextField fx:id="txtNombreSocio" labelFloat="true" layoutX="148.0" layoutY="122.0" promptText="Nombre De Socio" />
       <JFXTextField fx:id="txtCui" labelFloat="true" layoutX="401.0" layoutY="122.0" prefHeight="26.0" prefWidth="239.0" promptText="CUI De Propietario" />
@@ -42,6 +41,5 @@
       <JFXTextField fx:id="txtNoRecibo" labelFloat="true" layoutX="143.0" layoutY="387.0" promptText="Recibo No." />
       <JFXTextField fx:id="txtTotalPago" labelFloat="true" layoutX="401.0" layoutY="387.0" promptText="Total Q." />
       <JFXButton fx:id="btnEliminarFIla" buttonType="RAISED" layoutX="832.0" layoutY="586.0" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: #BDBDBD;" text="Eliminar FIla" />
-      <JFXToggleButton fx:id="togglePropietario" layoutX="399.0" layoutY="10.0" prefWidth="193.0" text="Propietario" />
    </children>
 </AnchorPane>
