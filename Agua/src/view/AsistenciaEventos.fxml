@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="924.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AsistenciaEventosController">
+    <stylesheets>
+        <URL value="@/css/asistenciaeventos.css" />
+    </stylesheets>
+   <children>
+      <TableView fx:id="table_asistentes" layoutX="40.0" layoutY="90.0" onMouseClicked="#seleccionarAsistentes" prefHeight="400.0" prefWidth="350.0" styleClass="table_asistentes">
+        <columns>
+          <TableColumn fx:id="colCodigoA" editable="false" prefWidth="90.0" resizable="false" text="Codigo" />
+          <TableColumn fx:id="colNombresA" editable="false" prefWidth="130.0" resizable="false" text="Nombres" />
+            <TableColumn fx:id="colApellidosA" editable="false" prefWidth="130.0" resizable="false" text="Apellidos" />
+        </columns>
+      </TableView>
+      <TableView fx:id="table_inasistentes" layoutX="534.0" layoutY="90.0" onMouseClicked="#seleccionarInasistentes" prefHeight="400.0" prefWidth="350.0" styleClass="table_inasistentes" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="90.0">
+         <columns>
+            <TableColumn fx:id="colCodigoI" editable="false" prefWidth="90.0" resizable="false" text="Codigo" />
+            <TableColumn fx:id="colNombresI" editable="false" prefWidth="130.0" resizable="false" text="Nombres" />
+            <TableColumn fx:id="colApellidosI" editable="false" prefWidth="130.0" resizable="false" text="Apellidos" />
+         </columns>
+      </TableView>
+      <Label fx:id="label_asistentes" layoutX="40.0" layoutY="60.0" styleClass="label_asistentes" text="Asistentes" />
+      <Label fx:id="label_inasistentes" layoutX="534.0" layoutY="60.0" styleClass="label_inasistentes" text="Inasistentes" />
+      <Button fx:id="button_inasistentes" layoutX="406.0" layoutY="250.0" mnemonicParsing="false" onAction="#inasistentesAction" prefHeight="30.0" prefWidth="112.0" styleClass="button_inasistentes" text="Inasistentes &gt;&gt;" />
+      <Button fx:id="button_asistentes" layoutX="406.0" layoutY="300.0" mnemonicParsing="false" onAction="#asistentesAction" prefHeight="30.0" prefWidth="112.0" styleClass="button_asistentes" text="&lt;&lt; Asistentes" />
+      <Button fx:id="button_confirmar" layoutX="347.0" layoutY="525.0" mnemonicParsing="false" onAction="#confirmarAction" prefHeight="30.0" prefWidth="90.0" styleClass="button_confirmar" text="Confirmar" />
+      <Button fx:id="button_cancelar" layoutX="487.0" layoutY="525.0" mnemonicParsing="false" onAction="#cancelarAction" prefHeight="30.0" prefWidth="90.0" styleClass="button_cancelar" text="Cancelar" />
+   </children>
+</AnchorPane>

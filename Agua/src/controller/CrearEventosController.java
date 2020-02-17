@@ -27,8 +27,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -93,6 +91,8 @@ public class CrearEventosController implements Initializable {
     private Button button_editar;
     @FXML
     private Button button_eliminar;
+    @FXML
+    private Button button_confirmar;
         
     /**
      * Initializes the controller class.
@@ -107,6 +107,7 @@ public class CrearEventosController implements Initializable {
         setTableEventos();
         button_editar.setDisable(true);
         button_eliminar.setDisable(true);
+        button_confirmar.setDisable(true);
     }
     
     //Metodo para recibir los objetos de tipo Socios y Aministradores con informacion del admin logueado
@@ -152,6 +153,7 @@ public class CrearEventosController implements Initializable {
             nuevo.setNombre(txt_nombreEvento.getText());
             nuevo.setFecha(java.sql.Date.valueOf(fecha.getValue()));
             nuevo.setCuota(BigDecimal.valueOf(precio));
+            nuevo.setEstadoEvento(true);
             
             EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
             EventosJpaController saveEvento = new EventosJpaController(emf);
@@ -191,8 +193,12 @@ public class CrearEventosController implements Initializable {
         }
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         for(Eventos e: evt){
-            String fecha = format.format(e.getFecha());
-            viewEvt.add(new ViewEventos(e.getIdEventos(), e.getNombre(), fecha, e.getCuota()));
+            
+            //Comprueba si el evento esta activo para poder mostralo
+            if(e.getEstadoEvento()){
+                String fecha = format.format(e.getFecha());
+                viewEvt.add(new ViewEventos(e.getIdEventos(), e.getNombre(), fecha, e.getCuota()));
+            }
         }
         
         return viewEvt;
@@ -222,6 +228,7 @@ public class CrearEventosController implements Initializable {
         if(tmp != null){
             button_editar.setDisable(false);
             button_eliminar.setDisable(false);
+            button_confirmar.setDisable(false);
         }
     }
 
@@ -322,5 +329,31 @@ public class CrearEventosController implements Initializable {
         }
         
         return evt;
+    }
+
+    @FXML
+    private void confirmarAction(ActionEvent event) throws IOException {
+        ViewEventos tmp = table_eventos.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            Eventos evt = getEventoById(tmp);
+            if(evt != null){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AsistenciaEventos.fxml"));
+                Parent root = loader.load();
+                AsistenciaEventosController controller = loader.getController();
+                controller.initializeAttributes(evt);
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Confirmar Asistencia - " + evt.getNombre());
+                stage.show();
+            }
+        }else{
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un evento para pode confirmar asistencia de los socios");
+            errorInfo.show(); 
+        }        
+        
     }
 }

@@ -192,6 +192,7 @@ public class CrearSocioController implements Initializable {
             if (!txtCodePropietario.getText().isEmpty()) {
                 nuevo.setSociosIdSocio(socioSuper());
             }
+
             
             if (checkCode() !=  null) {
                 nuevo.setCodigo(checkCode());

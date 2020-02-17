@@ -10,15 +10,24 @@ package object.auxiliary;
  * @author julio
  */
 public class ViewSocio {
-
-    public ViewSocio() {
-    }
-
     
+    private int idSocio;
+    private String codigo;
+    private String nombre;
+    
+    private String apellidos;
+  
     public ViewSocio(int idSocio, String codigo, String nombre) {
         this.idSocio = idSocio;
         this.codigo = codigo;
         this.nombre = nombre;
+    }
+
+    public ViewSocio(int idSocio, String codigo, String nombre, String apellidos) {
+        this.idSocio = idSocio;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
     }
 
     public int getIdSocio() {
@@ -44,11 +53,12 @@ public class ViewSocio {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
-    
-    private int idSocio;
-    private String codigo;
-    private String nombre;
-    
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }    
 }
