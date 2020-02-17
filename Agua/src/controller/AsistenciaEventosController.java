@@ -24,8 +24,10 @@ import javafx.scene.input.MouseEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import object.Administradores;
 import object.Eventos;
 import object.Socios;
+import object.SociosEventos;
 import object.auxiliary.ViewSocio;
 
 /**
@@ -34,8 +36,10 @@ import object.auxiliary.ViewSocio;
  * @author cesar31
  */
 public class AsistenciaEventosController implements Initializable {
-    
+
+    private Administradores admin;
     private Eventos evt;
+    
     private ObservableList<ViewSocio> asistentes;
     private ObservableList<ViewSocio> inasistentes;
     
@@ -83,7 +87,8 @@ public class AsistenciaEventosController implements Initializable {
     }    
     
     //Metodo para recibir el objeto de tipo Eventos con la informacion del evento correspondiente
-    public void initializeAttributes(Eventos evt){
+    public void initializeAttributes(Administradores admin, Eventos evt){
+        this.admin = admin;
         this.evt = evt;
         createTables();
         setTableAsistentes();
@@ -114,12 +119,12 @@ public class AsistenciaEventosController implements Initializable {
 
     @FXML
     private void inasistentesAction(ActionEvent event) {
-        setInasistentes();
+        setInasistentesTable();
     }
 
     @FXML
     private void asistentesAction(ActionEvent event) {
-        setAsistentes();
+        setAsistentesTable();
     }
 
     @FXML
@@ -132,7 +137,7 @@ public class AsistenciaEventosController implements Initializable {
         this.button_cancelar.getScene().getWindow().hide();
     }
     
-    public void setInasistentes(){
+    public void setInasistentesTable(){
         ViewSocio tmp = table_asistentes.getSelectionModel().getSelectedItem();
         if(tmp != null){
             inasistentes.add(tmp);
@@ -147,7 +152,7 @@ public class AsistenciaEventosController implements Initializable {
         }
     }
     
-    public void setAsistentes(){
+    public void setAsistentesTable(){
         ViewSocio tmp = table_inasistentes.getSelectionModel().getSelectedItem();
         if(tmp != null){
             asistentes.add(tmp);
@@ -163,7 +168,64 @@ public class AsistenciaEventosController implements Initializable {
     
     public void setSociosEventos(){
         //Acciones para ingresar/eliminar en la tabla socios_eventos
+        for(ViewSocio s: socioEvt){
+            if(asistentes.contains(s)){
+                asistentes.remove(s);
+            }
+        }
         
+        for(ViewSocio s: socioNoEvt){
+            if(inasistentes.contains(s)){
+                inasistentes.remove(s);
+            }
+        }
+        
+        if(asistentes.size() > 0){
+            List<Socios> socios = getSocios(asistentes);
+            System.out.println("asistentes: ");
+            for(Socios s: socios){
+                System.out.println(s.getNombres());
+            }
+        }
+        
+        
+        if(inasistentes.size() > 0){
+            List<Socios> socios = getSocios(inasistentes);
+            System.out.println("\ninasistentes");
+            for(Socios s: socios){
+                System.out.println(s.getNombres());
+            }            
+        }
+    }
+    
+    public void setAsistentesBD(List<Socios> socios){
+        for(Socios s: socios){
+            SociosEventos tmp = new SociosEventos();
+            tmp.setEventosIdEventos(evt);
+            tmp.setCancelado(false);
+        }
+    }
+    
+    public void setInasistentesBD(List<Socios> socios){
+        
+    }
+    
+    public List<Socios> getSocios(List<ViewSocio> view){
+        List<Socios> socios = new ArrayList<>();
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        for(ViewSocio s: view){
+            Query getSocio = em.createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", s.getIdSocio());
+            Socios socio = (Socios) getSocio.getResultList().get(0);
+            socios.add(socio);
+        }
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return socios;
     }
     
     public void createTables(){
