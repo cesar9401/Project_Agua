@@ -105,7 +105,7 @@ public class PagosController implements Initializable {
 
     private Socios tmp;
     private PopSocios prueba;
-    
+    private LocalDate datePay;
 
     /**
      * Initializes the controller class.
@@ -118,11 +118,13 @@ public class PagosController implements Initializable {
         dateActual.setVisible(false);
         txtNombreSocio.setEditable(false);
         txtCui.setEditable(false);
+        
+        
         prueba = new PopSocios();
         prueba.setSocio(tmp);
-       
+
         fillComboBox();
-        tmp = prueba.popOverMancomunado( txtCodigoSocio);
+        tmp = prueba.popOverMancomunado(txtCodigoSocio);
 
         txtCodigoSocio.setOnAction(e -> {
             System.out.println("Nombre evento " + e.getEventType().getName());
@@ -157,37 +159,36 @@ public class PagosController implements Initializable {
         columnDescripcion.setCellValueFactory(new PropertyValueFactory<DetallePago, String>("descripcion"));
         columnPrecio.setCellValueFactory(new PropertyValueFactory<DetallePago, Double>("precio"));
     }
-    
 
-     @FXML
+    @FXML
     private void btnBusccar(ActionEvent event) {
 
         this.tmp = prueba.getSocio();
-         
-         txtNombreSocio.setText(prueba.getSocio().getNombres()+" "+prueba.getSocio().getApellidos());
-         txtCui.setText(prueba.getSocio().getDpi());
-         dateActual.setValue(LocalDate.now());
-         searchLatestPay();
-         
+
+        txtNombreSocio.setText(prueba.getSocio().getNombres() + " " + prueba.getSocio().getApellidos());
+        txtCui.setText(prueba.getSocio().getDpi());
+        dateActual.setValue(LocalDate.now());
+        searchLatestPay();
+
     }
-    private void searchLatestPay(){
-        
+
+    private void searchLatestPay() {
+
         Query searchPay = getEntityManager().createNamedQuery("PagosSocios.findLatestPago").setParameter("idSocio", this.tmp.getIdSocio());
         searchPay.setMaxResults(1);
-        
-        
+
         if (searchPay.getResultList().size() < 1) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("EL socio que desea pagar no cuenta con un registro de pagos,\npor favor verificar ");
             alert.setTitle("Informacion");
             alert.setHeaderText("Verificar Socio");
             alert.show();
-        }else{
+        } else {
             PagosSocios nuevo = (PagosSocios) searchPay.getResultList().get(0);
-            
+
             java.sql.Date date = new java.sql.Date(nuevo.getMesCancelado().getTime());
             dateUltimo.setValue(date.toLocalDate());
-            
+
         }
     }
 
@@ -198,41 +199,42 @@ public class PagosController implements Initializable {
     @FXML
     private void btnDeleteAction(ActionEvent event) {
     }
+
     @FXML
     private void btnVisualizarAction(ActionEvent event) {
-        
 
-        LocalDate mes = dateUltimo.getValue().plusMonths(comboCantidad.getValue());
-        
-        System.out.println("Fecha Sin Modificar"+ dateUltimo.getValue());
-        System.out.println("Sumar 3 Meses"+ mes.toString());
-        
-        
-                
-         //     System.out.println((dateUltimo.getValue()<datePagarHasta.getValue()));
+        //     System.out.println((dateUltimo.getValue()<datePagarHasta.getValue()));
         if (dateUltimo.getValue() != null) {
-            if (datePagarHasta.getValue() != null) {
-                
-                //LocalDate amountMonth = dateUltimo.getValue().;
-                
-        
-                
-                
-            }
-            
-        }else{
-            if (datePagarHasta.getValue() != null) {
-                
-            }
+                datePay = dateUltimo.getValue().plusMonths(comboCantidad.getValue());
+        } else {
+
+            dateActual.setValue(LocalDate.now());
+            dateUltimo.setValue(dateActual.getValue());
+            datePay = dateActual.getValue().plusMonths(comboCantidad.getValue());
         }
+        
+        
+        DetallePago mensualidad = new DetallePago(tmp.getCodigo(),  "Cancela "+comboCantidad.getValue()+" del "+dateUltimo.getValue()+" al    "+datePay.toString(), 35);
+        
+        
+        
+        ObservableList<DetallePago> detail = FXCollections.observableArrayList();
+        
+        detail.add(new DetallePago(tmp.getCodigo(), "Sancion de Sesion", Double.parseDouble(txtSancion.getText())));
+        detail.add(new DetallePago(tmp.getCodigo(), "Por Construccion ", Double.parseDouble(txtTotalDeConstruccion.getText())));
+        detail.add(new DetallePago(tmp.getCodigo(), "Sancion de Trabajo", Double.parseDouble(txtSancion.getText())));
+        detail.add(new DetallePago(tmp.getCodigo(), "Mora", Double.parseDouble(txtTotalDeMora.getText())));
+        
+        detail.add(mensualidad);
+        tblDetalle.setItems(detail);
     }
-    
-    public void fillComboBox(){
+
+    public void fillComboBox() {
         ObservableList<Integer> meses = FXCollections.observableArrayList();
         for (int i = 1; i <= 24; i++) {
             meses.add(new Integer(i));
         }
-        
+
         comboCantidad.setItems(meses);
         comboCantidad.getSelectionModel().selectFirst();
     }
