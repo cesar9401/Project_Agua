@@ -27,7 +27,8 @@ public class MainTestJulio extends Application{
     
     public static void main(String[] args){
 
-        Query pagos = getEntityManager().createNamedQuery("PagosSocios.findLatestPago");
+        Query pagos = getEntityManager().createNamedQuery("PagosSocios.findLatestPago").setParameter("idSocio", 3);
+        pagos.setMaxResults(1);
         List<PagosSocios> list = pagos.getResultList();
         
         for (PagosSocios pagosSocios : list) {

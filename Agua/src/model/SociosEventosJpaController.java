@@ -5,7 +5,6 @@
  */
 package model;
 
-import model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -14,8 +13,10 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import model.exceptions.NonexistentEntityException;
 import object.Eventos;
 import object.Socios;
+import object.Administradores;
 import object.SociosEventos;
 
 /**
@@ -48,6 +49,11 @@ public class SociosEventosJpaController implements Serializable {
                 sociosIdSocio = em.getReference(sociosIdSocio.getClass(), sociosIdSocio.getIdSocio());
                 sociosEventos.setSociosIdSocio(sociosIdSocio);
             }
+            Administradores administradoresIdAdministrador = sociosEventos.getAdministradoresIdAdministrador();
+            if (administradoresIdAdministrador != null) {
+                administradoresIdAdministrador = em.getReference(administradoresIdAdministrador.getClass(), administradoresIdAdministrador.getIdAdministrador());
+                sociosEventos.setAdministradoresIdAdministrador(administradoresIdAdministrador);
+            }
             em.persist(sociosEventos);
             if (eventosIdEventos != null) {
                 eventosIdEventos.getSociosEventosCollection().add(sociosEventos);
@@ -56,6 +62,10 @@ public class SociosEventosJpaController implements Serializable {
             if (sociosIdSocio != null) {
                 sociosIdSocio.getSociosEventosCollection().add(sociosEventos);
                 sociosIdSocio = em.merge(sociosIdSocio);
+            }
+            if (administradoresIdAdministrador != null) {
+                administradoresIdAdministrador.getSociosEventosCollection().add(sociosEventos);
+                administradoresIdAdministrador = em.merge(administradoresIdAdministrador);
             }
             em.getTransaction().commit();
         } finally {
@@ -75,6 +85,8 @@ public class SociosEventosJpaController implements Serializable {
             Eventos eventosIdEventosNew = sociosEventos.getEventosIdEventos();
             Socios sociosIdSocioOld = persistentSociosEventos.getSociosIdSocio();
             Socios sociosIdSocioNew = sociosEventos.getSociosIdSocio();
+            Administradores administradoresIdAdministradorOld = persistentSociosEventos.getAdministradoresIdAdministrador();
+            Administradores administradoresIdAdministradorNew = sociosEventos.getAdministradoresIdAdministrador();
             if (eventosIdEventosNew != null) {
                 eventosIdEventosNew = em.getReference(eventosIdEventosNew.getClass(), eventosIdEventosNew.getIdEventos());
                 sociosEventos.setEventosIdEventos(eventosIdEventosNew);
@@ -82,6 +94,10 @@ public class SociosEventosJpaController implements Serializable {
             if (sociosIdSocioNew != null) {
                 sociosIdSocioNew = em.getReference(sociosIdSocioNew.getClass(), sociosIdSocioNew.getIdSocio());
                 sociosEventos.setSociosIdSocio(sociosIdSocioNew);
+            }
+            if (administradoresIdAdministradorNew != null) {
+                administradoresIdAdministradorNew = em.getReference(administradoresIdAdministradorNew.getClass(), administradoresIdAdministradorNew.getIdAdministrador());
+                sociosEventos.setAdministradoresIdAdministrador(administradoresIdAdministradorNew);
             }
             sociosEventos = em.merge(sociosEventos);
             if (eventosIdEventosOld != null && !eventosIdEventosOld.equals(eventosIdEventosNew)) {
@@ -99,6 +115,14 @@ public class SociosEventosJpaController implements Serializable {
             if (sociosIdSocioNew != null && !sociosIdSocioNew.equals(sociosIdSocioOld)) {
                 sociosIdSocioNew.getSociosEventosCollection().add(sociosEventos);
                 sociosIdSocioNew = em.merge(sociosIdSocioNew);
+            }
+            if (administradoresIdAdministradorOld != null && !administradoresIdAdministradorOld.equals(administradoresIdAdministradorNew)) {
+                administradoresIdAdministradorOld.getSociosEventosCollection().remove(sociosEventos);
+                administradoresIdAdministradorOld = em.merge(administradoresIdAdministradorOld);
+            }
+            if (administradoresIdAdministradorNew != null && !administradoresIdAdministradorNew.equals(administradoresIdAdministradorOld)) {
+                administradoresIdAdministradorNew.getSociosEventosCollection().add(sociosEventos);
+                administradoresIdAdministradorNew = em.merge(administradoresIdAdministradorNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -138,6 +162,11 @@ public class SociosEventosJpaController implements Serializable {
             if (sociosIdSocio != null) {
                 sociosIdSocio.getSociosEventosCollection().remove(sociosEventos);
                 sociosIdSocio = em.merge(sociosIdSocio);
+            }
+            Administradores administradoresIdAdministrador = sociosEventos.getAdministradoresIdAdministrador();
+            if (administradoresIdAdministrador != null) {
+                administradoresIdAdministrador.getSociosEventosCollection().remove(sociosEventos);
+                administradoresIdAdministrador = em.merge(administradoresIdAdministrador);
             }
             em.remove(sociosEventos);
             em.getTransaction().commit();

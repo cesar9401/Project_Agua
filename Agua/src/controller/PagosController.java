@@ -6,10 +6,12 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -32,8 +34,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import object.Administradores;
+import object.PagosSocios;
 import object.Socios;
 import object.auxiliary.DetallePago;
+import object.auxiliary.Mes_ES;
 import object.auxiliary.PopSocios;
 import object.auxiliary.ViewSocio;
 import org.controlsfx.control.PopOver;
@@ -91,6 +95,8 @@ public class PagosController implements Initializable {
     private JFXToggleButton togglePropietario;
     @FXML
     private Label lblPagarHasta;
+    @FXML
+    private JFXComboBox<Integer> comboCantidad;
 
     @FXML
     private JFXButton btnAdd;
@@ -108,11 +114,14 @@ public class PagosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         inicializarTable();
 
+        datePagarHasta.setVisible(false);
+        dateActual.setVisible(false);
         txtNombreSocio.setEditable(false);
         txtCui.setEditable(false);
         prueba = new PopSocios();
         prueba.setSocio(tmp);
        
+        fillComboBox();
         tmp = prueba.popOverMancomunado( txtCodigoSocio);
 
         txtCodigoSocio.setOnAction(e -> {
@@ -153,22 +162,79 @@ public class PagosController implements Initializable {
      @FXML
     private void btnBusccar(ActionEvent event) {
 
-        this.socio = prueba.getSocio();
+        this.tmp = prueba.getSocio();
          
          txtNombreSocio.setText(prueba.getSocio().getNombres()+" "+prueba.getSocio().getApellidos());
          txtCui.setText(prueba.getSocio().getDpi());
+         dateActual.setValue(LocalDate.now());
          searchLatestPay();
          
     }
     private void searchLatestPay(){
-        Query searchPay = getEntityManager().createNamedQuery("PagosSocios.findLatestPago");//.setParameter("sociosIdSocio", this.socio.getIdSocio());
+        
+        Query searchPay = getEntityManager().createNamedQuery("PagosSocios.findLatestPago").setParameter("idSocio", this.tmp.getIdSocio());
+        searchPay.setMaxResults(1);
+        
+        
         if (searchPay.getResultList().size() < 1) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("EL socio que desea pagar no cuenta con un registro de pagos,\npor favor verificar ");
             alert.setTitle("Informacion");
             alert.setHeaderText("Verificar Socio");
+            alert.show();
         }else{
+            PagosSocios nuevo = (PagosSocios) searchPay.getResultList().get(0);
+            
+            java.sql.Date date = new java.sql.Date(nuevo.getMesCancelado().getTime());
+            dateUltimo.setValue(date.toLocalDate());
             
         }
     }
+
+    @FXML
+    private void btnRegistrarAction(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnDeleteAction(ActionEvent event) {
+    }
+    @FXML
+    private void btnVisualizarAction(ActionEvent event) {
+        
+
+        LocalDate mes = dateUltimo.getValue().plusMonths(comboCantidad.getValue());
+        
+        System.out.println("Fecha Sin Modificar"+ dateUltimo.getValue());
+        System.out.println("Sumar 3 Meses"+ mes.toString());
+        
+        
+                
+         //     System.out.println((dateUltimo.getValue()<datePagarHasta.getValue()));
+        if (dateUltimo.getValue() != null) {
+            if (datePagarHasta.getValue() != null) {
+                
+                //LocalDate amountMonth = dateUltimo.getValue().;
+                
+        
+                
+                
+            }
+            
+        }else{
+            if (datePagarHasta.getValue() != null) {
+                
+            }
+        }
+    }
+    
+    public void fillComboBox(){
+        ObservableList<Integer> meses = FXCollections.observableArrayList();
+        for (int i = 1; i <= 24; i++) {
+            meses.add(new Integer(i));
+        }
+        
+        comboCantidad.setItems(meses);
+        comboCantidad.getSelectionModel().selectFirst();
+    }
+
 }
