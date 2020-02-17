@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -37,6 +38,10 @@ public class AsistenciaEventosController implements Initializable {
     private Eventos evt;
     private ObservableList<ViewSocio> asistentes;
     private ObservableList<ViewSocio> inasistentes;
+    
+    //Listado de socios asistentes e inasistentes
+    private List<ViewSocio> socioEvt;
+    private List<ViewSocio> socioNoEvt;
     
     @FXML
     private TableView<ViewSocio> table_asistentes;
@@ -75,8 +80,6 @@ public class AsistenciaEventosController implements Initializable {
         // TODO
         button_asistentes.setDisable(true);
         button_inasistentes.setDisable(true);
-        
-
     }    
     
     //Metodo para recibir el objeto de tipo Eventos con la informacion del evento correspondiente
@@ -111,17 +114,17 @@ public class AsistenciaEventosController implements Initializable {
 
     @FXML
     private void inasistentesAction(ActionEvent event) {
-        
+        setInasistentes();
     }
 
     @FXML
     private void asistentesAction(ActionEvent event) {
-        
+        setAsistentes();
     }
 
     @FXML
     private void confirmarAction(ActionEvent event) {
-        
+        setSociosEventos();
     }
 
     @FXML
@@ -129,14 +132,50 @@ public class AsistenciaEventosController implements Initializable {
         this.button_cancelar.getScene().getWindow().hide();
     }
     
+    public void setInasistentes(){
+        ViewSocio tmp = table_asistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            inasistentes.add(tmp);
+            asistentes.remove(tmp);
+            
+        }else{
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un Socio");
+            errorInfo.show(); 
+        }
+    }
+    
+    public void setAsistentes(){
+        ViewSocio tmp = table_inasistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            asistentes.add(tmp);
+            inasistentes.remove(tmp);
+        }else{
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un Socio");
+            errorInfo.show(); 
+        }    
+    }
+    
+    public void setSociosEventos(){
+        //Acciones para ingresar/eliminar en la tabla socios_eventos
+        
+    }
+    
     public void createTables(){
         //Tabla asistentes
+        socioEvt = new ArrayList<>();
         asistentes = FXCollections.observableArrayList();
         colCodigoA.setCellValueFactory(new PropertyValueFactory("codigo"));
         colNombresA.setCellValueFactory(new PropertyValueFactory("nombre"));
         colApellidosA.setCellValueFactory(new PropertyValueFactory("apellidos"));
         
         //Tabla inasistentes
+        socioNoEvt = new ArrayList<>();
         inasistentes = FXCollections.observableArrayList();
         colCodigoI.setCellValueFactory(new PropertyValueFactory("codigo"));
         colNombresI.setCellValueFactory(new PropertyValueFactory("nombre"));
@@ -146,6 +185,7 @@ public class AsistenciaEventosController implements Initializable {
     public void setTableAsistentes(){
         asistentes.clear();
         List<ViewSocio> socios = getSociosAsistentes();
+        socioEvt.addAll(socios);
         
         if(!this.asistentes.containsAll(socios)){
             this.asistentes.addAll(socios);
@@ -156,6 +196,7 @@ public class AsistenciaEventosController implements Initializable {
     public void setTableInasistentes(){
         inasistentes.clear();
         List<ViewSocio> socios = getSociosInasistentes();
+        socioNoEvt.addAll(socios);
         
         if(!this.inasistentes.containsAll(socios)){
             this.inasistentes.addAll(socios);
