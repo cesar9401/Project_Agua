@@ -36,7 +36,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PagosSocios.findAll", query = "SELECT p FROM PagosSocios p")
     , @NamedQuery(name = "PagosSocios.findByIdPagosSocios", query = "SELECT p FROM PagosSocios p WHERE p.idPagosSocios = :idPagosSocios")
     , @NamedQuery(name = "PagosSocios.findByMesCancelado", query = "SELECT p FROM PagosSocios p WHERE p.mesCancelado = :mesCancelado")
-    , @NamedQuery(name = "PagosSocios.findByFechaPago", query = "SELECT p FROM PagosSocios p WHERE p.fechaPago = :fechaPago")})
+    , @NamedQuery(name = "PagosSocios.findByFechaPago", query = "SELECT p FROM PagosSocios p WHERE p.fechaPago = :fechaPago")
+    , @NamedQuery(name = "PagosSocios.findLatestPago", query = "select p from PagosSocios p  where p.sociosIdSocio.idSocio = :idSocio ORDER BY p.mesCancelado DESC ")
+        //select * from pagos_socios p where p.socios_id_socio = 3 order by mes_cancelado asc limit 1
+        //ORDER BY p.mesCancelado DESC
+})
 public class PagosSocios implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
@@ -23,6 +24,7 @@
       <JFXDatePicker fx:id="dateUltimo" layoutX="142.0" layoutY="213.0" promptText="Ultimo Mes Pagado" />
       <JFXDatePicker fx:id="dateActual" layoutX="401.0" layoutY="213.0" promptText="Fecha Actual" />
       <JFXDatePicker fx:id="datePagarHasta" layoutX="683.0" layoutY="213.0" promptText="Pagar Hasta:" />
+      <JFXComboBox fx:id="comboCantidad" layoutX="671.0" layoutY="215.0" prefHeight="26.0" prefWidth="200.0" promptText="Meses a Cancelar" />
       <JFXTextField fx:id="txtSancion" labelFloat="true" layoutX="148.0" layoutY="278.0" promptText="Sancion De Sesion" />
       <JFXTextField fx:id="txtSancionDeTrabajo" labelFloat="true" layoutX="148.0" layoutY="326.0" promptText="Sancion De Trabajo" />
       <JFXTextField fx:id="txtTotalDeConstruccion" labelFloat="true" layoutX="401.0" layoutY="278.0" promptText="Total De Construccion" />
@@ -35,11 +37,11 @@
           <TableColumn fx:id="columnPrecio" prefWidth="253.0" text="Precio" />
         </columns>
       </TableView>
-      <JFXButton fx:id="btnVisualizarPago" buttonType="RAISED" layoutX="664.0" layoutY="300.0" prefHeight="40.0" prefWidth="193.0" style="-fx-background-color: #FA8258;" text="Visualizar Pago" />
+      <JFXButton fx:id="btnVisualizarPago" buttonType="RAISED" layoutX="664.0" layoutY="300.0" onAction="#btnVisualizarAction" prefHeight="40.0" prefWidth="193.0" style="-fx-background-color: #FA8258;" text="Visualizar Pago" />
       <Separator layoutX="84.0" layoutY="367.0" prefHeight="3.0" prefWidth="864.0" />
-      <JFXButton fx:id="btnRegistrar" layoutX="699.0" layoutY="391.0" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #FE642E;" text="Registrar" />
+      <JFXButton fx:id="btnRegistrar" layoutX="699.0" layoutY="391.0" onAction="#btnRegistrarAction" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #FE642E;" text="Registrar" />
       <JFXTextField fx:id="txtNoRecibo" labelFloat="true" layoutX="143.0" layoutY="387.0" promptText="Recibo No." />
       <JFXTextField fx:id="txtTotalPago" labelFloat="true" layoutX="401.0" layoutY="387.0" promptText="Total Q." />
-      <JFXButton fx:id="btnEliminarFIla" buttonType="RAISED" layoutX="832.0" layoutY="586.0" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: #BDBDBD;" text="Eliminar FIla" />
+      <JFXButton fx:id="btnEliminarFIla" buttonType="RAISED" layoutX="832.0" layoutY="586.0" onAction="#btnDeleteAction" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: #BDBDBD;" text="Eliminar FIla" />
    </children>
 </AnchorPane>

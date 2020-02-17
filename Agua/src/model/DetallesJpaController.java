@@ -5,7 +5,6 @@
  */
 package model;
 
-import model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -14,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import model.exceptions.NonexistentEntityException;
 import object.Comprobantes;
 import object.Detalles;
 import object.PagosSocios;
