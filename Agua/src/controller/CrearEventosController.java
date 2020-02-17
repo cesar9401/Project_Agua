@@ -345,7 +345,7 @@ public class CrearEventosController implements Initializable {
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.setTitle("Confirmar Asistencia - " + evt.getNombre());
-                stage.showAndWait();
+                stage.show();
             }
         }else{
             Alert errorInfo = new Alert(Alert.AlertType.ERROR);

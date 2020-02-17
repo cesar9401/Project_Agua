@@ -23,6 +23,13 @@ public class ViewSocio {
         this.nombre = nombre;
     }
 
+    public ViewSocio(int idSocio, String codigo, String nombre, String apellidos) {
+        this.idSocio = idSocio;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+    }
+
     public int getIdSocio() {
         return idSocio;
     }

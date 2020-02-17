@@ -25,7 +25,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import object.Eventos;
 import object.Socios;
-import object.SociosEventos;
 import object.auxiliary.ViewSocio;
 
 /**
@@ -74,24 +73,40 @@ public class AsistenciaEventosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        createTables();
-        setTableAsistentes();
-        setTableInasistentes();
+        button_asistentes.setDisable(true);
+        button_inasistentes.setDisable(true);
+        
+
     }    
     
     //Metodo para recibir el objeto de tipo Eventos con la informacion del evento correspondiente
     public void initializeAttributes(Eventos evt){
         this.evt = evt;
+        createTables();
+        setTableAsistentes();
+        setTableInasistentes();
     } 
 
     @FXML
     private void seleccionarAsistentes(MouseEvent event) {
-        
+        ViewSocio tmp = table_asistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            button_inasistentes.setDisable(false);
+            button_asistentes.setDisable(true);
+        }else{
+            button_inasistentes.setDisable(true);
+        }
     }
 
     @FXML
     private void seleccionarInasistentes(MouseEvent event) {
-        
+        ViewSocio tmp = table_inasistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            button_asistentes.setDisable(false);
+            button_inasistentes.setDisable(true);
+        }else{
+            button_asistentes.setDisable(true);
+        }
     }
 
     @FXML
@@ -106,6 +121,7 @@ public class AsistenciaEventosController implements Initializable {
 
     @FXML
     private void confirmarAction(ActionEvent event) {
+        
     }
 
     @FXML
@@ -140,7 +156,6 @@ public class AsistenciaEventosController implements Initializable {
     public void setTableInasistentes(){
         inasistentes.clear();
         List<ViewSocio> socios = getSociosInasistentes();
-        System.out.println(socios.size());
         
         if(!this.inasistentes.containsAll(socios)){
             this.inasistentes.addAll(socios);
@@ -151,9 +166,12 @@ public class AsistenciaEventosController implements Initializable {
     public List<ViewSocio> getSociosAsistentes(){
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+                
+        Query getSocios = em.createNativeQuery("SELECT * FROM socios LEFT JOIN (SELECT * FROM socios_eventos WHERE eventos_id_eventos = ?1) AS socio_evento ON id_socio = socio_evento.socios_id_socio WHERE estado = true AND socio_evento.socios_id_socio IS NULL", Socios.class);
+        getSocios.setParameter(1, evt.getIdEventos());
         
-        Query getSocios = em.createQuery("SELECT s FROM Socios s LEFT JOIN s.sociosEventosCollection e ON s.idSocio = e.idSociosEventos WHERE s.estado=true AND e.idSociosEventos IS NULL");
-        List<Socios> socios = null;
+        List<Socios> socios = new ArrayList<>();
         List<ViewSocio> viewSocios = new ArrayList<>();
         try{
             socios = getSocios.getResultList();
@@ -162,11 +180,11 @@ public class AsistenciaEventosController implements Initializable {
         }
         
         for(Socios s: socios){
-            ViewSocio view = new ViewSocio(s.getIdSocio(), s.getCodigo(), s.getNombres());
-            view.setApellidos(s.getApellidos());
-            
-            viewSocios.add(view);
+            viewSocios.add(new ViewSocio(s.getIdSocio(), s.getCodigo(), s.getNombres(), s.getApellidos()));
         }
+        
+        em.getTransaction().commit();
+        em.close();
         
         return viewSocios;
     }
@@ -174,9 +192,12 @@ public class AsistenciaEventosController implements Initializable {
     public List<ViewSocio> getSociosInasistentes(){
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
         
-        Query getSocios = em.createQuery("SELECT s FROM Socios s INNER JOIN s.sociosEventosCollection e ON s.idSocio = e.idSociosEventos WHERE s.estado=true");
-        List<Socios> socios = null;
+        Query getSocios = em.createNativeQuery("SELECT * FROM socios INNER JOIN (SELECT * FROM socios_eventos WHERE eventos_id_eventos = ?1) AS socio_evento ON id_socio = socio_evento.socios_id_socio WHERE estado = true", Socios.class);
+        getSocios.setParameter(1, evt.getIdEventos());
+        
+        List<Socios> socios = new ArrayList<>();
         List<ViewSocio> viewSocios = new ArrayList<>();
         try{
             socios = getSocios.getResultList();
@@ -185,12 +206,12 @@ public class AsistenciaEventosController implements Initializable {
         }
         
         for(Socios s: socios){
-            ViewSocio view = new ViewSocio(s.getIdSocio(), s.getCodigo(), s.getNombres());
-            view.setApellidos(s.getApellidos());
-            
-            viewSocios.add(view);
+            viewSocios.add(new ViewSocio(s.getIdSocio(), s.getCodigo(), s.getNombres(), s.getApellidos()));
         }
-                
+        
+        em.getTransaction().commit();
+        em.close();
+        
         return viewSocios;
     }
 }
