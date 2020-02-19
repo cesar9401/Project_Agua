@@ -180,29 +180,45 @@ public class AsistenciaEventosController implements Initializable {
             }
         }
         
+        //Socios que estaban como inasistentes pero quedaron como asistentes
         if(asistentes.size() > 0){
             List<Socios> socios = getSocios(asistentes);
-            System.out.println("asistentes: ");
-            for(Socios s: socios){
-                System.out.println(s.getNombres());
-            }
+//            System.out.println("asistentes: ");
+//            for(Socios s: socios){
+//                System.out.println(s.getNombres());
+//            }
+            setAsistentesBD(socios);
         }
         
+        //Socios que estaban como asitentes pero quedaron como inasistentes
         if(inasistentes.size() > 0){
             List<Socios> socios = getSocios(inasistentes);
-            System.out.println("\ninasistentes");
-            for(Socios s: socios){
-                System.out.println(s.getNombres());
-            }            
+//            System.out.println("\ninasistentes");
+//            for(Socios s: socios){
+//                System.out.println(s.getNombres());
+//            }            
         }
     }
     
     public void setAsistentesBD(List<Socios> socios){
+        List<SociosEventos> tmp = new ArrayList<>();
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
         for(Socios s: socios){
-            SociosEventos tmp = new SociosEventos();
-            tmp.setEventosIdEventos(evt);
-            tmp.setCancelado(false);
+            Query getSociosEvt = em.createQuery("SELECT ev FROM SociosEventos ev WHERE ev.sociosIdSocio = :sociosIdSocio AND ev.eventosIdEventos = :eventosIdEventos");
+            getSociosEvt.setParameter("sociosIdSocio", s);
+            getSociosEvt.setParameter("eventosIdEventos", evt);
+            SociosEventos sEvt = (SociosEventos) getSociosEvt.getResultList().get(0);
+            tmp.add(sEvt);
         }
+        
+        for(SociosEventos ev: tmp){
+            System.out.println(ev.getIdSociosEventos());
+        }
+        
+        em.getTransaction().commit();
+        em.close();
     }
     
     public void setInasistentesBD(List<Socios> socios){
