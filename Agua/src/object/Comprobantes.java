@@ -39,6 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Comprobantes.findByFechaComprobante", query = "SELECT c FROM Comprobantes c WHERE c.fechaComprobante = :fechaComprobante")})
 public class Comprobantes implements Serializable {
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "subTotal")
     private BigDecimal subTotal;
@@ -139,6 +142,14 @@ public class Comprobantes implements Serializable {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
 }

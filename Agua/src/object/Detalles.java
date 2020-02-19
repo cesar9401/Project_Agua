@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Detalles.findByDescripcion", query = "SELECT d FROM Detalles d WHERE d.descripcion = :descripcion")})
 public class Detalles implements Serializable {
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "subTotal")
     private BigDecimal subTotal;
@@ -46,8 +49,8 @@ public class Detalles implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_detalles")
     private Integer idDetalles;
-    @Column(name = "Descripcion")
-    private String descripcion;
+    //@Column(name = "Descripcion")
+    //private String descripcion;
     @JoinColumn(name = "comprobantes_id_comprobantes", referencedColumnName = "id_comprobantes")
     @ManyToOne(optional = false)
     private Comprobantes comprobantesIdComprobantes;
@@ -134,5 +137,13 @@ public class Detalles implements Serializable {
     public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
+
+//    public String getDescripcion() {
+//        return descripcion;
+//    }
+//
+//    public void setDescripcion(String descripcion) {
+//        this.descripcion = descripcion;
+//    }
     
 }

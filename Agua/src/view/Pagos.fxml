@@ -24,7 +24,7 @@
       <JFXDatePicker fx:id="dateUltimo" layoutX="142.0" layoutY="213.0" promptText="Ultimo Mes Pagado" />
       <JFXDatePicker fx:id="dateActual" layoutX="401.0" layoutY="213.0" promptText="Fecha Actual" />
       <JFXDatePicker fx:id="datePagarHasta" layoutX="683.0" layoutY="213.0" promptText="Pagar Hasta:" />
-      <JFXComboBox fx:id="comboCantidad" layoutX="671.0" layoutY="215.0" prefHeight="26.0" prefWidth="200.0" promptText="Meses a Cancelar" />
+      <JFXComboBox fx:id="comboCantidad" layoutX="388.0" layoutY="215.0" prefHeight="26.0" prefWidth="200.0" promptText="Meses a Cancelar" />
       <JFXTextField fx:id="txtSancion" labelFloat="true" layoutX="148.0" layoutY="278.0" promptText="Sancion De Sesion" />
       <JFXTextField fx:id="txtSancionDeTrabajo" labelFloat="true" layoutX="148.0" layoutY="326.0" promptText="Sancion De Trabajo" />
       <JFXTextField fx:id="txtTotalDeConstruccion" labelFloat="true" layoutX="401.0" layoutY="278.0" promptText="Total De Construccion" />
@@ -43,5 +43,6 @@
       <JFXTextField fx:id="txtNoRecibo" labelFloat="true" layoutX="143.0" layoutY="387.0" promptText="Recibo No." />
       <JFXTextField fx:id="txtTotalPago" labelFloat="true" layoutX="401.0" layoutY="387.0" promptText="Total Q." />
       <JFXButton fx:id="btnEliminarFIla" buttonType="RAISED" layoutX="832.0" layoutY="586.0" onAction="#btnDeleteAction" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: #BDBDBD;" text="Eliminar FIla" />
+      <Label fx:id="lblTotalMensualidad" layoutX="646.0" layoutY="210.0" prefHeight="29.0" prefWidth="226.0" />
    </children>
 </AnchorPane>

@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class PagosSocios implements Serializable {
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,6 +165,14 @@ public class PagosSocios implements Serializable {
     @Override
     public String toString() {
         return "object.PagosSocios[ idPagosSocios=" + idPagosSocios + " ]";
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
 }
