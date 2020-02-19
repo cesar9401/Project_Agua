@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SociosEventos.findAll", query = "SELECT s FROM SociosEventos s")
-    , @NamedQuery(name = "SociosEventos.findByIdSociosEventos", query = "SELECT s FROM SociosEventos s WHERE s.idSociosEventos = :idSociosEventos")
+    , @NamedQuery(name = "SociosEventos.findByIdSociosEventos", query = "SELECT s FROM SociosEventos s WHERE s.idSociosEventos = :idSociosEventos AND s.cancelado = true")
     , @NamedQuery(name = "SociosEventos.findByCancelado", query = "SELECT s FROM SociosEventos s WHERE s.cancelado = :cancelado")})
 public class SociosEventos implements Serializable {
 
