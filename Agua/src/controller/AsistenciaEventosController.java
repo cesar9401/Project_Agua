@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -23,8 +24,10 @@ import javafx.scene.input.MouseEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import object.Administradores;
 import object.Eventos;
 import object.Socios;
+import object.SociosEventos;
 import object.auxiliary.ViewSocio;
 
 /**
@@ -33,10 +36,16 @@ import object.auxiliary.ViewSocio;
  * @author cesar31
  */
 public class AsistenciaEventosController implements Initializable {
-    
+
+    private Administradores admin;
     private Eventos evt;
+    
     private ObservableList<ViewSocio> asistentes;
     private ObservableList<ViewSocio> inasistentes;
+    
+    //Listado de socios asistentes e inasistentes
+    private List<ViewSocio> socioEvt;
+    private List<ViewSocio> socioNoEvt;
     
     @FXML
     private TableView<ViewSocio> table_asistentes;
@@ -75,12 +84,11 @@ public class AsistenciaEventosController implements Initializable {
         // TODO
         button_asistentes.setDisable(true);
         button_inasistentes.setDisable(true);
-        
-
     }    
     
     //Metodo para recibir el objeto de tipo Eventos con la informacion del evento correspondiente
-    public void initializeAttributes(Eventos evt){
+    public void initializeAttributes(Administradores admin, Eventos evt){
+        this.admin = admin;
         this.evt = evt;
         createTables();
         setTableAsistentes();
@@ -111,17 +119,17 @@ public class AsistenciaEventosController implements Initializable {
 
     @FXML
     private void inasistentesAction(ActionEvent event) {
-        
+        setInasistentesTable();
     }
 
     @FXML
     private void asistentesAction(ActionEvent event) {
-        
+        setAsistentesTable();
     }
 
     @FXML
     private void confirmarAction(ActionEvent event) {
-        
+        setSociosEventos();
     }
 
     @FXML
@@ -129,14 +137,107 @@ public class AsistenciaEventosController implements Initializable {
         this.button_cancelar.getScene().getWindow().hide();
     }
     
+    public void setInasistentesTable(){
+        ViewSocio tmp = table_asistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            inasistentes.add(tmp);
+            asistentes.remove(tmp);
+            
+        }else{
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un Socio");
+            errorInfo.show(); 
+        }
+    }
+    
+    public void setAsistentesTable(){
+        ViewSocio tmp = table_inasistentes.getSelectionModel().getSelectedItem();
+        if(tmp != null){
+            asistentes.add(tmp);
+            inasistentes.remove(tmp);
+        }else{
+            Alert errorInfo = new Alert(Alert.AlertType.ERROR);
+            errorInfo.setTitle("Error");
+            errorInfo.setHeaderText(" Accion no Valida");
+            errorInfo.setContentText("Debe seleccionar un Socio");
+            errorInfo.show(); 
+        }    
+    }
+    
+    public void setSociosEventos(){
+        //Acciones para ingresar/eliminar en la tabla socios_eventos
+        for(ViewSocio s: socioEvt){
+            if(asistentes.contains(s)){
+                asistentes.remove(s);
+            }
+        }
+        
+        for(ViewSocio s: socioNoEvt){
+            if(inasistentes.contains(s)){
+                inasistentes.remove(s);
+            }
+        }
+        
+        if(asistentes.size() > 0){
+            List<Socios> socios = getSocios(asistentes);
+            System.out.println("asistentes: ");
+            for(Socios s: socios){
+                System.out.println(s.getNombres());
+            }
+        }
+        
+        
+        if(inasistentes.size() > 0){
+            List<Socios> socios = getSocios(inasistentes);
+            System.out.println("\ninasistentes");
+            for(Socios s: socios){
+                System.out.println(s.getNombres());
+            }            
+        }
+    }
+    
+    public void setAsistentesBD(List<Socios> socios){
+        for(Socios s: socios){
+            SociosEventos tmp = new SociosEventos();
+            tmp.setEventosIdEventos(evt);
+            tmp.setCancelado(false);
+        }
+    }
+    
+    public void setInasistentesBD(List<Socios> socios){
+        
+    }
+    
+    public List<Socios> getSocios(List<ViewSocio> view){
+        List<Socios> socios = new ArrayList<>();
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        
+        for(ViewSocio s: view){
+            Query getSocio = em.createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", s.getIdSocio());
+            Socios socio = (Socios) getSocio.getResultList().get(0);
+            socios.add(socio);
+        }
+        
+        em.getTransaction().commit();
+        em.close();
+        
+        return socios;
+    }
+    
     public void createTables(){
         //Tabla asistentes
+        socioEvt = new ArrayList<>();
         asistentes = FXCollections.observableArrayList();
         colCodigoA.setCellValueFactory(new PropertyValueFactory("codigo"));
         colNombresA.setCellValueFactory(new PropertyValueFactory("nombre"));
         colApellidosA.setCellValueFactory(new PropertyValueFactory("apellidos"));
         
         //Tabla inasistentes
+        socioNoEvt = new ArrayList<>();
         inasistentes = FXCollections.observableArrayList();
         colCodigoI.setCellValueFactory(new PropertyValueFactory("codigo"));
         colNombresI.setCellValueFactory(new PropertyValueFactory("nombre"));
@@ -146,6 +247,7 @@ public class AsistenciaEventosController implements Initializable {
     public void setTableAsistentes(){
         asistentes.clear();
         List<ViewSocio> socios = getSociosAsistentes();
+        socioEvt.addAll(socios);
         
         if(!this.asistentes.containsAll(socios)){
             this.asistentes.addAll(socios);
@@ -156,6 +258,7 @@ public class AsistenciaEventosController implements Initializable {
     public void setTableInasistentes(){
         inasistentes.clear();
         List<ViewSocio> socios = getSociosInasistentes();
+        socioNoEvt.addAll(socios);
         
         if(!this.inasistentes.containsAll(socios)){
             this.inasistentes.addAll(socios);

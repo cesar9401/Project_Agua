@@ -340,7 +340,7 @@ public class CrearEventosController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AsistenciaEventos.fxml"));
                 Parent root = loader.load();
                 AsistenciaEventosController controller = loader.getController();
-                controller.initializeAttributes(evt);
+                controller.initializeAttributes(admin, evt);
                 Scene scene = new Scene(root);
                 Stage stage = new Stage();
                 stage.setScene(scene);

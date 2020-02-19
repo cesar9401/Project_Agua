@@ -244,8 +244,45 @@ public class PagosController implements Initializable {
                     alert.setHeaderText("Numero De Recibo");
                     alert.show();
         }else{
-            //
-        }d
+            //aca estoy trabajando...
+            //crear pago y enviarlo a la db
+            
+            //crear recibo y enviarlo a la db
+            //en metodos y ya solo llamarlos
+            //para crear pagos 
+            /*
+            PASOS PARA ENVIAR A LA TABLA PAGOS
+            pagos obtner el texto del jfxTexfield con nombre txtTotalAPagar
+            a dateUltimo sumarle la cantidad que selecciona en el combobox
+            y enviarle un LocalDate.now() 
+            y el monto que se toma del txtTotalAPagar
+            enviar tmp que es de tipo SOcios
+            para administrador verificar que exista la variable administrado en un ambito static 
+            si existe enviarle el admin static sino tomar el id de la variable socio que esta en esta clase y enviarlo como parametro
+            
+            
+            
+            */
+            
+            /*
+            PASOS PARA COMPROBANTE
+            VERIFICAR QUE EL NUMERO DE COMPROBANTE NO SE REPITA
+            setear el estado a true y enviarle lo que tiene el txtTotalAPagar
+            y la fecha actual LocalDate.now()
+            
+            
+            
+            si se agrego el atributo descripcion agregarle de que mes a que mes pago (la cantidad de meses que se pagaron)
+            
+            */
+            /*
+            PASOS PARA DETALLES
+            debo de crear antes comprobante
+            tomar todos los valores que se encuentren en la tblDetalle 
+            
+            */
+                  
+        }
 
     }
 
