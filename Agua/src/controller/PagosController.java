@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,13 +40,18 @@ import javafx.scene.layout.VBox;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import model.ComprobantesJpaController;
+import model.DetallesJpaController;
 import model.GenerarReporte;
+import model.PagosSociosJpaController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import object.Administradores;
+import object.Comprobantes;
 import object.Cuotas;
 import object.DTO.GenericoDTO;
+import object.Detalles;
 import object.PagosSocios;
 import object.Socios;
 import object.SociosEventos;
@@ -125,6 +131,7 @@ public class PagosController implements Initializable {
     private BigDecimal sancionAsamblea;
     private BigDecimal mensualidad;
     private BigDecimal construccion;
+    private LocalDate mesCancelado;
     @FXML
     private Label lblTotalMensualidad;
 
@@ -239,55 +246,176 @@ public class PagosController implements Initializable {
     private void btnRegistrarAction(ActionEvent event) {
         if (txtNoRecibo.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Ingrese el Numero de Recibo");
-                    alert.setTitle("Informacion");
-                    alert.setHeaderText("Numero De Recibo");
-                    alert.show();
-        }else{
-            //aca estoy trabajando...
-            //crear pago y enviarlo a la db
-            
-            //crear recibo y enviarlo a la db
-            //en metodos y ya solo llamarlos
-            //para crear pagos 
-            /*
-            PASOS PARA ENVIAR A LA TABLA PAGOS
-            pagos obtner el texto del jfxTexfield con nombre txtTotalAPagar
-            a dateUltimo sumarle la cantidad que selecciona en el combobox
-            y enviarle un LocalDate.now() 
-            y el monto que se toma del txtTotalAPagar
-            enviar tmp que es de tipo SOcios
-            para administrador verificar que exista la variable administrado en un ambito static 
-            si existe enviarle el admin static sino tomar el id de la variable socio que esta en esta clase y enviarlo como parametro
-            
-            
-            
-            */
-            
-            /*
-            PASOS PARA COMPROBANTE
-            VERIFICAR QUE EL NUMERO DE COMPROBANTE NO SE REPITA
-            setear el estado a true y enviarle lo que tiene el txtTotalAPagar
-            y la fecha actual LocalDate.now()
-            
-            
-            
-            si se agrego el atributo descripcion agregarle de que mes a que mes pago (la cantidad de meses que se pagaron)
-            
-            */
-            /*
-            PASOS PARA DETALLES
-            debo de crear antes comprobante
-            tomar todos los valores que se encuentren en la tblDetalle 
-            
-            */
-                  
+            alert.setContentText("Ingrese el Numero de Recibo");
+            alert.setTitle("Informacion");
+            alert.setHeaderText("Numero De Recibo");
+            alert.show();
+        } else {
+            createPay();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Se Almaceno el Registro Correctamente");
+            alert.setTitle("Informacion");
+            alert.setHeaderText("Regitro");
+            alert.show();
+            tmp = null;
+            cleanField();
+
         }
 
     }
+    private void cleanField(){
+        
+        txtCodigoSocio.setText("");
+        txtCui.setText("");
+        txtNombreSocio.setText("");
+        txtNoRecibo.setText("");
+        txtSancion.setText("");
+        txtSancionDeTrabajo.setText("");
+        txtTotalDeConstruccion.setText("");
+        txtTotalDeMora.setText("");
+        txtTotalPago.setText("");
+        dateUltimo.setValue(null);
+        lblTotalMensualidad.setText("");
+        lblTotalMensualidad.setVisible(false);
+        comboCantidad.getSelectionModel().select(0);
+        comboCantidad.setVisible(false);
+    }
 
+    private void createPay() {
+
+        java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
+
+        PagosSocios pagoSocio = new PagosSocios();
+
+//        pagoSocio.setAdministradoresIdAdministrador(admin);
+//        pagoSocio.setFechaPago(date);
+//        pagoSocio.setSociosIdSocio(tmp);
+//        pagoSocio.setMesCancelado(Date.valueOf(dateUltimo.getValue().plusMonths(comboCantidad.getValue())));
+//        pagoSocio.setDescripcion("Mensualidad");
+//        
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        PagosSociosJpaController savePay = new PagosSociosJpaController(emf);
+        ComprobantesJpaController saveComprobante = new ComprobantesJpaController(emf);
+        DetallesJpaController saveDetail = new DetallesJpaController(emf);
+        Query deCoutas;
+        Detalles deComprobante;
+
+        Comprobantes comprobante = new Comprobantes();
+        comprobante.setEstado(true);
+        comprobante.setFechaComprobante(Date.valueOf(LocalDate.now()));
+        comprobante.setNoComprobante(txtNoRecibo.getText());
+        double total = Double.parseDouble(txtTotalPago.getText());
+
+        comprobante.setSubTotal(BigDecimal.valueOf(total));
+        saveComprobante.create(comprobante);
+
+        
+
+        for (DetallePago item : tblDetalle.getItems()) {
+            if (item.getDescripcion().contains("Cancela")) {
+
+                for (int i = 1; i <= comboCantidad.getValue(); i++) {
+
+                    deCoutas = getEntityManager().createNamedQuery("Cuotas.findByNombreCuota").setParameter("nombreCuota", "Mensualidad");
+                    Cuotas cuotaMensual = (Cuotas) deCoutas.getResultList().get(0);
+
+                    pagoSocio.setMesCancelado(Date.valueOf(dateUltimo.getValue().plusMonths(i)));
+                    pagoSocio.setFechaPago(date);
+                    pagoSocio.setSociosIdSocio(tmp);
+                    pagoSocio.setCuotasIdCuotas(cuotaMensual);
+                    pagoSocio.setDescripcion("Mensualidad");
+                    pagoSocio.setAdministradoresIdAdministrador(admin);
+
+                    savePay.create(pagoSocio);
+
+                    deComprobante = new Detalles();
+                    deComprobante.setComprobantesIdComprobantes(comprobante);
+                    deComprobante.setDisponible(true);
+                    deComprobante.setPagosSociosIdPagosSocios(pagoSocio);
+                    deComprobante.setSubTotal(BigDecimal.valueOf(item.getPrecio()));
+                    deComprobante.setDescripcion("Mes de: " + dateUltimo.getValue().plusMonths(i));
+
+                    saveDetail.create(deComprobante);
+                    
+
+                }
+
+            } else if (item.getDescripcion().contains("Mora")) {
+                if (!(item.getPrecio() == 0.0)) {
+
+                    saveData(comprobante, item.getPrecio(), "Mora");
+
+                }
+            } else if (item.getDescripcion().contains("Trabajo")) {
+                if (item.getPrecio()!= 0) {
+                    saveData(comprobante, item.getPrecio()  ,"Sancion De Trabajo" );
+                }
+                
+            } else if (item.getDescripcion().contains("Construccion")) {
+               if (item.getPrecio()!= 0) {
+                    saveData(comprobante, item.getPrecio()  ,"Construccion" );
+                }
+                
+
+            } else if (item.getDescripcion().contains("Sesion")) {
+
+                if (item.getPrecio()!= 0) {
+                    saveData(comprobante, item.getPrecio()  ,"Sancion De Sesion" );
+                }
+                
+            }
+        }
+
+    }
+    public void saveData(Comprobantes comprobante, double precio, String nameCouta){
+        
+        java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
+
+        PagosSocios pagoSocio = new PagosSocios();
+
+//        pagoSocio.setAdministradoresIdAdministrador(admin);
+//        pagoSocio.setFechaPago(date);
+//        pagoSocio.setSociosIdSocio(tmp);
+//        pagoSocio.setMesCancelado(Date.valueOf(dateUltimo.getValue().plusMonths(comboCantidad.getValue())));
+//        pagoSocio.setDescripcion("Mensualidad");
+//        
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        PagosSociosJpaController savePay = new PagosSociosJpaController(emf);
+        ComprobantesJpaController saveComprobante = new ComprobantesJpaController(emf);
+        DetallesJpaController saveDetail = new DetallesJpaController(emf);
+        Query deCoutas;
+        Detalles deComprobante;
+
+        
+                    deCoutas = getEntityManager().createNamedQuery("Cuotas.findByNombreCuota").setParameter("nombreCuota", nameCouta);
+                    Cuotas cuotaMensual = (Cuotas) deCoutas.getResultList().get(0);
+
+                    pagoSocio = new PagosSocios();
+
+                    //pagoSocio.setMesCancelado());
+                    pagoSocio.setFechaPago(date);
+                    pagoSocio.setSociosIdSocio(tmp);
+                    pagoSocio.setCuotasIdCuotas(cuotaMensual);
+                    pagoSocio.setDescripcion(nameCouta);
+                    pagoSocio.setAdministradoresIdAdministrador(admin);
+
+                    savePay.create(pagoSocio);
+
+                    deComprobante = new Detalles();
+                    deComprobante = new Detalles();
+                    deComprobante.setComprobantesIdComprobantes(comprobante);
+                    deComprobante.setDisponible(true);
+                    deComprobante.setPagosSociosIdPagosSocios(pagoSocio);
+                    deComprobante.setSubTotal(BigDecimal.valueOf(precio));
+                    deComprobante.setDescripcion(nameCouta);
+                    
+                    saveDetail.create(deComprobante);
+    }
+
+    
     @FXML
     private void btnDeleteAction(ActionEvent event) {
+
     }
 
     @FXML
