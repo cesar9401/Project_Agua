@@ -188,7 +188,6 @@ public class AsistenciaEventosController implements Initializable {
             }
         }
         
-        
         if(inasistentes.size() > 0){
             List<Socios> socios = getSocios(inasistentes);
             System.out.println("\ninasistentes");
