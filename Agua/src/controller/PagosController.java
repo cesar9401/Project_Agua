@@ -320,7 +320,7 @@ public class PagosController implements Initializable {
                     Cuotas cuotaMensual = (Cuotas) deCoutas.getResultList().get(0);
 
                     pagoSocio.setMesCancelado(Date.valueOf(dateUltimo.getValue().plusMonths(i)));
-                    pagoSocio.setFechaPago(date);
+//                    pagoSocio.setFechaPago(date);
                     pagoSocio.setSociosIdSocio(tmp);
                     pagoSocio.setCuotasIdCuotas(cuotaMensual);
                     pagoSocio.setDescripcion("Mensualidad");
@@ -373,12 +373,6 @@ public class PagosController implements Initializable {
 
         PagosSocios pagoSocio = new PagosSocios();
 
-//        pagoSocio.setAdministradoresIdAdministrador(admin);
-//        pagoSocio.setFechaPago(date);
-//        pagoSocio.setSociosIdSocio(tmp);
-//        pagoSocio.setMesCancelado(Date.valueOf(dateUltimo.getValue().plusMonths(comboCantidad.getValue())));
-//        pagoSocio.setDescripcion("Mensualidad");
-//        
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         PagosSociosJpaController savePay = new PagosSociosJpaController(emf);
         ComprobantesJpaController saveComprobante = new ComprobantesJpaController(emf);
@@ -393,7 +387,7 @@ public class PagosController implements Initializable {
                     pagoSocio = new PagosSocios();
 
                     //pagoSocio.setMesCancelado());
-                    pagoSocio.setFechaPago(date);
+//                    pagoSocio.setFechaPago(date);
                     pagoSocio.setSociosIdSocio(tmp);
                     pagoSocio.setCuotasIdCuotas(cuotaMensual);
                     pagoSocio.setDescripcion(nameCouta);
@@ -416,6 +410,7 @@ public class PagosController implements Initializable {
     @FXML
     private void btnDeleteAction(ActionEvent event) {
 
+        testReporte();
     }
 
     @FXML

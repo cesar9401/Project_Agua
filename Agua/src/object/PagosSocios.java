@@ -58,8 +58,8 @@ public class PagosSocios implements Serializable {
     private Date mesCancelado;
     @Basic(optional = false)
     @Column(name = "fecha_pago")
-    @Temporal(TemporalType.DATE)
-    private Date fechaPago;
+    //@Temporal(TemporalType.DATE)
+   // private Date fechaPago;
     @OneToMany(mappedBy = "pagosSociosIdPagosSocios")
     private Collection<Detalles> detallesCollection;
     @JoinColumn(name = "administradores_id_administrador", referencedColumnName = "id_administrador")
@@ -82,7 +82,7 @@ public class PagosSocios implements Serializable {
     public PagosSocios(Integer idPagosSocios, Date mesCancelado, Date fechaPago) {
         this.idPagosSocios = idPagosSocios;
         this.mesCancelado = mesCancelado;
-        this.fechaPago = fechaPago;
+//        this.fechaPago = fechaPago;
     }
 
     public Integer getIdPagosSocios() {
@@ -101,13 +101,13 @@ public class PagosSocios implements Serializable {
         this.mesCancelado = mesCancelado;
     }
 
-    public Date getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
+//    public Date getFechaPago() {
+//        return fechaPago;
+//    }
+//
+//    public void setFechaPago(Date fechaPago) {
+//        this.fechaPago = fechaPago;
+//    }
 
     @XmlTransient
     public Collection<Detalles> getDetallesCollection() {

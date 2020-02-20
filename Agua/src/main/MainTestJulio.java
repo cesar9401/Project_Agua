@@ -26,15 +26,15 @@ import object.Socios;
 public class MainTestJulio extends Application{
     
     public static void main(String[] args){
-
-        Query pagos = getEntityManager().createNamedQuery("PagosSocios.findLatestPago").setParameter("idSocio", 3);
-        pagos.setMaxResults(1);
-        List<PagosSocios> list = pagos.getResultList();
-        
-        for (PagosSocios pagosSocios : list) {
-            System.out.println("pagosSocios = " + pagosSocios.getIdPagosSocios());
-        }
-    //    launch(args);
+//
+//        Query pagos = getEntityManager().createNamedQuery("PagosSocios.findLatestPago").setParameter("idSocio", 3);
+//        pagos.setMaxResults(1);
+//        List<PagosSocios> list = pagos.getResultList();
+//        
+//        for (PagosSocios pagosSocios : list) {
+//            System.out.println("pagosSocios = " + pagosSocios.getIdPagosSocios());
+//        }
+       launch(args);
     }
 private static EntityManager getEntityManager() {
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
