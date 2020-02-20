@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +26,8 @@ import javafx.scene.input.MouseEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import model.SociosEventosJpaController;
+import model.exceptions.NonexistentEntityException;
 import object.Administradores;
 import object.Eventos;
 import object.Socios;
@@ -182,25 +186,30 @@ public class AsistenciaEventosController implements Initializable {
         
         //Socios que estaban como inasistentes pero quedaron como asistentes
         if(asistentes.size() > 0){
-            List<Socios> socios = getSocios(asistentes);
-//            System.out.println("asistentes: ");
-//            for(Socios s: socios){
-//                System.out.println(s.getNombres());
-//            }
-            setAsistentesBD(socios);
+            List<Socios> sociosAsistentes = getSocios(asistentes);
+            setAsistentes(sociosAsistentes);
         }
         
         //Socios que estaban como asitentes pero quedaron como inasistentes
         if(inasistentes.size() > 0){
-            List<Socios> socios = getSocios(inasistentes);
-//            System.out.println("\ninasistentes");
-//            for(Socios s: socios){
-//                System.out.println(s.getNombres());
-//            }            
+            List<Socios> sociosInasistentes = getSocios(inasistentes);
+            setInasistentes(sociosInasistentes);
         }
-    }
+        
+        //Actualizar tablas
+        setTableAsistentes();
+        setTableInasistentes();
+
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Informacion");
+        info.setContentText("Se ha confirmado la asistencia de los socios");
+        info.showAndWait(); 
+        
+        this.button_confirmar.getScene().getWindow().hide();
+   }
     
-    public void setAsistentesBD(List<Socios> socios){
+    //Establece quienes asistieron al evento creado
+    public void setAsistentes(List<Socios> socios){
         List<SociosEventos> tmp = new ArrayList<>();
         EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
         EntityManager em = emf.createEntityManager();
@@ -213,16 +222,54 @@ public class AsistenciaEventosController implements Initializable {
             tmp.add(sEvt);
         }
         
-        for(SociosEventos ev: tmp){
-            System.out.println(ev.getIdSociosEventos());
-        }
+        em.getTransaction().commit();
+        em.close();
         
+        //Elimina los SociosEventos de la BD, de quienes estaban inasistentes pero son asistentes
+        deleteSociosEventosBD(tmp);
+    }
+    
+    //Elimina los SociosEventos de la BD, de quienes estaban inasistentes pero son asistentes
+    public void deleteSociosEventosBD(List<SociosEventos> sociosEvt){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        SociosEventosJpaController deleteSocioEvento = new SociosEventosJpaController(emf);
+       
+        for(SociosEventos ev: sociosEvt){
+            System.out.println(ev.getIdSociosEventos());
+            try {
+                deleteSocioEvento.destroy(ev.getIdSociosEventos());
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(AsistenciaEventosController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         em.getTransaction().commit();
         em.close();
     }
     
-    public void setInasistentesBD(List<Socios> socios){
+    //Establece quienes no asistieron al evento creado
+    public void setInasistentes(List<Socios> socios){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
         
+        SociosEventosJpaController nuevoSocioEvt = new SociosEventosJpaController(emf);
+        
+        for(Socios s: socios){
+            SociosEventos sociosEvt = new SociosEventos();
+            sociosEvt.setAdministradoresIdAdministrador(admin);
+            sociosEvt.setCancelado(false);
+            sociosEvt.setEventosIdEventos(evt);
+            sociosEvt.setIdSociosEventos(evt.getIdEventos());
+            sociosEvt.setSociosIdSocio(s);
+            
+            nuevoSocioEvt.create(sociosEvt);
+        }
+        
+        em.getTransaction().commit();
+        em.close();
     }
     
     public List<Socios> getSocios(List<ViewSocio> view){

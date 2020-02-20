@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SociosEventos.findByCancelado", query = "SELECT s FROM SociosEventos s WHERE s.cancelado = :cancelado")})
 public class SociosEventos implements Serializable {
 
-    @Column(name = "fecha_pago")
-    @Temporal(TemporalType.DATE)
-    private Date fechaPago;
+//    @Column(name = "fecha_pago")
+//    @Temporal(TemporalType.DATE)
+//    private Date fechaPago;
     @JoinColumn(name = "administradores_id_administrador", referencedColumnName = "id_administrador")
     @ManyToOne
     private Administradores administradoresIdAdministrador;
@@ -127,13 +127,13 @@ public class SociosEventos implements Serializable {
         return "object.SociosEventos[ idSociosEventos=" + idSociosEventos + " ]";
     }
 
-    public Date getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
+//    public Date getFechaPago() {
+//        return fechaPago;
+//    }
+//
+//    public void setFechaPago(Date fechaPago) {
+//        this.fechaPago = fechaPago;
+//    }
 
     public Administradores getAdministradoresIdAdministrador() {
         return administradoresIdAdministrador;
