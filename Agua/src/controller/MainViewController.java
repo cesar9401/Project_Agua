@@ -32,7 +32,6 @@ import object.Socios;
  */
 public class MainViewController implements Initializable {
         
-    //----------------------> navBar y adminBar
     //Atributos del administrador que inicia sesion
     private Socios socio;
     private Administradores admin;
@@ -59,12 +58,13 @@ public class MainViewController implements Initializable {
     private Label label_inicio;
     @FXML
     private MenuItem item_eventos;
-    //---------------------- Aqui termina NavBar y adminBar
     
     @FXML
     private AnchorPane base_pane;
     @FXML
     private MenuItem pagos;
+    @FXML
+    private MenuItem item_administrador;
 
     /**
      * Initializes the controller class.
@@ -74,7 +74,6 @@ public class MainViewController implements Initializable {
         // TODO
     }
 
-    //-----------Aqui empiezan metodos del navBar y adminBar
     @FXML
     void cerrarSesion(ActionEvent event) {
         //Cerrar Sesion
@@ -139,6 +138,10 @@ public class MainViewController implements Initializable {
             root = loader.load();
             PagosController controller = loader.getController();
             controller.initializeAttributes(socio, admin);
+        }else if(obj == item_administrador){
+            loader = new FXMLLoader(getClass().getResource("../view/VistaAdministracion.fxml"));
+            root = loader.load();
+            VistaAdministracionController controller = loader.getController();
         } 
         
         base_pane.getChildren().clear();
@@ -168,5 +171,5 @@ public class MainViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    //-----------Aqui termina metodos del navBar y adminBar
+
 }

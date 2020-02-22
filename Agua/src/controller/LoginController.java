@@ -118,9 +118,11 @@ public class LoginController implements Initializable {
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
         Parent root = loader.load();
-        
         MainViewController controller = loader.getController();
         controller.initializeAttributes(socio, admin);
+        
+        administrador.Administrador.setAdmin(admin);
+        administrador.Administrador.setSocio(socio);
         
         Scene scene = new Scene(root);
         Stage stage = new Stage();

@@ -15,26 +15,27 @@
     <!--Aqui empieza navBar-->
       <AnchorPane fx:id="navBar" prefHeight="55.0" prefWidth="200.0" styleClass="navBar" stylesheets="@../css/mainview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <MenuButton fx:id="admin_button" layoutX="890.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" styleClass="button_admin" text="Administrador">
+            <MenuButton fx:id="admin_button" layoutX="849.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" styleClass="button_admin" text="Administracion" textFill="WHITE">
               <items>
+                  <MenuItem fx:id="item_administrador" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_administrador" text="Administrador..." />
                 <MenuItem fx:id="item_cerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" styleClass="item_cerrarSesion" text="Cerrar Sesion" />
               </items>
             </MenuButton>
             <MenuButton fx:id="menu_btnSocios" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnSocios" stylesheets="@../css/mainview.css" text="Socios" textAlignment="CENTER" textFill="WHITE">
               <items>
-                <MenuItem fx:id="item_nuevoSocio" mnemonicParsing="false" onAction="#handleItemAction" text="Nuevo Socio" />
-                <MenuItem fx:id="item_VerSocios" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Socios" />
+                <MenuItem fx:id="item_nuevoSocio" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_nuevoSocio" text="Nuevo Socio" />
+                <MenuItem fx:id="item_VerSocios" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_VerSocios" text="Ver Socios" />
               </items>
             </MenuButton>
             <MenuButton fx:id="menu_btnPagos" layoutX="265.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnPagos" text="Pagos" textAlignment="CENTER" textFill="WHITE">
               <items>
                 <MenuItem fx:id="item_eventos" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_eventos" text="Eventos" />
-                  <MenuItem fx:id="pagos" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_eventos" text="Pagos" />
+                  <MenuItem fx:id="pagos" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_pagos" text="Pagos" />
               </items>
             </MenuButton>
             <MenuButton fx:id="menu_btnCuotas" layoutX="390.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" styleClass="menu_btnCuotas" text="Cuotas" textAlignment="CENTER" textFill="WHITE">
               <items>
-                <MenuItem fx:id="item_VerCuotas" mnemonicParsing="false" onAction="#handleItemAction" text="Ver Cuotas" />
+                <MenuItem fx:id="item_VerCuotas" mnemonicParsing="false" onAction="#handleItemAction" styleClass="item_VerCuotas" text="Ver Cuotas" />
               </items>
             </MenuButton>
             <Label fx:id="label_inicio" layoutX="15.0" layoutY="10.0" onMouseClicked="#handleItemActionMouse" prefHeight="35.0" prefWidth="100.0" styleClass="label_inicio" text="Inicio" textFill="WHITE" />
