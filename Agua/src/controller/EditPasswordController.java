@@ -9,6 +9,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +21,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javax.persistence.EntityManagerFactory;
+import model.AdministradoresJpaController;
+import model.exceptions.NonexistentEntityException;
+import object.Administradores;
 import object.Socios;
 
 /**
@@ -64,6 +71,14 @@ public class EditPasswordController implements Initializable {
     private Button button_confirmar;
     @FXML
     private PasswordField password;
+    @FXML
+    private PasswordField confirm_password;
+    @FXML
+    private ImageView confirmar_image;
+    
+    //img
+    Image confirm = new Image("/img/confirmar.png");
+    Image error = new Image("/img/error.png");
 
     /**
      * Initializes the controller class.
@@ -71,6 +86,7 @@ public class EditPasswordController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        button_confirmar.setDisable(true);
         setImage();
         setDatos();
     }   
@@ -84,7 +100,42 @@ public class EditPasswordController implements Initializable {
     private void confirmarAction(ActionEvent event) {
         //Acciones evento cambiar contraseña
         updatePassword();
+        
+        this.button_confirmar.getScene().getWindow().hide();
+    } 
+    
+
+    @FXML
+    private void cambiarPassword(KeyEvent event) {
+        if(!confirm_password.getText().isEmpty()){
+            String pass = password.getText();
+            String confirm_pass = confirm_password.getText();
+            
+            if(pass.equals(confirm_pass)){
+                confirmar_image.setImage(confirm);
+                button_confirmar.setDisable(false);
+            }else{
+                confirmar_image.setImage(error);
+                button_confirmar.setDisable(true);            
+            }
+        }
     }    
+    
+    @FXML
+    private void validarPassword(KeyEvent event) {
+        if(!password.getText().isEmpty()){
+            String pass = password.getText();
+            String confirm_pass = confirm_password.getText();
+            
+            if(pass.equals(confirm_pass)){
+                confirmar_image.setImage(confirm);
+                button_confirmar.setDisable(false);
+            }else{
+                confirmar_image.setImage(error);
+                button_confirmar.setDisable(true);            
+            }
+        }
+    }
     
     public void setImage(){
         Socios tmp = administrador.Administrador.getSocio();
@@ -118,14 +169,26 @@ public class EditPasswordController implements Initializable {
     }    
     
     public void updatePassword(){
-        if(!password.getText().isEmpty()){
+        try {
             String pass = password.getText();
+            Administradores tmp = administrador.Administrador.getAdmin();
+            tmp.setPassword(pass);
             
-        }else{
-            Alert alertaError = new Alert(Alert.AlertType.ERROR);
-            alertaError.setTitle("Error");
-            alertaError.setContentText("Debe llenar el campo: \"Nueva Contraseña\"");
-            alertaError.show();
+            EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+            AdministradoresJpaController editAdmin = new AdministradoresJpaController(emf);
+            editAdmin.edit(tmp);
+            
+            administrador.Administrador.setAdmin(tmp);
+            
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Informacion");
+            info.setContentText("Contraseña Actualizada Correctamente");
+            info.show();
+            
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(EditPasswordController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(EditPasswordController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -351,7 +351,7 @@ public class CrearEventosController implements Initializable {
             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
             errorInfo.setTitle("Error");
             errorInfo.setHeaderText(" Accion no Valida");
-            errorInfo.setContentText("Debe seleccionar un evento para pode confirmar asistencia de los socios");
+            errorInfo.setContentText("Debe seleccionar un evento para poder confirmar asistencia de los socios");
             errorInfo.show(); 
         }        
         

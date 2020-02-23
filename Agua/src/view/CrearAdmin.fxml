@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="380.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CrearAdminController">
+    <stylesheets>
+        <URL value="@/css/crearadmin.css" />
+    </stylesheets>
+   <children>
+      <TableView fx:id="table_admins" layoutX="50.0" layoutY="50.0" onMouseClicked="#seleccionarSocios" prefHeight="280.0" prefWidth="380.0" styleClass="table_admins">
+         <columns>
+            <TableColumn fx:id="colCodigoA" editable="false" resizable="false" text="Codigo" />
+            <TableColumn fx:id="colNombresA" editable="false" prefWidth="150.0" resizable="false" text="Nombres" />
+            <TableColumn fx:id="colApellidosA" editable="false" prefWidth="150.0" resizable="false" text="Apellidos" />
+         </columns>
+      </TableView>
+      <Label layoutX="490.0" layoutY="75.0" prefHeight="20.0" prefWidth="140.0" text="Usuario" />
+      <Label layoutX="490.0" layoutY="150.0" prefHeight="20.0" prefWidth="140.0" text="Contraseña" />
+      <Label layoutX="490.0" layoutY="225.0" prefHeight="20.0" prefWidth="140.0" text="Confirmar Contraseña" />
+      <TextField fx:id="usuario" layoutX="490.0" layoutY="100.0" prefHeight="30.0" prefWidth="250.0" styleClass="usuario" />
+      <PasswordField fx:id="password" layoutX="490.0" layoutY="175.0" onKeyReleased="#pedirPassword" prefHeight="30.0" prefWidth="250.0" styleClass="password" />
+      <PasswordField fx:id="confirmPassword" layoutX="490.0" layoutY="250.0" onKeyReleased="#confirmarPassword" prefHeight="30.0" prefWidth="250.0" />
+      <ImageView fx:id="confirm_image" fitHeight="30.0" fitWidth="30.0" layoutX="750.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" styleClass="confirm_image" />
+      <Button fx:id="button_confirmar" layoutX="490.0" layoutY="300.0" mnemonicParsing="false" onAction="#confirmarAction" prefHeight="30.0" prefWidth="100.0" styleClass="button_confirmar" text="Confirmar" />
+      <Button fx:id="button_cancelar" layoutX="640.0" layoutY="300.0" mnemonicParsing="false" onAction="#cancelarAction" prefHeight="30.0" prefWidth="100.0" styleClass="button_cancelar" text="Cancelar" />
+   </children>
+</AnchorPane>

@@ -9,3 +9,9 @@
 .button_password{
     -fx-cursor: hand;
 }
+
+.label_cuenta,
+.label_administradores{
+    -fx-font-size: 20px;
+    -fx-text-align: center;
+}
