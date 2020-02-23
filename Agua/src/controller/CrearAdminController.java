@@ -9,11 +9,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -27,6 +30,8 @@ import javafx.scene.input.MouseEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import model.AdministradoresJpaController;
+import object.Administradores;
 import object.Socios;
 import object.auxiliary.ViewSocio;
 
@@ -71,12 +76,19 @@ public class CrearAdminController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         usuario.setEditable(false);
+        button_confirmar.setDisable(true);
         createTable();
         setTable();
     }    
 
     @FXML
     private void seleccionarSocios(MouseEvent event) {
+        if(event.getClickCount() == 2){
+            String codigo = table_admins.getSelectionModel().getSelectedItem().getCodigo();
+            usuario.setText(codigo);
+        }else if(event.getClickCount() == 1){
+            usuario.setText("");
+        }
     }
 
     @FXML
@@ -90,14 +102,13 @@ public class CrearAdminController implements Initializable {
                 button_confirmar.setDisable(false);
             }else{
                 confirm_image.setImage(error);
-                button_confirmar.setDisable(true);            
+                button_confirmar.setDisable(true);
             }
         }        
     }
 
     @FXML
     private void confirmarPassword(KeyEvent event) {
-        
         if(!password.getText().isEmpty()){
             String pass = password.getText();
             String confirm_pass = confirmPassword.getText();
@@ -107,13 +118,14 @@ public class CrearAdminController implements Initializable {
                 button_confirmar.setDisable(false);
             }else{
                 confirm_image.setImage(error);
-                button_confirmar.setDisable(true);            
+                button_confirmar.setDisable(true);
             }
         }        
     }
 
     @FXML
     private void confirmarAction(ActionEvent event) {
+        setNewAdmin();
     }
 
     @FXML
@@ -156,4 +168,70 @@ public class CrearAdminController implements Initializable {
         return viewSocios;
     }
     
+    public void setNewAdmin(){
+        if(!usuario.getText().isEmpty()){
+            try {
+                //Obtener socio
+                int idSocio = table_admins.getSelectionModel().getSelectedItem().getIdSocio();
+                Socios socio = getSocio(idSocio);
+                
+                //Pass
+                String pass = password.getText();
+                
+                //idAdmin
+                int idAdmin = getIdAdmin();
+                
+                //Crear admin
+                Administradores admin = new Administradores();
+                admin.setIdAdministrador(idAdmin);
+                admin.setPassword(pass);
+                admin.setSociosIdSocio(socio);
+                
+                EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+                AdministradoresJpaController newAdmin = new AdministradoresJpaController(emf);
+                newAdmin.create(admin);
+
+                //Actualizar tabla
+                setTable();
+                
+                //Alerta
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Informacion");
+                info.setContentText("Administrador creado correctamente");
+                info.show(); 
+                
+                //Cerrar ventana
+                this.button_confirmar.getScene().getWindow().hide();
+                
+            } catch (Exception ex) {
+                Logger.getLogger(CrearAdminController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            Alert alertaError = new Alert(Alert.AlertType.ERROR);
+            alertaError.setTitle("Error");
+            alertaError.setContentText("Debe seleccionar a un usuario");
+            alertaError.show();
+        }    
+    }
+    
+    public Socios getSocio(int idSocio){
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        Query getS = em.createNamedQuery("Socios.findByIdSocio").setParameter("idSocio", idSocio);
+        Socios tmp = (Socios) getS.getResultList().get(0);
+        
+        return tmp;
+    }
+    
+    public int getIdAdmin(){
+        int idAdmin = 0;
+        EntityManagerFactory emf = conexion.ConexionJPA.getInstancia().getEMF();
+        EntityManager em = emf.createEntityManager();
+        
+        Query getId = em.createNativeQuery("SELECT MAX(id_administrador) AS id_admin FROM administradores");
+        idAdmin = (int) getId.getResultList().get(0);
+        idAdmin++;
+        
+        return idAdmin;
+    }   
 }

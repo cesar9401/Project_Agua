@@ -127,6 +127,13 @@ public class LoginController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        
+        //Logo
+        try {
+            stage.getIcons().add(new Image("/img/icono200x200.png"));
+        } catch (Exception e) {
+        }
+        
         stage.show();
         
         //Cerrar ventana Login

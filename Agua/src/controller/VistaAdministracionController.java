@@ -212,6 +212,8 @@ public class VistaAdministracionController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Crear Administrador");
         stage.showAndWait();
+        
+        setTable();
     }
     
     public void deleteAdmin(){

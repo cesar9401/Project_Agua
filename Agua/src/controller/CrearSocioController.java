@@ -11,41 +11,24 @@ import com.jfoenix.controls.JFXTextField;
 //import com.jfoenix.controls.JFXTextField;
 import javafx.scene.control.TextField;
 import com.jfoenix.controls.JFXToggleButton;
-import com.sun.org.apache.bcel.internal.generic.PopInstruction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.effect.Blend;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -53,8 +36,6 @@ import model.SociosJpaController;
 import object.Administradores;
 import object.Socios;
 import object.auxiliary.PopSocios;
-import object.auxiliary.ViewSocio;
-import org.controlsfx.control.PopOver;
 
 /**
  * FXML Controller class
@@ -314,10 +295,9 @@ public class CrearSocioController implements Initializable {
         txtLastName.setText("");
         txtName.setText("");
         
-       mancomunado.setSelected(false);
-       isExonerated.setSelected(false);
-       changeImg = false;
-       
+        mancomunado.setSelected(false);
+        isExonerated.setSelected(false);
+        changeImg = false;
        
         Image imgUsr = new Image("/img/usr+.png");
         img.setImage(imgUsr);
