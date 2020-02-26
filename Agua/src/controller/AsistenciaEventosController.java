@@ -146,6 +146,10 @@ public class AsistenciaEventosController implements Initializable {
         if(tmp != null){
             inasistentes.add(tmp);
             asistentes.remove(tmp);
+
+            if(inasistentes.size() == 1){
+                table_inasistentes.setItems(inasistentes);
+            }
             
         }else{
             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
@@ -161,6 +165,11 @@ public class AsistenciaEventosController implements Initializable {
         if(tmp != null){
             asistentes.add(tmp);
             inasistentes.remove(tmp);
+            
+            if(asistentes.size() == 1){
+                table_asistentes.setItems(asistentes);
+            }
+            
         }else{
             Alert errorInfo = new Alert(Alert.AlertType.ERROR);
             errorInfo.setTitle("Error");
